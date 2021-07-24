@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:wecomi_flutter/components/bottom_nav_bar_icon.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
-import 'package:wecomi_flutter/view_models/app_provider.dart';
 import 'package:wecomi_flutter/views/account/account_screen.dart';
 import 'package:wecomi_flutter/views/genre/genre_screen.dart';
 import 'package:wecomi_flutter/views/home/home_screen.dart';
@@ -39,8 +37,8 @@ class _MainScreenState extends State<MainScreen>{
             ),
             child:
             BottomNavigationBar(
-              selectedLabelStyle: kMediumTextStyle,
-              unselectedLabelStyle: kMediumTextStyle,
+              selectedLabelStyle: mediumTextStyle,
+              unselectedLabelStyle: mediumTextStyle,
               selectedItemColor: Theme.of(context).highlightColor,
               unselectedItemColor: Theme.of(context).highlightColor,
               selectedFontSize: 10.0,
@@ -49,7 +47,7 @@ class _MainScreenState extends State<MainScreen>{
               showSelectedLabels: true,
               showUnselectedLabels: true,
               backgroundColor: Theme.of(context).primaryColor,
-              onTap: onPageChanged,
+              onTap: _onPageChanged,
               currentIndex: _index,
               items: [
                 BottomNavigationBarItem(
@@ -65,24 +63,24 @@ class _MainScreenState extends State<MainScreen>{
                         size: 24
                     )),
                 BottomNavigationBarItem(
-                    label: "Tủ sách",
+                    label: "Thế loại",
                     icon: CustomizedBottomNavBarIcon(
-                        source:_index == 2 ? "assets/icons/Library_selected.png" : "assets/icons/Library.png",
+                        source:_index == 2 ? "assets/icons/Genre_selected.png" : "assets/icons/Genre.png",
                         size: 24
                     )),
-                // BottomNavigationBarItem(
-                //     label: "Tài khoản",
-                //     icon: CustomizedBottomNavBarIcon(
-                //         source:_index == 3 ? "assets/icons/User_selected.png" : "assets/icons/User.png",
-                //         size: 24
-                //     )),
+                BottomNavigationBarItem(
+                    label: "Tủ sách",
+                    icon: CustomizedBottomNavBarIcon(
+                        source:_index == 3 ? "assets/icons/Library_selected.png" : "assets/icons/Library.png",
+                        size: 24
+                    )),
               ],
             ),
     )
       )
           );
   }
-  void onPageChanged(int index) {
+  void _onPageChanged(int index) {
     setState(() {
       this._index = index;
     });

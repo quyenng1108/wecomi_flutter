@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
 import 'package:wecomi_flutter/view_models/app_provider.dart';
 import 'package:provider/provider.dart';
@@ -23,16 +22,12 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           navigatorKey: appProvider.navigatorKey,
           title: "Wecomi",
-          theme: themeData(appProvider.theme),
-          darkTheme: themeData(ThemeConfig.darkTheme),
+          theme: appProvider.theme,
+          darkTheme: ThemeConfig.darkTheme,
           home: MainScreen(),
         );
       }
     );
   }
-  ThemeData themeData(ThemeData theme) {
-    return theme.copyWith(
-      textTheme: theme.textTheme,
-    );
-  }
+
 }

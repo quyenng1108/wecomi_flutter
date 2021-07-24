@@ -1,33 +1,39 @@
 import 'package:flutter/material.dart';
-//normal text
-const kNormalTextStyle = TextStyle(
+//regular text
+const regularTextStyle = TextStyle(
     fontSize: 10, fontWeight: FontWeight.normal);
-const kMediumTextStyle = TextStyle(
-    fontSize: 10, fontWeight: FontWeight.w400);
-const kBoldTextStyle = TextStyle(
+const mediumTextStyle = TextStyle(
+    fontSize: 10, fontWeight: FontWeight.w500);
+const boldTextStyle = TextStyle(
     fontSize: 10, fontWeight: FontWeight.bold);
 // body text
-const kSmallNormalBodyTextStyle = TextStyle(
+const smallRegularBodyTextStyle = TextStyle(
     fontSize: 12, fontWeight: FontWeight.normal);
-const kSmallMediumBodyTextStyle = TextStyle(
-    fontSize: 12, fontWeight: FontWeight.w400);
-const kNormalBodyTextStyle = TextStyle(
+const smallRegularGreyBodyTextStyle = TextStyle(
+    fontSize: 12, fontWeight: FontWeight.normal,color: Color(0xff7f7f7f));
+    const smallRegularWhiteBodyTextStyle = TextStyle(
+    fontSize: 12, fontWeight: FontWeight.normal,color: Color(0xffFFFFFF));
+const smallMediumBodyTextStyle = TextStyle(
+    fontSize: 12, fontWeight: FontWeight.w500);
+const regularBodyTextStyle = TextStyle(
     fontSize: 14, fontWeight: FontWeight.normal);
-const kMediumBodyTextStyle = TextStyle(
-    fontSize: 14, fontWeight: FontWeight.w400);
-const kLargeNormalBodyTextStyle = TextStyle(
+const mediumBodyTextStyle = TextStyle(
+    fontSize: 14, fontWeight: FontWeight.w500);
+const largeRegularBodyTextStyle = TextStyle(
     fontSize: 16, fontWeight: FontWeight.normal);
-const kLargeMediumBodyTextStyle = TextStyle(
-    fontSize: 16, fontWeight: FontWeight.w400);
+const largeMediumBodyTextStyle = TextStyle(
+    fontSize: 16, fontWeight: FontWeight.w500);
 // Title text
-const kSmallTitleTextStyle = TextStyle(
+const smallTitleTextStyle = TextStyle(
     fontSize: 12, fontWeight: FontWeight.bold);
-const kTitleTextStyle = TextStyle(
+const titleTextStyle = TextStyle(
     fontSize: 14, fontWeight: FontWeight.bold);
-const kLargeTitleTextStyle = TextStyle(
+const largeTitleTextStyle = TextStyle(
     fontSize: 16, fontWeight: FontWeight.bold);
 //Heading text
-const kHeadingTextStyle = TextStyle(
+const smallHeadingTextStyle = TextStyle(
     fontSize: 20, fontWeight: FontWeight.bold);
-const kLargeHeadingTextStyle = TextStyle(
+const headingTextStyle = TextStyle(
+    fontSize: 20, fontWeight: FontWeight.bold);
+const largeHeadingTextStyle = TextStyle(
     fontSize: 28, fontWeight: FontWeight.bold);
