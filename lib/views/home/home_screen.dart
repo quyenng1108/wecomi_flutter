@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:wecomi_flutter/components/category_bubble.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 
 class HomeScreen extends StatefulWidget{
@@ -255,38 +256,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: EdgeInsets.only(left:width * 0.0426, right: width * 0.0213),
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) 
-                  => GestureDetector(
+                  => CategoryBubble(
                     onTap: (){
                       setState(() {
                       _selected = index;                        
                       });
                     },
-                    child: Container(
-                      padding:EdgeInsets.only(right: width * 0.0213),
-                      child: Container(
-                        // padding: EdgeInsets.symmetric(horizontal: 5),
-                        decoration: BoxDecoration(
-                          color: _selected != null && _selected == index ? Color(0xffF05A77) : Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                            color: Color(0xff08252B).withOpacity(.1),
-                            spreadRadius: 0,
-                            blurRadius: 3,
-                            offset: Offset(0,1), // changes position of shadow
-                          ),
-                        ],
-                          borderRadius: BorderRadius.circular(8)
-                        ),
-                        child: Container(
-                          // alignment: Alignment.center,
-                          margin: EdgeInsets.symmetric(horizontal: width * 0.0266),
-                          child: Center(
-                            child: Text(_category[index],textAlign: TextAlign.center, style :_selected != null && _selected == index ? smallRegularWhiteBodyTextStyle : smallRegularGreyBodyTextStyle
-                            ),
-                          ))
-                        ),
-                    ),
-                  ), 
+                    color: _selected != null && _selected == index ? Color(0xffF05A77) : Colors.white,
+                    style: _selected != null && _selected == index ? smallRegularWhiteBodyTextStyle : smallRegularGreyBodyTextStyle,
+                    category: _category[index],
+                  ),
                   separatorBuilder: (context, index) 
                   => Divider(
                     height: height * 0.0213,
