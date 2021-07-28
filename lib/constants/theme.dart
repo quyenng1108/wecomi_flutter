@@ -5,7 +5,7 @@ class ThemeConfig {
   static Color darkPrimary = Color(0xff1f1f1f);
   static Color lightAccent = Color(0xff2ca8e2);
   static Color darkAccent = Color(0xff2ca8e2);
-  static Color lightBG = Color(0xffE5E5E5);
+  static Color lightBG = Color(0xffF4F6F9);
   static Color darkBG = Color(0xff121212);
   static Color selectedPink = Color(0xffB85985);
 
@@ -30,7 +30,7 @@ class ThemeConfig {
     fontFamily: "Helvetica Neue",
     highlightColor: selectedPink,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: Colors.amber,
+        backgroundColor: Colors.pink,
     ),
     brightness: Brightness.dark,
     backgroundColor: darkBG,

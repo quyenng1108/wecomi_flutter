@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:wecomi_flutter/components/bottom_nav_bar_icon.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
-import 'package:wecomi_flutter/view_models/app_provider.dart';
 import 'package:wecomi_flutter/views/account/account_screen.dart';
+import 'package:wecomi_flutter/views/discover/discover_screen.dart';
 import 'package:wecomi_flutter/views/genre/genre_screen.dart';
 import 'package:wecomi_flutter/views/home/home_screen.dart';
 import 'package:wecomi_flutter/views/library/library_screen.dart';
@@ -15,9 +14,9 @@ class MainScreen extends StatefulWidget{
 }
 List<Widget> _pages = [
   HomeScreen(),
+  DiscoverScreen(),
   GenreScreen(),
-  LibraryScreen(),
-  AccountScreen()
+  LibraryScreen()
 ];
 class _MainScreenState extends State<MainScreen>{
   int _index = 0;
@@ -29,6 +28,20 @@ class _MainScreenState extends State<MainScreen>{
       ),
       bottomNavigationBar:Container(
         decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xff18274B).withOpacity(.14),
+              offset: Offset(0,18),
+              spreadRadius: -4,
+              blurRadius: 88
+            ),
+            BoxShadow(
+              color: Color(0xff18274B).withOpacity(.12),
+              offset: Offset(0,8),
+              spreadRadius: -6,
+              blurRadius: 28
+            )
+          ],
           borderRadius: BorderRadius.only(
               topRight: Radius.circular(16), topLeft: Radius.circular(16)),
         ),
@@ -39,8 +52,8 @@ class _MainScreenState extends State<MainScreen>{
             ),
             child:
             BottomNavigationBar(
-              selectedLabelStyle: kMediumTextStyle,
-              unselectedLabelStyle: kMediumTextStyle,
+              selectedLabelStyle: mediumTextStyle,
+              unselectedLabelStyle: mediumTextStyle,
               selectedItemColor: Theme.of(context).highlightColor,
               unselectedItemColor: Theme.of(context).highlightColor,
               selectedFontSize: 10.0,
@@ -49,40 +62,40 @@ class _MainScreenState extends State<MainScreen>{
               showSelectedLabels: true,
               showUnselectedLabels: true,
               backgroundColor: Theme.of(context).primaryColor,
-              onTap: onPageChanged,
+              onTap: _onPageChanged,
               currentIndex: _index,
               items: [
                 BottomNavigationBarItem(
                     label: "Trang chủ",
                     icon: CustomizedBottomNavBarIcon(
-                      source:_index == 0 ? "assets/icons/Home_selected.png" : "assets/icons/Home.png",
+                      source:_index == 0 ? "assets/icons/Home-Selected.png" : "assets/icons/Home.png",
                       size: 24
                     )),
                 BottomNavigationBarItem(
                     label: "Khám phá",
                     icon: CustomizedBottomNavBarIcon(
-                        source:_index == 1 ? "assets/icons/Discover_selected.png" : "assets/icons/Discover.png",
+                        source:_index == 1 ? "assets/icons/Discover-Selected.png" : "assets/icons/Discover.png",
+                        size: 24
+                    )),
+                BottomNavigationBarItem(
+                    label: "Thế loại",
+                    icon: CustomizedBottomNavBarIcon(
+                        source:_index == 2 ? "assets/icons/Genre-Selected.png" : "assets/icons/Genre.png",
                         size: 24
                     )),
                 BottomNavigationBarItem(
                     label: "Tủ sách",
                     icon: CustomizedBottomNavBarIcon(
-                        source:_index == 2 ? "assets/icons/Library_selected.png" : "assets/icons/Library.png",
+                        source:_index == 3 ? "assets/icons/Library-Selected.png" : "assets/icons/Library.png",
                         size: 24
                     )),
-                // BottomNavigationBarItem(
-                //     label: "Tài khoản",
-                //     icon: CustomizedBottomNavBarIcon(
-                //         source:_index == 3 ? "assets/icons/User_selected.png" : "assets/icons/User.png",
-                //         size: 24
-                //     )),
               ],
             ),
     )
       )
           );
   }
-  void onPageChanged(int index) {
+  void _onPageChanged(int index) {
     setState(() {
       this._index = index;
     });
