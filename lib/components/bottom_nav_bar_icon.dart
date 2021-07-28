@@ -13,7 +13,7 @@ class CustomizedBottomNavBarIcon extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 4),
+      padding: EdgeInsets.only(bottom: 4,top: 8),
       child: Image.asset(
         source,
         height: size,

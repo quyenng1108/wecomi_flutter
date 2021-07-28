@@ -25,6 +25,7 @@ class AppProvider extends ChangeNotifier{
     theme = value;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('theme', c);
+    print(c);
     notifyListeners();
   }
 
@@ -36,7 +37,6 @@ class AppProvider extends ChangeNotifier{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     ThemeData t;
     String r = prefs.getString('theme') ?? 'light';
-    print(r);
     if (r == 'light') {
       t = ThemeConfig.lightTheme;
       setTheme(ThemeConfig.lightTheme, 'light');

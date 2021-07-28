@@ -30,7 +30,7 @@ class ThemeConfig {
     fontFamily: "Helvetica Neue",
     highlightColor: selectedPink,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: Colors.amber,
+        backgroundColor: Colors.pink,
     ),
     brightness: Brightness.dark,
     backgroundColor: darkBG,
