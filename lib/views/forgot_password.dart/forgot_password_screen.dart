@@ -25,7 +25,9 @@ class ForgotPasswordScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomBackButton(),
+                CustomBackButton(
+                  color: darkGrey,
+                ),
                 SizedBox(
                   height: height * 0.0295,
                 ),
@@ -94,7 +96,8 @@ class ForgotPasswordScreen extends StatelessWidget {
                 Center(
                   child: LoginRelatedButton(
                     label: "Tiếp theo",
-                    onPressed: () => forgotPasswordProvider.submitForgotPassword(),
+                    onPressed: () =>
+                        forgotPasswordProvider.submitForgotPassword(),
                   ),
                 ),
                 SizedBox(

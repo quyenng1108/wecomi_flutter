@@ -32,7 +32,9 @@ class _PasswordChangeScreenState extends State<PasswordChangeScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CustomBackButton(),
+                        CustomBackButton(
+                          color: darkGrey,
+                        ),
                         SizedBox(
                           height: height * 0.0295,
                         ),

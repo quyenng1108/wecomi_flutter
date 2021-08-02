@@ -5,6 +5,7 @@ import 'package:wecomi_flutter/constants/theme.dart';
 
 
 class AppProvider extends ChangeNotifier{
+  
   AppProvider(){
   checkTheme();
 }
@@ -21,6 +22,7 @@ class AppProvider extends ChangeNotifier{
     navigatorKey = value;
     notifyListeners();
   }
+
   void setTheme(value, c) async {
     theme = value;
     SharedPreferences prefs = await SharedPreferences.getInstance();

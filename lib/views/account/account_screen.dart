@@ -2,199 +2,226 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wecomi_flutter/common/app_session.dart';
 import 'package:wecomi_flutter/components/back_button.dart';
 import 'package:wecomi_flutter/components/login_related_button.dart';
 import 'package:wecomi_flutter/constants/color_const.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/login_provider.dart';
 import 'package:wecomi_flutter/view_models/ui_view_models/app_provider.dart';
 import 'package:wecomi_flutter/views/login/login_screen.dart';
+import 'package:after_layout/after_layout.dart';
 
 class AccountScreen extends StatefulWidget {
   @override
   _AccountScreenState createState() => _AccountScreenState();
 }
 
-class _AccountScreenState extends State<AccountScreen> {
+class _AccountScreenState extends State<AccountScreen>
+    with AfterLayoutMixin<AccountScreen> {
   bool? _value;
+  LoginProvider loginProvider = LoginProvider();
+  @override
+  void afterFirstLayout(BuildContext context) {
+    loginProvider.checkLoginState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    loginProvider = Provider.of<LoginProvider>(context);
     var standardSpacing = EdgeInsets.symmetric(horizontal: width * 0.0427);
     return Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         body: SafeArea(
-          child: Container(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Stack(
+            child: Container(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Stack(
+                children: [
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: CustomBackButton(
+                        color: darkGrey,
+                      )),
+                  Padding(
+                    padding: EdgeInsets.only(top: height * 0.0098),
+                    child: Center(
+                      child: Container(
+                          height: height * 0.0296,
+                          child: Text(
+                            "Tài khoản",
+                            style: giganticMediumBodyTextStyle,
+                            textAlign: TextAlign.center,
+                          )),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: height * 0.0295,
+              ),
+              Container(
+                height: 2,
+                color: lighGrey,
+              ),
+              SizedBox(
+                height: height * 0.0246,
+              ),
+              loginProvider.accessToken != null
+                  ? LoggedInLayout()
+                  : NotLoggedInLayout(),
+              SizedBox(
+                height: height * 0.0394,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8)),
+                padding: EdgeInsets.all(width * 0.0427),
+                height: height * 0.2611,
+                // width: width,
+                margin: standardSpacing,
+                child: Column(
                   children: [
-                    Align(
-                        alignment: Alignment.centerLeft,
-                        child: CustomBackButton()),
-                         Padding(
-                           padding: EdgeInsets.only(top: height * 0.0098),
-                           child: Center(
-                                child: Container(
-                                  height: height * 0.0296,
-                                  child: Text("Tài khoản", style: smallHeadingTextStyle,textAlign: TextAlign.center,)),
-                              ),
-                         ),
+                    RowItem(
+                      image: "assets/icons/Upload.png",
+                      title: "Đăng tải truyện",
+                      widget: Image.asset(
+                        "assets/icons/Arrow-Right.png",
+                        height: width * 0.064,
+                      ),
+                    ),
+                    SizedBox(
+                      height: height * 0.0172,
+                    ),
+                    Container(
+                      height: 2,
+                      color: Color(0xffF4F6F9),
+                    ),
+                    SizedBox(
+                      height: height * 0.0147,
+                    ),
+                    RowItem(
+                        image: "assets/icons/Language.png",
+                        title: "Ngôn ngữ",
+                        widget: Image.asset(
+                          "assets/icons/Arrow-Right.png",
+                          height: width * 0.064,
+                        )),
+                    SizedBox(
+                      height: height * 0.0172,
+                    ),
+                    Container(
+                      height: 2,
+                      color: Color(0xffF4F6F9),
+                    ),
+                    SizedBox(
+                      height: height * 0.0147,
+                    ),
+                    RowItem(
+                        image: "assets/icons/Faq.png",
+                        title: "Câu hỏi thường gặp",
+                        widget: Image.asset(
+                          "assets/icons/Arrow-Right.png",
+                          height: width * 0.064,
+                        )),
+                    SizedBox(
+                      height: height * 0.0172,
+                    ),
+                    Container(
+                      height: 2,
+                      color: Color(0xffF4F6F9),
+                    ),
+                    SizedBox(
+                      height: height * 0.0147,
+                    ),
+                    RowItem(
+                        image: "assets/icons/Dark-Mode.png",
+                        title: "Dark Mode",
+                        widget: Consumer<AppProvider>(
+                          builder: (context, appProvider, child) =>
+                              Transform.scale(
+                            scale: 0.9,
+                            child: CupertinoSwitch(
+                              value: _value =
+                                  appProvider.theme == ThemeConfig.lightTheme
+                                      ? false
+                                      : true,
+                              onChanged: (v) {
+                                _value == true
+                                    ? appProvider.setTheme(
+                                        ThemeConfig.lightTheme, 'light')
+                                    : appProvider.setTheme(
+                                        ThemeConfig.darkTheme, 'dark');
+                                _value = !_value!;
+                              },
+                              activeColor: Color(0xffDE5A7C),
+                            ),
+                          ),
+                        ))
                   ],
                 ),
-                SizedBox(
-                  height: height * 0.0295,
-                ),
-                Container(
-                  height: 2,
-                  color: lighGrey,
-                ),
-                SizedBox(
-                  height: height * 0.0246,
-                ),
-                NotLoggedInLayout(),
-                SizedBox(
-                  height: height * 0.0394,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8)),
-                  padding: EdgeInsets.all(width * 0.0427),
-                  height: height * 0.2611,
-                  // width: width,
-                  margin: standardSpacing,
-                  child: Column(
-                    children: [
-                      RowItem(
-                        image: "assets/icons/Upload.png",
-                        title: "Đăng tải truyện",
+              ),
+              SizedBox(
+                height: height * 0.022,
+              ),
+              loginProvider.accessToken != null
+                  ? Container(
+                      margin: standardSpacing,
+                      height: height * 0.0665,
+                      padding: EdgeInsets.all(width * 0.0427),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.white,
+                      ),
+                      child: RowItem(
+                        image: "assets/icons/Logout.png",
+                        title: "Đăng xuất",
                         widget: Image.asset(
                           "assets/icons/Arrow-Right.png",
                           height: width * 0.064,
                         ),
+                        onTap: () => showDialog(
+                            context: context,
+                            builder: (context) => CupertinoAlertDialog(
+                                  content: Text(
+                                      "Bạn có chắc chắn muốn đăng xuất không?",
+                                      style: largeMediumBodyTextStyle),
+                                  actions: [
+                                    CupertinoDialogAction(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        isDefaultAction: true,
+                                        child: Text("Hủy",
+                                            style: defaultActionStyle)),
+                                    CupertinoDialogAction(
+                                        isDefaultAction: false,
+                                        child: Text("Đăng xuất",
+                                            style: nonDefaultActionStyle),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          loginProvider.logout();
+                                        }),
+                                  ],
+                                )),
                       ),
-                      SizedBox(
-                        height: height * 0.0172,
-                      ),
-                      Container(
-                        height: 2,
-                        color: Color(0xffF4F6F9),
-                      ),
-                      SizedBox(
-                        height: height * 0.0147,
-                      ),
-                      RowItem(
-                          image: "assets/icons/Language.png",
-                          title: "Ngôn ngữ",
-                          widget: Image.asset(
-                            "assets/icons/Arrow-Right.png",
-                            height: width * 0.064,
-                          )),
-                      SizedBox(
-                        height: height * 0.0172,
-                      ),
-                      Container(
-                        height: 2,
-                        color: Color(0xffF4F6F9),
-                      ),
-                      SizedBox(
-                        height: height * 0.0147,
-                      ),
-                      RowItem(
-                          image: "assets/icons/Faq.png",
-                          title: "Câu hỏi thường gặp",
-                          widget: Image.asset(
-                            "assets/icons/Arrow-Right.png",
-                            height: width * 0.064,
-                          )),
-                      SizedBox(
-                        height: height * 0.0172,
-                      ),
-                      Container(
-                        height: 2,
-                        color: Color(0xffF4F6F9),
-                      ),
-                      SizedBox(
-                        height: height * 0.0147,
-                      ),
-                      RowItem(
-                          image: "assets/icons/Dark-Mode.png",
-                          title: "Dark Mode",
-                          widget: Consumer<AppProvider>(
-                            builder: (context, appProvider, child) =>
-                                Transform.scale(
-                              scale: 0.9,
-                              child: CupertinoSwitch(
-                                value: _value =
-                                    appProvider.theme == ThemeConfig.lightTheme
-                                        ? false
-                                        : true,
-                                onChanged: (v) {
-                                  _value == true
-                                      ? appProvider.setTheme(
-                                          ThemeConfig.lightTheme, 'light')
-                                      : appProvider.setTheme(
-                                          ThemeConfig.darkTheme, 'dark');
-                                  _value = !_value!;
-                                },
-                                activeColor: Color(0xffDE5A7C),
-                              ),
-                            ),
-                          ))
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: height * 0.022,
-                ),
-                Container(
-                  margin: standardSpacing,
-                  height: height * 0.0665,
-                  padding: EdgeInsets.all(width * 0.0427),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Colors.white,
-                  ),
-                  child: RowItem(
-                    image: "assets/icons/Logout.png",
-                    title: "Đăng xuất",
-                    widget: Image.asset(
-                      "assets/icons/Arrow-Right.png",
-                      height: width * 0.064,
-                    ),
-                    onTap: () => showDialog(
-                        context: context,
-                        builder: (context) => CupertinoAlertDialog(
-                              content: Text(
-                                  "Bạn có chắc chắn muốn đăng xuất không?",
-                                  style: largeMediumBodyTextStyle),
-                              actions: [
-                                CupertinoDialogAction(
-                                    onPressed: () => Navigator.pop(context),
-                                    isDefaultAction: true,
-                                    child:
-                                        Text("Hủy", style: defaultActionStyle)),
-                                CupertinoDialogAction(
-                                    isDefaultAction: false,
-                                    child: Text("Đăng xuất",
-                                        style: nonDefaultActionStyle)),
-                              ],
-                            )),
-                  ),
-                ),
-                Expanded(
-                  child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Text("Vesion 1.27",
-                          style: regularExtraLightBlackBodyTextStyle)),
-                )
-              ],
-            ),
+                    )
+                  : Container(),
+              Expanded(
+                child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Text("Vesion 1.27",
+                        style: regularExtraLightBlackBodyTextStyle)),
+              )
+            ],
           ),
-        ));
+        )));
   }
 }
 
@@ -316,7 +343,7 @@ class LoggedInLayout extends StatelessWidget {
           // ),
           ConstrainedBox(
             constraints: BoxConstraints.tightFor(
-                height: height * 0.0382, width: width * 0.288),
+                height: height * 0.0382, width: width * 0.33),
             child: ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
@@ -327,15 +354,17 @@ class LoggedInLayout extends StatelessWidget {
                   onPrimary: Theme.of(context).primaryColor,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8))),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Image.asset(
-                      "assets/icons/Edit.png",
-                      height: width * 0.0355,
-                    ),
-                    Text("Chỉnh sửa", style: mediumPinkBodyTextStyle),
-                  ]),
+              child: Container(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Image.asset(
+                        "assets/icons/Edit.png",
+                        height: width * 0.0426,
+                      ),
+                      Text("Chỉnh sửa", style: mediumPinkBodyTextStyle),
+                    ]),
+              ),
             ),
           ),
         ],

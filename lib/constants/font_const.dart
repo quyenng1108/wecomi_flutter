@@ -39,6 +39,8 @@ const extraLargeMediumBodyTextStyle = TextStyle(
     fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xff373737));
 const extraLargeDarkGreyMediumBodyTextStyle =
     TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: darkGrey);
+const giganticMediumBodyTextStyle = TextStyle(
+    fontSize: 24, fontWeight: FontWeight.w500, color: Color(0xff373737));
 // Title text
 const smallTitleTextStyle = TextStyle(
     fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xff373737));

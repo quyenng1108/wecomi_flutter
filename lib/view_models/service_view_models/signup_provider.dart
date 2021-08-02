@@ -11,12 +11,17 @@ class SignupProvider with ChangeNotifier {
   SignupValidationModel _passwordConfirmation =
       SignupValidationModel(null, null);
   SignupValidationModel _matchedPassword = SignupValidationModel(null, null);
+    SignupValidationModel _test = SignupValidationModel(null, null);
+
   String? tmp;
+  String? _log;
+  String? get log => _log;
   SignupValidationModel get email => _email;
   SignupValidationModel get name => _name;
   SignupValidationModel get password => _password;
   SignupValidationModel get passwordConfirmation => _passwordConfirmation;
   SignupValidationModel get matchededPassword => _matchedPassword;
+  SignupValidationModel get test => _test;
   bool get isValid {
     if (_name.value != null &&
         _email.value != null &&
@@ -103,6 +108,7 @@ class SignupProvider with ChangeNotifier {
           headers: {'Content-Type': 'application/json'},
           body: json.encode(body));
           print(res.body);
+          _test = SignupValidationModel("hehehe", "hehehe");
     } else {
       print("hok dc dau");
     }
