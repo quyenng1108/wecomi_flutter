@@ -1,8 +1,14 @@
+import 'package:after_layout/after_layout.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:wecomi_flutter/common/app_session.dart';
 import 'package:wecomi_flutter/components/category_bubble.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
+import 'package:wecomi_flutter/models/comic.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/comic_provider.dart';
 import 'package:wecomi_flutter/views/account/account_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -43,13 +49,26 @@ List _recommended = [
   "assets/images/Recommended3.png",
   "assets/images/Recommended4.png",
 ];
+List _novel = [
+  "assets/images/Novel-1.png",
+  "assets/images/Novel-2.png",
+  "assets/images/Novel-3.png",
+];
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with AfterLayoutMixin<HomeScreen> {
   bool _value = false;
+  ComicProvider comicProvider = ComicProvider();
+  @override
+  void afterFirstLayout(BuildContext context) {
+    comicProvider.getComicBySex(AppSession().sex);
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    comicProvider = Provider.of<ComicProvider>(context);
     var standardSpacing = EdgeInsets.symmetric(horizontal: width * 0.0427);
     return Scaffold(
         body: SafeArea(
@@ -94,15 +113,22 @@ class _HomeScreenState extends State<HomeScreen> {
                             AnimatedPositioned(
                               curve: Curves.easeIn,
                               // top: 3.0,
-                              left: _value ? 20 : 0,
-                              right: _value ? 0 : 20,
+                              left: AppSession().sex == 1 ? 20 : 0,
+                              right: AppSession().sex == 1 ? 0 : 20,
                               duration: Duration(milliseconds: 700),
 
                               child: InkWell(
                                 onTap: () {
                                   setState(() {
-                                    _value = !_value;
+                                    AppSession().sex == 1
+                                        ? AppSession().changeSexGroup(2)
+                                        : AppSession().changeSexGroup(1);
+                                        
                                   });
+                                  comicProvider.isLoading = true;
+                                  Future.delayed(Duration(milliseconds: 1000))
+                                      .then((value) => comicProvider
+                                          .getComicBySex(AppSession().sex));
                                 },
                                 child: AnimatedSwitcher(
                                     duration: Duration(milliseconds: 700),
@@ -113,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         child: child,
                                       );
                                     },
-                                    child: _value
+                                    child: AppSession().sex == 1
                                         ? ClipRRect(
                                             key: UniqueKey(),
                                             borderRadius: BorderRadius.only(
@@ -170,11 +196,16 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                             ),
                             GestureDetector(
-                              onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (context) => AccountScreen())),
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => AccountScreen())),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(90),
-                                child: Image.asset("assets/icons/User-Sample.png",
-                                    height: width * 0.085, width: width * 0.085),
+                                child: Image.asset(
+                                    "assets/icons/User-Sample.png",
+                                    height: width * 0.085,
+                                    width: width * 0.085),
                               ),
                             )
                           ],
@@ -222,9 +253,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   for (int i = 0; i < 4; i++)
                     RecommendedItems(
-                      source: _recommended[i],
-                      title: "Nụ hôn đẫm máu",
-                      category: "Tình cảm",
+                      isLoading: comicProvider.isLoading,
+                      source: comicProvider.recommendedComic?[i].imgUrl,
+                      title: comicProvider.recommendedComic?[i].bookname,
+                      category: comicProvider.recommendedComic?[i].categoryName,
                       secondCategory: 'Tổng tài',
                     ),
                 ],
@@ -260,34 +292,34 @@ class _HomeScreenState extends State<HomeScreen> {
             HomeCategoryTitles(
               title: "Có thể bạn thích",
             ),
-            SizedBox(
-              height: height * 0.0148,
-            ),
-            Container(
-              height: height * 0.0345,
-              child: ListView.separated(
-                  padding: EdgeInsets.only(
-                      left: width * 0.0426, right: width * 0.0213),
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) => CategoryBubble(
-                        onTap: () {
-                          setState(() {
-                            _selected = index;
-                          });
-                        },
-                        color: _selected != null && _selected == index
-                            ? Color(0xffF05A77)
-                            : Colors.white,
-                        style: _selected != null && _selected == index
-                            ? smallRegularWhiteBodyTextStyle
-                            : smallRegularGreyBodyTextStyle,
-                        category: _category[index],
-                      ),
-                  separatorBuilder: (context, index) => Divider(
-                        height: height * 0.0213,
-                      ),
-                  itemCount: _category.length),
-            ),
+            // SizedBox(
+            //   height: height * 0.0148,
+            // ),
+            // Container(
+            //   height: height * 0.0345,
+            //   child: ListView.separated(
+            //       padding: EdgeInsets.only(
+            //           left: width * 0.0426, right: width * 0.0213),
+            //       scrollDirection: Axis.horizontal,
+            //       itemBuilder: (context, index) => CategoryBubble(
+            //             onTap: () {
+            //               setState(() {
+            //                 _selected = index;
+            //               });
+            //             },
+            //             color: _selected != null && _selected == index
+            //                 ? Color(0xffF05A77)
+            //                 : Colors.white,
+            //             style: _selected != null && _selected == index
+            //                 ? smallRegularWhiteBodyTextStyle
+            //                 : smallRegularGreyBodyTextStyle,
+            //             category: _category[index],
+            //           ),
+            //       separatorBuilder: (context, index) => Divider(
+            //             height: height * 0.0213,
+            //           ),
+            //       itemCount: _category.length),
+            // ),
             SizedBox(
               height: height * 0.0148,
             ),
@@ -314,6 +346,33 @@ class _HomeScreenState extends State<HomeScreen> {
                       (index == 0) ? 3 : 1,
                       (index == 0) ? height * 0.2894 : height * 0.2278),
                 ),
+              ),
+            ),
+            SizedBox(
+              height: height * 0.027,
+            ),
+            Container(
+                margin: standardSpacing,
+                height: height * 0.0283,
+                width: width,
+                child: Text("Tiểu thuyết hot", style: smallHeadingTextStyle)),
+            SizedBox(
+              height: height * 0.0148,
+            ),
+            Container(
+              height: height * 0.1662,
+              child: ListView.separated(
+                itemBuilder: (context, index) => NovelItems(
+                  category: "Tổng tài",
+                  secondCategory: "Lãng mạn",
+                  source: _novel[index],
+                  title: "Ngày mai sẽ đến",
+                ),
+                separatorBuilder: (context, index) => Divider(),
+                itemCount: _novel.length,
+                padding: EdgeInsets.only(
+                    left: width * 0.0426, right: width * 0.0213),
+                scrollDirection: Axis.horizontal,
               ),
             ),
             SizedBox(
@@ -384,65 +443,133 @@ class HomeCategoryTitles extends StatelessWidget {
 }
 
 class RecommendedItems extends StatelessWidget {
-  RecommendedItems({
-    @required this.source,
-    @required this.title,
-    @required this.category,
-    @required this.secondCategory,
-  });
+  RecommendedItems(
+      {@required this.source,
+      @required this.title,
+      @required this.category,
+      @required this.secondCategory,
+      required this.isLoading});
   final String? source;
   final String? title;
   final String? category;
   final String? secondCategory;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return GestureDetector(
-      child: Container(
-        padding: EdgeInsets.symmetric(
-            horizontal: width * 0.0107, vertical: height * 0.0074),
-        height: height * 0.1743,
-        width: width * 0.448,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Container(
-                width: width * 0.448,
-                height: height * 0.1182,
-                // margin: EdgeInsets.only(right: width * 0.0213),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(source!,
-                      height: height * 0.1182,
+    return isLoading == true
+        ? (Container(
+            padding: EdgeInsets.symmetric(
+                horizontal: width * 0.0107, vertical: height * 0.0074),
+            height: height * 0.1743,
+            width: width * 0.448,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Flexible(
+                  child: Shimmer.fromColors(
+                    baseColor: Color(0xffE4E8EF),
+                    highlightColor: Color(0xffC9D1E0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Color(0xffE4E8EF),
+                      ),
                       width: width * 0.448,
-                      fit: BoxFit.fill),
+                      height: height * 0.1182,
+                      // margin: EdgeInsets.only(right: width * 0.0213),
+                    ),
+                  ),
                 ),
+                SizedBox(
+                  height: height * 0.0049,
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Shimmer.fromColors(
+                    baseColor: Color(0xffE4E8EF),
+                    highlightColor: Color(0xffC9D1E0),
+                    child: Container(
+                      padding: EdgeInsets.only(right: width * 0.1333),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Color(0xffE4E8EF),
+                      ),
+                      width: width * 0.3146,
+                      height: height * 0.0197,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: height * 0.0049,
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Shimmer.fromColors(
+                    baseColor: Color(0xffE4E8EF),
+                    highlightColor: Color(0xffC9D1E0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Color(0xffE4E8EF),
+                      ),
+                      width: width * 0.2133,
+                      height: height * 0.0172,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ))
+        : GestureDetector(
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                  horizontal: width * 0.0107, vertical: height * 0.0074),
+              height: height * 0.1743,
+              width: width * 0.448,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Flexible(
+                    child: Container(
+                      width: width * 0.448,
+                      height: height * 0.1182,
+                      // margin: EdgeInsets.only(right: width * 0.0213),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(source!,
+                            height: height * 0.1182,
+                            width: width * 0.448,
+                            fit: BoxFit.fill),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: height * 0.0049,
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    height: height * 0.0259,
+                    child: Text(title!,
+                        style: mediumBodyTextStyle,
+                        overflow: TextOverflow.ellipsis),
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    height: height * 0.0172,
+                    child: Text("$category • $secondCategory",
+                        style: regularGreyTextStyle,
+                        overflow: TextOverflow.ellipsis),
+                  ),
+                ],
               ),
             ),
-            SizedBox(
-              height: height * 0.0049,
-            ),
-            Container(
-              alignment: Alignment.centerLeft,
-              height: height * 0.0259,
-              child: Text(title!,
-                  style: mediumBodyTextStyle, overflow: TextOverflow.ellipsis),
-            ),
-            Container(
-              alignment: Alignment.centerLeft,
-              height: height * 0.0172,
-              child: Text("$category • $secondCategory",
-                  style: regularGreyTextStyle, overflow: TextOverflow.ellipsis),
-            ),
-          ],
-        ),
-      ),
-      onTap: () {},
-    );
+            onTap: () {},
+          );
   }
 }
 
@@ -455,9 +582,7 @@ class HotItems extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return GestureDetector(
-      onTap: () {
-
-      },
+      onTap: () {},
       child: Container(
         width: width * 0.2906,
         height: height * 0.2870,
@@ -519,6 +644,63 @@ class LikedItems extends StatelessWidget {
                 style: regularGreyTextStyle, overflow: TextOverflow.ellipsis),
           ),
         ],
+      ),
+      onTap: () {},
+    );
+  }
+}
+
+class NovelItems extends StatelessWidget {
+  NovelItems({this.source, this.title, this.category, this.secondCategory});
+  final String? source;
+  final String? title;
+  final String? category;
+  final String? secondCategory;
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    return GestureDetector(
+      child: Container(
+        padding: EdgeInsets.symmetric(
+            horizontal: width * 0.0107, vertical: height * 0.0074),
+        height: height * 0.1743,
+        width: width * 0.368,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Flexible(
+              child: Container(
+                width: width * 0.448,
+                height: height * 0.1182,
+                // margin: EdgeInsets.only(right: width * 0.0213),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.asset(source!,
+                      height: height * 0.1083,
+                      width: width * 0.448,
+                      fit: BoxFit.fill),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: height * 0.0049,
+            ),
+            Container(
+              alignment: Alignment.centerLeft,
+              height: height * 0.0259,
+              child: Text(title!,
+                  style: mediumBodyTextStyle, overflow: TextOverflow.ellipsis),
+            ),
+            Container(
+              alignment: Alignment.centerLeft,
+              height: height * 0.0172,
+              child: Text("$category • $secondCategory",
+                  style: regularGreyTextStyle, overflow: TextOverflow.ellipsis),
+            ),
+          ],
+        ),
       ),
       onTap: () {},
     );

@@ -16,7 +16,9 @@ class EmailSentScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            CustomBackButton(),
+            CustomBackButton(
+              color: darkGrey,
+            ),
             SizedBox(
               height: height * 0.1626,
             ),
@@ -29,41 +31,46 @@ class EmailSentScreen extends StatelessWidget {
               height: height * 0.0098,
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: width * 0.112),
-              child: Text("Chúng tôi đã gửi một mật khẩu xác nhận qua email của bạn.", style: regularExtraLightBlackBodyTextStyle, textAlign: TextAlign.center,)),
-              SizedBox(
-                height: height * 0.0886,
-              ),
+                padding: EdgeInsets.symmetric(horizontal: width * 0.112),
+                child: Text(
+                  "Chúng tôi đã gửi một mật khẩu xác nhận qua email của bạn.",
+                  style: regularExtraLightBlackBodyTextStyle,
+                  textAlign: TextAlign.center,
+                )),
+            SizedBox(
+              height: height * 0.0886,
+            ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: width * 0.1546),
               child: LoginRelatedButton(
                 label: "Đi tới email",
-                onPressed: (){
-
-                },
+                onPressed: () {},
               ),
             ),
-            Flexible(child: 
-            Padding(padding: EdgeInsets.only(bottom: 20, left: width * 0.1173, right: width * 0.1173),
-            child: Container(
-              alignment: Alignment.bottomCenter,
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  style: regularExtraLightBlackBodyTextStyle,
-                  children: [
-                    TextSpan(
-                      text: "Bạn không nhận được email? Kiểm tra lại hoặc "
-                    ),
-                    TextSpan(
-                      text: "Nhập một địa chỉ emal khác.",
-                      style: mediumBodyTextStyle.copyWith(color: buttonColor),
-                      recognizer: TapGestureRecognizer()..onTap = () => Navigator.pop(context))
-                  ]
+            Flexible(
+                child: Padding(
+              padding: EdgeInsets.only(
+                  bottom: 20, left: width * 0.1173, right: width * 0.1173),
+              child: Container(
+                alignment: Alignment.bottomCenter,
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                      style: regularExtraLightBlackBodyTextStyle,
+                      children: [
+                        TextSpan(
+                            text:
+                                "Bạn không nhận được email? Kiểm tra lại hoặc "),
+                        TextSpan(
+                            text: "Nhập một địa chỉ emal khác.",
+                            style: mediumBodyTextStyle.copyWith(
+                                color: buttonColor),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => Navigator.pop(context))
+                      ]),
                 ),
               ),
-            ),)
-            )
+            ))
           ],
         ),
       ),

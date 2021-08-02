@@ -33,7 +33,9 @@ class _SignupScreenState extends State<SignupScreen> {
               builder: (context, signupProvider, child) {
             return Column(
               children: [
-                CustomBackButton(),
+                CustomBackButton(
+                  color: darkGrey,
+                ),
                 SizedBox(height: height * 0.0344),
                 Image.asset("assets/icons/Logo.png", height: height * 0.0344),
                 SizedBox(height: height * 0.0591),

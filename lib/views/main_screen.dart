@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:wecomi_flutter/common/app_session.dart';
 import 'package:wecomi_flutter/components/bottom_nav_bar_icon.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/views/account/account_screen.dart';
@@ -7,7 +9,6 @@ import 'package:wecomi_flutter/views/genre/genre_screen.dart';
 import 'package:wecomi_flutter/views/home/home_screen.dart';
 import 'package:wecomi_flutter/views/library/library_screen.dart';
 class MainScreen extends StatefulWidget{
-
   @override
   _MainScreenState createState() => _MainScreenState();
 
@@ -19,9 +20,16 @@ List<Widget> _pages = [
   LibraryScreen()
 ];
 class _MainScreenState extends State<MainScreen>{
+   @override
+  void initState(){
+    
+    super.initState();
+  }
+
   int _index = 0;
   @override
   Widget build(BuildContext context) {
+    print(AppSession().token);
     return Scaffold(
       body: Container(
         child: _pages[_index]

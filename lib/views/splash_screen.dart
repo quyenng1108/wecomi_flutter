@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wecomi_flutter/common/app_session.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/comic_provider.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/login_provider.dart';
+import 'package:wecomi_flutter/views/account/account_screen.dart';
+import 'package:wecomi_flutter/views/login/login_screen.dart';
 import 'package:wecomi_flutter/views/main_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -7,16 +13,21 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>{
+class _SplashScreenState extends State<SplashScreen> {
+    String? accessToken;
+    ComicProvider test = ComicProvider();
   @override
-  void initState(){
+  void initState() {
     super.initState();
+    AppSession().saveSession();
+    test.getComicBySex(1);
     Future.delayed(Duration(milliseconds: 1500)).then((value) => Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MainScreen())));
+        context, MaterialPageRoute(builder: (context) => MainScreen())));
   }
+
   @override
   Widget build(BuildContext context) {
+    print(test.comic);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
