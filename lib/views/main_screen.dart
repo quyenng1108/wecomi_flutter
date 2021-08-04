@@ -29,10 +29,10 @@ class _MainScreenState extends State<MainScreen>{
   int _index = 0;
   @override
   Widget build(BuildContext context) {
-    print(AppSession().token);
     return Scaffold(
-      body: Container(
-        child: _pages[_index]
+      body: IndexedStack(
+        index: _index,
+        children: _pages,
       ),
       bottomNavigationBar:Container(
         decoration: BoxDecoration(

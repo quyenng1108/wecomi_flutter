@@ -12,7 +12,6 @@ import 'package:wecomi_flutter/view_models/service_view_models/login_provider.da
 import 'package:wecomi_flutter/views/forgot_password.dart/forgot_password_screen.dart';
 import 'package:wecomi_flutter/views/signup/signup_screen.dart';
 
-
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -179,12 +178,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                        onTap: () =>
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => ForgotPasswordScreen()))
-                            print(loginProvider.accessToken)),
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ForgotPasswordScreen()))),
                     SizedBox(
                       height: height * 0.0295,
                     ),
@@ -193,7 +190,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         onPressed: () {
                           loginProvider.loginWithEmail(
                               _usernameTextController.text,
-                              _passwordTextController.text, context);
+                              _passwordTextController.text,
+                              context);
                         }),
                     SizedBox(
                       height: height * 0.0197,
