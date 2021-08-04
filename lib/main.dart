@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         title: "Wecomi",
         theme: appProvider.theme,
         darkTheme: ThemeConfig.darkTheme,
-        home: SplashScreen(),
+        home: AccountScreen(),
       );
     });
   }

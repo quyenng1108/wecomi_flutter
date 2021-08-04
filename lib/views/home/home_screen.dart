@@ -16,39 +16,6 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-int? _selected;
-List _category = [
-  "Tình yêu",
-  "Học đường",
-  "Viễn tưởng",
-  "Đam Mỹ",
-];
-List _images = [
-  "assets/images/Banner2.png",
-  "assets/images/Banner1.jpeg",
-  "assets/images/Banner2.png",
-  "assets/images/Banner1.jpeg",
-  "assets/images/Banner2.png"
-];
-List _hot = [
-  "assets/images/Hot1.jpeg",
-  "assets/images/Hot2.jpeg",
-  "assets/images/Hot3.png",
-  "assets/images/Hot1.jpeg",
-  "assets/images/Hot2.jpeg",
-  "assets/images/Hot3.png",
-  "assets/images/Hot1.jpeg",
-  "assets/images/Hot2.jpeg",
-  "assets/images/Hot3.png",
-  "assets/images/Hot1.jpeg",
-  "assets/images/Hot2.jpeg",
-];
-List _recommended = [
-  "assets/images/Recommended1.png",
-  "assets/images/Recommended2.png",
-  "assets/images/Recommended3.png",
-  "assets/images/Recommended4.png",
-];
 List _novel = [
   "assets/images/Novel-1.png",
   "assets/images/Novel-2.png",
@@ -57,22 +24,30 @@ List _novel = [
 
 class _HomeScreenState extends State<HomeScreen>
     with AfterLayoutMixin<HomeScreen> {
-  bool _value = false;
-  ComicProvider comicProvider = ComicProvider();
+        ComicProvider comicProvider = ComicProvider();
+
   @override
   void afterFirstLayout(BuildContext context) {
+    print(AppSession().sex);
     comicProvider.getComicBySex(AppSession().sex);
   }
 
   @override
   Widget build(BuildContext context) {
+    comicProvider = Provider.of<ComicProvider>(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    comicProvider = Provider.of<ComicProvider>(context);
+    print(height);
     var standardSpacing = EdgeInsets.symmetric(horizontal: width * 0.0427);
+    Future<void> _refreshData() async {
+      comicProvider.isLoading = true;
+      Future.delayed(Duration(milliseconds: 1000))
+          .then((value) => comicProvider.getComicBySex(AppSession().sex));
+      setState(() {});
+    }
+
     return Scaffold(
-        body: SafeArea(
-      child: SingleChildScrollView(
+      body: SafeArea(
         child: Column(
           children: [
             Container(
@@ -123,7 +98,6 @@ class _HomeScreenState extends State<HomeScreen>
                                     AppSession().sex == 1
                                         ? AppSession().changeSexGroup(2)
                                         : AppSession().changeSexGroup(1);
-                                        
                                   });
                                   comicProvider.isLoading = true;
                                   Future.delayed(Duration(milliseconds: 1000))
@@ -131,6 +105,8 @@ class _HomeScreenState extends State<HomeScreen>
                                           .getComicBySex(AppSession().sex));
                                 },
                                 child: AnimatedSwitcher(
+                                    // switchInCurve: Curves.easeOut,
+                                    // switchOutCurve: Curves.easeOut,
                                     duration: Duration(milliseconds: 700),
                                     transitionBuilder: (Widget child,
                                         Animation<double> animation) {
@@ -141,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     },
                                     child: AppSession().sex == 1
                                         ? ClipRRect(
-                                            key: UniqueKey(),
+                                            key: Key("1"),
                                             borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(14.0),
                                               topRight: Radius.circular(14.0),
@@ -152,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen>
                                                 height: width * 0.064,
                                                 fit: BoxFit.fill))
                                         : ClipRRect(
-                                            key: UniqueKey(),
+                                            key: Key("2"),
                                             borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(0),
                                               topRight: Radius.circular(0),
@@ -219,169 +195,376 @@ class _HomeScreenState extends State<HomeScreen>
             SizedBox(
               height: height * 0.0197,
             ),
-            Container(
-              height: height * 0.2365,
-              child: ListView.separated(
-                padding: EdgeInsets.only(
-                    left: width * 0.0426, right: width * 0.0213),
-                itemCount: _images.length,
-                separatorBuilder: (context, index) => Divider(
-                  height: height * 0.0213,
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () => _refreshData(),
+                child: SingleChildScrollView(
+                  physics: comicProvider.isLoading
+                      ? NeverScrollableScrollPhysics()
+                      : AlwaysScrollableScrollPhysics(),
+                  child: comicProvider.isLoading
+                      ? Column(
+                          children: [
+                            Container(
+                              height: height * 0.2365,
+                              child: ListView.separated(
+                                physics: NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.only(
+                                    left: width * 0.0426,
+                                    right: width * 0.0213),
+                                itemCount: 4,
+                                separatorBuilder: (context, index) => Divider(
+                                  height: height * 0.0213,
+                                ),
+                                itemBuilder: (context, i) => Shimmer.fromColors(
+                                  loop: 1,
+                                  // enabled: false,
+                                  period: Duration(milliseconds: 700),
+                                  baseColor: Color(0xffE4E8EF),
+                                  highlightColor: Color(0xffC9D1E0),
+                                  child: Container(
+                                    margin:
+                                        EdgeInsets.only(right: width * 0.0213),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: Color(0xffE4E8EF),
+                                    ),
+                                    width: width * 0.8373,
+                                    height: height * 0.2365,
+                                  ),
+                                ),
+                                scrollDirection: Axis.horizontal,
+                              ),
+                            ),
+                            SizedBox(
+                              height: height * 0.0345,
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Shimmer.fromColors(
+                                loop: 1,
+                                baseColor: Color(0xffE4E8EF),
+                                highlightColor: Color(0xffC9D1E0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Color(0xffE4E8EF),
+                                  ),
+                                  margin: standardSpacing,
+                                  height: height * 0.0283,
+                                  width: width * 0.2133,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: height * 0.0074,
+                            ),
+                            Container(
+                              height: height * 0.3486,
+                              child: GridView.count(
+                                physics: NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.symmetric(
+                                horizontal: width * 0.032),
+                                crossAxisCount: 2,
+                                childAspectRatio: (width * 0.448) / (height * 0.1663),
+                                children: [
+                                  for (int i = 0; i < 4; i++)
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: width * 0.0107,
+                                          vertical: height * 0.0074),
+                                      height: height * 0.1743,
+                                      width: width * 0.448,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Flexible(
+                                            child: 
+                                            Shimmer.fromColors(
+                                              loop: 1,
+                                              period:
+                                                  Duration(milliseconds: 700),
+                                              baseColor: Color(0xffE4E8EF),
+                                              highlightColor: Color(0xffC9D1E0),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  color: Color(0xffE4E8EF),
+                                                ),
+                                                width: width * 0.448,
+                                                height: height * 0.1182,
+                                                margin: EdgeInsets.only(right: width * 0.0213),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: height * 0.0049,
+                                          ),
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Shimmer.fromColors(
+                                              loop: 1,
+                                              period:
+                                                  Duration(milliseconds: 700),
+                                              baseColor: Color(0xffE4E8EF),
+                                              highlightColor: Color(0xffC9D1E0),
+                                              child: Container(
+                                                padding: EdgeInsets.only(
+                                                    right: width * 0.1333),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  color: Color(0xffE4E8EF),
+                                                ),
+                                                width: width * 0.3146,
+                                                height: height * 0.0197,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: height * 0.0049,
+                                          ),
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Shimmer.fromColors(
+                                              loop: 1,
+                                              period:
+                                                  Duration(milliseconds: 700),
+                                              baseColor: Color(0xffE4E8EF),
+                                              highlightColor: Color(0xffC9D1E0),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  color: Color(0xffE4E8EF),
+                                                ),
+                                                width: width * 0.2133,
+                                                height: height * 0.0172,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: height * 0.027,
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Shimmer.fromColors(
+                                loop: 1,
+                                baseColor: Color(0xffE4E8EF),
+                                highlightColor: Color(0xffC9D1E0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Color(0xffE4E8EF),
+                                  ),
+                                  margin: standardSpacing,
+                                  height: height * 0.0283,
+                                  width: width * 0.2133,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Column(
+                          children: [
+                            Container(
+                              height: height * 0.2365,
+                              child: ListView.separated(
+                                physics: comicProvider.isLoading
+                                    ? NeverScrollableScrollPhysics()
+                                    : AlwaysScrollableScrollPhysics(),
+                                padding: EdgeInsets.only(
+                                    left: width * 0.0426,
+                                    right: width * 0.0213),
+                                itemCount: 4,
+                                separatorBuilder: (context, index) => Divider(
+                                  height: height * 0.0213,
+                                ),
+                                itemBuilder: (context, i) => BannerItems(
+                                  source:
+                                      comicProvider.recommendedComic?[i].imgUrl,
+                                ),
+                                scrollDirection: Axis.horizontal,
+                              ),
+                            ),
+                            SizedBox(
+                              height: height * 0.0345,
+                            ),
+                            HomeCategoryTitles(
+                              title: "Đề xuất",
+                            ),
+                            SizedBox(
+                              height: height * 0.0074,
+                            ),
+                            Container(
+                              height: height * 0.3485,
+                              child: GridView.count(
+                                physics: NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: width * 0.032),
+                                crossAxisCount: 2,
+                                childAspectRatio: (width * 0.448) / (height * 0.1663),
+                                children: [
+                                  for (int i = 0; i < 4; i++)
+                                    RecommendedItems(
+                                      source: comicProvider
+                                          .recommendedComic?[i].imgUrl,
+                                      title: comicProvider
+                                          .recommendedComic?[i].bookname,
+                                      category: comicProvider
+                                          .recommendedComic?[i].categoryName,
+                                      secondCategory: 'Tổng tài',
+                                    ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: height * 0.027,
+                            ),
+                            HomeCategoryTitles(
+                              title: "Truyện hot",
+                            ),
+                            SizedBox(
+                              height: height * 0.0148,
+                            ),
+                            Container(
+                              height: height * 0.2870,
+                              child: ListView.separated(
+                                padding: EdgeInsets.only(
+                                    left: width * 0.0426,
+                                    right: width * 0.0213),
+                                itemCount: 4,
+                                separatorBuilder: (context, index) => Divider(
+                                  height: height * 0.0213,
+                                ),
+                                itemBuilder: (context, i) => HotItems(
+                                  source: comicProvider.hotComic?[i].imgUrl,
+                                ),
+                                scrollDirection: Axis.horizontal,
+                              ),
+                            ),
+                            SizedBox(
+                              height: height * 0.027,
+                            ),
+                            HomeCategoryTitles(
+                              title: "Có thể bạn thích",
+                            ),
+                            // SizedBox(
+                            //   height: height * 0.0148,
+                            // ),
+                            // Container(
+                            //   height: height * 0.0345,
+                            //   child: ListView.separated(
+                            //       padding: EdgeInsets.only(
+                            //           left: width * 0.0426, right: width * 0.0213),
+                            //       scrollDirection: Axis.horizontal,
+                            //       itemBuilder: (context, index) => CategoryBubble(
+                            //             onTap: () {
+                            //               setState(() {
+                            //                 _selected = index;
+                            //               });
+                            //             },
+                            //             color: _selected != null && _selected == index
+                            //                 ? Color(0xffF05A77)
+                            //                 : Colors.white,
+                            //             style: _selected != null && _selected == index
+                            //                 ? smallRegularWhiteBodyTextStyle
+                            //                 : smallRegularGreyBodyTextStyle,
+                            //             category: _category[index],
+                            //           ),
+                            //       separatorBuilder: (context, index) => Divider(
+                            //             height: height * 0.0213,
+                            //           ),
+                            //       itemCount: _category.length),
+                            // ),
+                            SizedBox(
+                              height: height * 0.0148,
+                            ),
+                            Padding(
+                              padding: standardSpacing,
+                              child: Container(
+                                height: height * 0.537,
+                                child: StaggeredGridView.countBuilder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  mainAxisSpacing: width * 0.0426,
+                                  crossAxisSpacing: width * 0.0213,
+                                  itemCount: 4,
+                                  // shrinkWrap: true,
+                                  crossAxisCount: 3,
+                                  itemBuilder: (context, index) => LikedItems(
+                                    height: index == 0
+                                        ? height * 0.2365
+                                        : height * 0.1749,
+                                    width: index == 0
+                                        ? width * 0.9146
+                                        : width * 0.3786,
+                                    source:
+                                        comicProvider.likedComic?[index].imgUrl,
+                                    title: comicProvider
+                                        .likedComic?[index].bookname,
+                                    category: comicProvider
+                                        .likedComic?[index].categoryName,
+                                    secondCategory: "Tình cảm",
+                                  ),
+                                  staggeredTileBuilder: (index) =>
+                                      StaggeredTile.extent(
+                                          (index == 0) ? 3 : 1,
+                                          (index == 0)
+                                              ? height * 0.2894
+                                              : height * 0.2278),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: height * 0.027,
+                            ),
+                            Container(
+                                margin: standardSpacing,
+                                height: height * 0.0283,
+                                width: width,
+                                child: Text("Tiểu thuyết hot",
+                                    style: smallHeadingTextStyle)),
+                            SizedBox(
+                              height: height * 0.0148,
+                            ),
+                            Container(
+                              height: height * 0.1662,
+                              child: ListView.separated(
+                                itemBuilder: (context, index) => NovelItems(
+                                  category: "Tổng tài",
+                                  secondCategory: "Lãng mạn",
+                                  source: _novel[index],
+                                  title: "Ngày mai sẽ đến",
+                                ),
+                                separatorBuilder: (context, index) => Divider(),
+                                itemCount: _novel.length,
+                                padding: EdgeInsets.only(
+                                    left: width * 0.0426,
+                                    right: width * 0.0213),
+                                scrollDirection: Axis.horizontal,
+                              ),
+                            ),
+                            SizedBox(
+                              height: height * 0.059,
+                            ),
+                          ],
+                        ),
                 ),
-                itemBuilder: (context, i) => BannerItems(
-                  source: _images[i],
-                ),
-                scrollDirection: Axis.horizontal,
               ),
-            ),
-            SizedBox(
-              height: height * 0.0345,
-            ),
-            HomeCategoryTitles(
-              title: "Đề xuất",
-            ),
-            SizedBox(
-              height: height * 0.0074,
-            ),
-            Container(
-              height: height * 0.3485,
-              child: GridView.count(
-                physics: NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(horizontal: width * 0.032),
-                crossAxisCount: 2,
-                childAspectRatio: 168 / 135,
-                children: [
-                  for (int i = 0; i < 4; i++)
-                    RecommendedItems(
-                      isLoading: comicProvider.isLoading,
-                      source: comicProvider.recommendedComic?[i].imgUrl,
-                      title: comicProvider.recommendedComic?[i].bookname,
-                      category: comicProvider.recommendedComic?[i].categoryName,
-                      secondCategory: 'Tổng tài',
-                    ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: height * 0.027,
-            ),
-            HomeCategoryTitles(
-              title: "Truyện hot",
-            ),
-            SizedBox(
-              height: height * 0.0148,
-            ),
-            Container(
-              height: height * 0.2870,
-              child: ListView.separated(
-                padding: EdgeInsets.only(
-                    left: width * 0.0426, right: width * 0.0213),
-                itemCount: _images.length,
-                separatorBuilder: (context, index) => Divider(
-                  height: height * 0.0213,
-                ),
-                itemBuilder: (context, i) => HotItems(
-                  source: _hot[i],
-                ),
-                scrollDirection: Axis.horizontal,
-              ),
-            ),
-            SizedBox(
-              height: height * 0.027,
-            ),
-            HomeCategoryTitles(
-              title: "Có thể bạn thích",
-            ),
-            // SizedBox(
-            //   height: height * 0.0148,
-            // ),
-            // Container(
-            //   height: height * 0.0345,
-            //   child: ListView.separated(
-            //       padding: EdgeInsets.only(
-            //           left: width * 0.0426, right: width * 0.0213),
-            //       scrollDirection: Axis.horizontal,
-            //       itemBuilder: (context, index) => CategoryBubble(
-            //             onTap: () {
-            //               setState(() {
-            //                 _selected = index;
-            //               });
-            //             },
-            //             color: _selected != null && _selected == index
-            //                 ? Color(0xffF05A77)
-            //                 : Colors.white,
-            //             style: _selected != null && _selected == index
-            //                 ? smallRegularWhiteBodyTextStyle
-            //                 : smallRegularGreyBodyTextStyle,
-            //             category: _category[index],
-            //           ),
-            //       separatorBuilder: (context, index) => Divider(
-            //             height: height * 0.0213,
-            //           ),
-            //       itemCount: _category.length),
-            // ),
-            SizedBox(
-              height: height * 0.0148,
-            ),
-            Padding(
-              padding: standardSpacing,
-              child: Container(
-                height: height * 0.537,
-                child: StaggeredGridView.countBuilder(
-                  physics: NeverScrollableScrollPhysics(),
-                  mainAxisSpacing: width * 0.0426,
-                  crossAxisSpacing: width * 0.0213,
-                  itemCount: 4,
-                  // shrinkWrap: true,
-                  crossAxisCount: 3,
-                  itemBuilder: (context, index) => LikedItems(
-                    height: index == 0 ? height * 0.2365 : height * 0.1749,
-                    width: index == 0 ? width * 0.9146 : width * 0.3786,
-                    source: _images[index],
-                    title: "Cô thư ký xinh đẹp",
-                    category: "Tổng tài",
-                    secondCategory: "Tình cảm",
-                  ),
-                  staggeredTileBuilder: (index) => StaggeredTile.extent(
-                      (index == 0) ? 3 : 1,
-                      (index == 0) ? height * 0.2894 : height * 0.2278),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: height * 0.027,
-            ),
-            Container(
-                margin: standardSpacing,
-                height: height * 0.0283,
-                width: width,
-                child: Text("Tiểu thuyết hot", style: smallHeadingTextStyle)),
-            SizedBox(
-              height: height * 0.0148,
-            ),
-            Container(
-              height: height * 0.1662,
-              child: ListView.separated(
-                itemBuilder: (context, index) => NovelItems(
-                  category: "Tổng tài",
-                  secondCategory: "Lãng mạn",
-                  source: _novel[index],
-                  title: "Ngày mai sẽ đến",
-                ),
-                separatorBuilder: (context, index) => Divider(),
-                itemCount: _novel.length,
-                padding: EdgeInsets.only(
-                    left: width * 0.0426, right: width * 0.0213),
-                scrollDirection: Axis.horizontal,
-              ),
-            ),
-            SizedBox(
-              height: height * 0.059,
             ),
           ],
         ),
       ),
-    ));
+    );
   }
 }
 
@@ -399,7 +582,7 @@ class BannerItems extends StatelessWidget {
         margin: EdgeInsets.only(right: width * 0.0213),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(8),
-          child: Image.asset(source!,
+          child: Image.network(source!,
               height: height * 0.2365, width: width * 0.8373, fit: BoxFit.fill),
         ),
       ),
@@ -443,140 +626,71 @@ class HomeCategoryTitles extends StatelessWidget {
 }
 
 class RecommendedItems extends StatelessWidget {
-  RecommendedItems(
-      {@required this.source,
-      @required this.title,
-      @required this.category,
-      @required this.secondCategory,
-      required this.isLoading});
+  RecommendedItems({
+    @required this.source,
+    @required this.title,
+    @required this.category,
+    @required this.secondCategory,
+  });
   final String? source;
   final String? title;
   final String? category;
   final String? secondCategory;
-  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return isLoading == true
-        ? (Container(
-            padding: EdgeInsets.symmetric(
-                horizontal: width * 0.0107, vertical: height * 0.0074),
-            height: height * 0.1743,
-            width: width * 0.448,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Flexible(
-                  child: Shimmer.fromColors(
-                    baseColor: Color(0xffE4E8EF),
-                    highlightColor: Color(0xffC9D1E0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Color(0xffE4E8EF),
-                      ),
-                      width: width * 0.448,
+    return GestureDetector(
+      child: Container(
+        padding: EdgeInsets.symmetric(
+            horizontal: width * 0.0107, vertical: height * 0.0074),
+        height: height * 0.1743,
+        width: width * 0.448,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Flexible(
+              child: Container(
+                width: width * 0.448,
+                height: height * 0.1182,
+                // margin: EdgeInsets.only(right: width * 0.0213),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(source!,
                       height: height * 0.1182,
-                      // margin: EdgeInsets.only(right: width * 0.0213),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: height * 0.0049,
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Shimmer.fromColors(
-                    baseColor: Color(0xffE4E8EF),
-                    highlightColor: Color(0xffC9D1E0),
-                    child: Container(
-                      padding: EdgeInsets.only(right: width * 0.1333),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Color(0xffE4E8EF),
-                      ),
-                      width: width * 0.3146,
-                      height: height * 0.0197,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: height * 0.0049,
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Shimmer.fromColors(
-                    baseColor: Color(0xffE4E8EF),
-                    highlightColor: Color(0xffC9D1E0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Color(0xffE4E8EF),
-                      ),
-                      width: width * 0.2133,
-                      height: height * 0.0172,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ))
-        : GestureDetector(
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                  horizontal: width * 0.0107, vertical: height * 0.0074),
-              height: height * 0.1743,
-              width: width * 0.448,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Flexible(
-                    child: Container(
                       width: width * 0.448,
-                      height: height * 0.1182,
-                      // margin: EdgeInsets.only(right: width * 0.0213),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(source!,
-                            height: height * 0.1182,
-                            width: width * 0.448,
-                            fit: BoxFit.fill),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: height * 0.0049,
-                  ),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    height: height * 0.0259,
-                    child: Text(title!,
-                        style: mediumBodyTextStyle,
-                        overflow: TextOverflow.ellipsis),
-                  ),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    height: height * 0.0172,
-                    child: Text("$category • $secondCategory",
-                        style: regularGreyTextStyle,
-                        overflow: TextOverflow.ellipsis),
-                  ),
-                ],
+                      fit: BoxFit.fill),
+                ),
               ),
             ),
-            onTap: () {},
-          );
+            SizedBox(
+              height: height * 0.0049,
+            ),
+            Container(
+              alignment: Alignment.centerLeft,
+              height: height * 0.0259,
+              child: Text(title!,
+                  style: mediumBodyTextStyle, overflow: TextOverflow.ellipsis),
+            ),
+            Container(
+              alignment: Alignment.centerLeft,
+              height: height * 0.0172,
+              child: Text("$category • $secondCategory",
+                  style: regularGreyTextStyle, overflow: TextOverflow.ellipsis),
+            ),
+          ],
+        ),
+      ),
+      onTap: () {},
+    );
   }
 }
 
 class HotItems extends StatelessWidget {
   HotItems({@required this.source});
   final String? source;
-
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -589,8 +703,10 @@ class HotItems extends StatelessWidget {
         margin: EdgeInsets.only(right: width * 0.0213),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(8),
-          child: Image.asset(source!,
-              height: height * 0.2870, width: width * 0.2907, fit: BoxFit.fill),
+          child: Image.network(source!,
+              height: height * 0.2870,
+              width: width * 0.2907,
+              fit: BoxFit.cover),
         ),
       ),
     );
@@ -598,13 +714,14 @@ class HotItems extends StatelessWidget {
 }
 
 class LikedItems extends StatelessWidget {
-  LikedItems(
-      {@required this.source,
-      @required this.category,
-      @required this.secondCategory,
-      @required this.title,
-      @required this.height,
-      @required this.width});
+  LikedItems({
+    @required this.source,
+    @required this.category,
+    @required this.secondCategory,
+    @required this.title,
+    @required this.height,
+    @required this.width,
+  });
   final String? title;
   final String? category;
   final String? secondCategory;
@@ -624,7 +741,7 @@ class LikedItems extends StatelessWidget {
               height: height,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
-                child: Image.asset(source!, fit: BoxFit.cover),
+                child: Image.network(source!, fit: BoxFit.cover),
               ),
             ),
           ),

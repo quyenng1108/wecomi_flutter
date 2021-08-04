@@ -52,7 +52,7 @@ class _AccountScreenState extends State<AccountScreen>
                     padding: EdgeInsets.only(top: height * 0.0098),
                     child: Center(
                       child: Container(
-                          height: height * 0.0296,
+                          height: 28,
                           child: Text(
                             "Tài khoản",
                             style: giganticMediumBodyTextStyle,
@@ -83,7 +83,7 @@ class _AccountScreenState extends State<AccountScreen>
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8)),
                 padding: EdgeInsets.all(width * 0.0427),
-                height: height * 0.2611,
+                // height: height * 0.2611,
                 // width: width,
                 margin: standardSpacing,
                 child: Column(
@@ -216,8 +216,11 @@ class _AccountScreenState extends State<AccountScreen>
               Expanded(
                 child: Align(
                     alignment: Alignment.bottomCenter,
-                    child: Text("Vesion 1.27",
-                        style: regularExtraLightBlackBodyTextStyle)),
+                    child: Container(
+                      padding: EdgeInsets.only(bottom: 8),
+                      child: Text("Vesion 1.27",
+                          style: regularExtraLightBlackBodyTextStyle),
+                    )),
               )
             ],
           ),
@@ -270,12 +273,17 @@ class NotLoggedInLayout extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var standardSpacing = EdgeInsets.symmetric(horizontal: width * 0.0427);
-    return Container(
-      height: height * 0.1576,
-      padding: standardSpacing,
-      child: Column(
-        children: [
-          Row(
+    return
+        // Container(
+        //   height: height * 0.1576,
+        //   padding: standardSpacing,
+        //   child:
+        Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          padding: standardSpacing,
+          child: Row(
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(90),
@@ -298,16 +306,17 @@ class NotLoggedInLayout extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
-            height: height * 0.0295,
-          ),
-          LoginRelatedButton(
-            label: "Đăng nhập",
-            onPressed: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => LoginScreen())),
-          )
-        ],
-      ),
+        ),
+        SizedBox(
+          height: height * 0.0295,
+        ),
+        LoginRelatedButton(
+          label: "Đăng nhập",
+          onPressed: () => Navigator.push(
+              context, MaterialPageRoute(builder: (context) => LoginScreen())),
+        )
+      ],
+      // ),
     );
   }
 }
@@ -319,7 +328,7 @@ class LoggedInLayout extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     var standardSpacing = EdgeInsets.symmetric(horizontal: width * 0.0427);
     return Container(
-      height: height * 0.2044,
+      // height: height * 0.2044,
       padding: standardSpacing,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,

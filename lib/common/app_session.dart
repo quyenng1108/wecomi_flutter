@@ -19,10 +19,12 @@ class AppSession{
     token = prefs.getString("token");
     print(token);
     List<String>? userData = prefs.getStringList("userData");
-    userId = int.parse(userData![0]);
+    if(token != null && userData != null){
+    userId = int.parse(userData[0]);
     accountStatus = int.parse(userData[1]);
     if(prefs.getInt("sex") != null){
       sex = prefs.getInt("sex")!; 
+    }
     }
   }
 
