@@ -12,6 +12,7 @@ import 'package:wecomi_flutter/constants/theme.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/login_provider.dart';
 import 'package:wecomi_flutter/view_models/ui_view_models/app_provider.dart';
 import 'package:wecomi_flutter/views/login/login_screen.dart';
+import 'package:wecomi_flutter/views/comic/comic_screen.dart';
 import 'package:after_layout/after_layout.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -95,6 +96,8 @@ class _AccountScreenState extends State<AccountScreen>
                         "assets/icons/Arrow-Right.png",
                         height: width * 0.064,
                       ),
+                        onTap: () => Navigator.push(
+                            context, MaterialPageRoute(builder: (context) => ComicScreen()))
                     ),
                     SizedBox(
                       height: height * 0.0172,
