@@ -67,7 +67,7 @@ class _AccountScreenState extends State<AccountScreen>
               ),
               Container(
                 height: 2,
-                color: lighGrey,
+                color: lightGrey,
               ),
               SizedBox(
                 height: height * 0.0246,

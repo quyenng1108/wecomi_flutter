@@ -13,7 +13,36 @@ class _LibraryScreenState extends State<LibraryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text("Library Screen"),
+        child: Wrap(
+          children: [
+            Container(
+              width: 100,
+              height: 50,
+              color: Colors.red,
+            ),
+            Container(
+              width: 100,
+              height: 50,
+              color: Colors.red,
+            ),
+            Container(
+              width: 100,
+              height: 50,
+              color: Colors.red,
+            ),
+            Container(
+              width: 100,
+              height: 50,
+              color: Colors.red,
+            ),
+            Container(
+              width: 100,
+              height: 50,
+              color: Colors.red,
+            ),
+
+          ],
+        ),
       ),
     );
   }

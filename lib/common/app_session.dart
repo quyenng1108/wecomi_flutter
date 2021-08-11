@@ -17,7 +17,6 @@ class AppSession{
     Future<void> saveSession() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     token = prefs.getString("token");
-    print(token);
     List<String>? userData = prefs.getStringList("userData");
     if(token != null && userData != null){
     userId = int.parse(userData[0]);

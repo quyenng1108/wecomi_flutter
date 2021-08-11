@@ -8,7 +8,7 @@ class SeeAllScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    var standardSpacing = EdgeInsets.symmetric(horizontal: width * 0.0427);
+    // var standardSpacing = EdgeInsets.symmetric(horizontal: width * 0.0427);
     return Scaffold(
       body: Column(
         children: [
@@ -26,7 +26,9 @@ class SeeAllScreen extends StatelessWidget {
                 width: width,
                 padding:
                     EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-                child: Stack(
+                child: 
+                
+                Stack(
                   children: [
                     Align(
                         alignment: Alignment.centerLeft,
