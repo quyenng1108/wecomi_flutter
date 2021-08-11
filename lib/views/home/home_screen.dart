@@ -12,6 +12,9 @@ import 'package:wecomi_flutter/view_models/service_view_models/comic_provider.da
 import 'package:wecomi_flutter/views/account/account_screen.dart';
 
 class HomeScreen extends StatefulWidget {
+  final ScrollController scrollController;
+  HomeScreen({required this.scrollController});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -23,27 +26,37 @@ List _novel = [
 ];
 
 class _HomeScreenState extends State<HomeScreen>
-    with AfterLayoutMixin<HomeScreen> {
-        ComicProvider comicProvider = ComicProvider();
-
+// with AfterLayoutMixin<HomeScreen>
+{
+  ComicProvider comicProvider = ComicProvider();
+  // @override
+  // void afterFirstLayout(BuildContext context) {
+  //   // comicProvider = Provider.of<ComicProvider>(context);
+  //   comicProvider.getComicBySex(AppSession().sex);
+  // }
   @override
-  void afterFirstLayout(BuildContext context) {
-    print(AppSession().sex);
-    comicProvider.getComicBySex(AppSession().sex);
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+   
+    });
   }
-
+   @override
+  void dispose() {
+    super.dispose();
+    comicProvider.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     comicProvider = Provider.of<ComicProvider>(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    print(height);
     var standardSpacing = EdgeInsets.symmetric(horizontal: width * 0.0427);
     Future<void> _refreshData() async {
-      comicProvider.isLoading = true;
+      comicProvider.showProgress();
       Future.delayed(Duration(milliseconds: 1000))
           .then((value) => comicProvider.getComicBySex(AppSession().sex));
-      setState(() {});
+      // setState(() {});
     }
 
     return Scaffold(
@@ -199,6 +212,7 @@ class _HomeScreenState extends State<HomeScreen>
               child: RefreshIndicator(
                 onRefresh: () => _refreshData(),
                 child: SingleChildScrollView(
+                  controller: widget.scrollController,
                   physics: comicProvider.isLoading
                       ? NeverScrollableScrollPhysics()
                       : AlwaysScrollableScrollPhysics(),
@@ -264,9 +278,10 @@ class _HomeScreenState extends State<HomeScreen>
                               child: GridView.count(
                                 physics: NeverScrollableScrollPhysics(),
                                 padding: EdgeInsets.symmetric(
-                                horizontal: width * 0.032),
+                                    horizontal: width * 0.032),
                                 crossAxisCount: 2,
-                                childAspectRatio: (width * 0.448) / (height * 0.1663),
+                                childAspectRatio:
+                                    (width * 0.448) / (height * 0.1663),
                                 children: [
                                   for (int i = 0; i < 4; i++)
                                     Container(
@@ -281,8 +296,7 @@ class _HomeScreenState extends State<HomeScreen>
                                             MainAxisAlignment.start,
                                         children: [
                                           Flexible(
-                                            child: 
-                                            Shimmer.fromColors(
+                                            child: Shimmer.fromColors(
                                               loop: 1,
                                               period:
                                                   Duration(milliseconds: 700),
@@ -296,7 +310,8 @@ class _HomeScreenState extends State<HomeScreen>
                                                 ),
                                                 width: width * 0.448,
                                                 height: height * 0.1182,
-                                                margin: EdgeInsets.only(right: width * 0.0213),
+                                                margin: EdgeInsets.only(
+                                                    right: width * 0.0213),
                                               ),
                                             ),
                                           ),
@@ -412,7 +427,8 @@ class _HomeScreenState extends State<HomeScreen>
                                 padding: EdgeInsets.symmetric(
                                     horizontal: width * 0.032),
                                 crossAxisCount: 2,
-                                childAspectRatio: (width * 0.448) / (height * 0.1663),
+                                childAspectRatio:
+                                    (width * 0.448) / (height * 0.1663),
                                 children: [
                                   for (int i = 0; i < 4; i++)
                                     RecommendedItems(

@@ -57,7 +57,11 @@ class SignupTextField extends StatelessWidget {
           decoration: InputDecoration(
               isDense: true,
               // contentPadding: EdgeInsets.symmetric(vertical: height * 0.0689 /2, horizontal:width * 0.0427 ),
-              contentPadding: EdgeInsets.only(top: height * 0.0394, bottom: height * 0.0196, left: width * 0.0427, right: width * 0.0427),
+              contentPadding: EdgeInsets.only(
+                  top: height * 0.0394,
+                  bottom: height * 0.0196,
+                  left: width * 0.0427,
+                  right: width * 0.0427),
               suffixIcon: suffixIcon,
               focusedBorder: focusedBorder,
               enabledBorder: enabledBorder,
