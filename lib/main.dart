@@ -31,8 +31,8 @@ void main() {
       ChangeNotifierProvider(create: (_) => ForgotPasswordProvider()),
       ChangeNotifierProvider(create: (_) => LoginProvider()),
       ChangeNotifierProvider(create: (_) => ComicProvider()),
-     ChangeNotifierProvider(create: (_) => GenreProvider()),
-     ChangeNotifierProvider(create: (_) => SearchProvider()),
+      ChangeNotifierProvider(create: (_) => GenreProvider()),
+      ChangeNotifierProvider(create: (_) => SearchProvider()),
     ],
     child: MyApp(),
   ));
@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
         title: "Wecomi",
         theme: appProvider.theme,
         darkTheme: ThemeConfig.darkTheme,
-        home: SearchScreen(),
+        home: AccountScreen(),
       );
     });
   }

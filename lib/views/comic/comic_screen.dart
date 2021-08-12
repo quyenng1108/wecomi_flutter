@@ -56,8 +56,8 @@ class _ComicScreenState extends State<ComicScreen>
                     ],
                   ),
                   child: ClipRRect(
-                    borderRadius:
-                        BorderRadius.vertical(bottom: Radius.circular(30.0)),
+                    // borderRadius:
+                    //     BorderRadius.vertical(bottom: Radius.circular(30.0)),
                     child: Image(
                       image: AssetImage("assets/images/comic-01.png"),
                       fit: BoxFit.cover,
@@ -124,7 +124,11 @@ class _ComicScreenState extends State<ComicScreen>
             ],
           ),
           Container(
-            color: Theme.of(context).primaryColor,
+            // color: Theme.of(context).primaryColor,
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(30.0)),
+            ),
             child: TabBar(
               controller: _tabController,
               tabs: <Widget>[
@@ -136,76 +140,149 @@ class _ComicScreenState extends State<ComicScreen>
             ),
           ),
           Expanded(
-            child: Container(
-              color: Theme.of(context).primaryColor,
-              child: TabBarView(
-                controller: _tabController,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.all(20),
-                    child: Container(
-                      margin: EdgeInsets.all(20),
-                      padding: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20.0),
-                          border: Border.all(color: Color(0xffB85985))
-                          // color: Color(0xffB85985),
-                          ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Text('4.7',
-                                      style: TextStyle(
-                                          color: Color(0xffB85985),
-                                          fontSize: 24.0,
-                                          fontWeight: FontWeight.w600)),
-                                  Icon(Icons.star, color: Colors.yellow)
-                                ],
-                              ),
-                              Text('Đánh giá'),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text('7.2K',
-                                  style: TextStyle(
-                                      color: Color(0xffB85985),
-                                      fontSize: 24.0,
-                                      fontWeight: FontWeight.w600)),
-                              Text('Bình luận'),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text('99.7K',
-                                  style: TextStyle(
-                                      color: Color(0xffB85985),
-                                      fontSize: 24.0,
-                                      fontWeight: FontWeight.w600)),
-                              Text('Lượt Xem'),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text('5.8K',
-                                  style: TextStyle(
-                                      color: Color(0xffB85985),
-                                      fontSize: 24.0,
-                                      fontWeight: FontWeight.w600)),
-                              Text('Theo dõi'),
-                            ],
-                          )
-                        ],
+            child: Stack(
+              children: [
+                Container(
+                  color: Theme.of(context).primaryColor,
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.all(20),
+                        child: Container(
+                            margin: EdgeInsets.all(20),
+                            padding: EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20.0),
+                                border: Border.all(color: Color(0xffB85985))
+                                // color: Color(0xffB85985),
+                                ),
+                            child: Column(
+                              children: <Widget>[
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text('4.7',
+                                                style: TextStyle(
+                                                    color: Color(0xffB85985),
+                                                    fontSize: 24.0,
+                                                    fontWeight:
+                                                        FontWeight.w600)),
+                                            Icon(Icons.star,
+                                                color: Colors.yellow)
+                                          ],
+                                        ),
+                                        Text('Đánh giá'),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text('7.2K',
+                                            style: TextStyle(
+                                                color: Color(0xffB85985),
+                                                fontSize: 24.0,
+                                                fontWeight: FontWeight.w600)),
+                                        Text('Bình luận'),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text('99.7K',
+                                            style: TextStyle(
+                                                color: Color(0xffB85985),
+                                                fontSize: 24.0,
+                                                fontWeight: FontWeight.w600)),
+                                        Text('Lượt Xem'),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text('5.8K',
+                                            style: TextStyle(
+                                                color: Color(0xffB85985),
+                                                fontSize: 24.0,
+                                                fontWeight: FontWeight.w600)),
+                                        Text('Theo dõi'),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ],
+                            )),
                       ),
-                    ),
+                      Center(child: Text('Chapters')),
+                    ],
                   ),
-                  Center(child: Text('Chapters')),
-                ],
-              ),
+                ),
+                Positioned(
+                  right: 0,
+                  left: 0,
+                  bottom: 0,
+                  child: Container(
+                    height: 100,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(40),
+                        boxShadow: [
+                          BoxShadow(
+                            offset: Offset(0, 4),
+                            blurRadius: 50,
+                            color: Colors.black.withOpacity(.1),
+                          )
+                        ]),
+                    child: Row(children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.all(14),
+                        alignment: Alignment.center,
+                        child: Column(
+                          children: [
+                            Icon(Icons.send_outlined,
+                                color: Color(0xffB85985), size: 25.0),
+                            Text('Chia sẻ',
+                                style: TextStyle(
+                                    color: Color(0xffB85985), fontSize: 24.0)),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(14),
+                        alignment: Alignment.center,
+                        child: Column(
+                          children: [
+                            Icon(Icons.favorite_border_outlined,
+                                color: Color(0xffB85985), size: 25.0),
+                            Text('Chia sẻ',
+                                style: TextStyle(
+                                    color: Color(0xffB85985), fontSize: 24.0)),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.all(14),
+                            height: 56,
+                            width: 80,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(40),
+                                color: Color(0xffB85985)),
+                            child: Text("Đọc tiếp",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.bold,
+                                ))),
+                      ),
+                    ]),
+                  ),
+                )
+              ],
             ),
           ),
         ],
