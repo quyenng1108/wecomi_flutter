@@ -3,10 +3,10 @@ import 'package:sliding_sheet/sliding_sheet.dart';
 import 'package:wecomi_flutter/components/bottom_nav_bar_icon.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
-import 'package:wecomi_flutter/detail_manga/compoments/body_chapter.dart';
-import 'package:wecomi_flutter/detail_manga/compoments/body_like.dart';
-import 'compoments/body_comments.dart';
-import 'compoments/body_content.dart';
+import 'package:wecomi_flutter/detail_manga/compoments/view_chapter/body_chapter.dart';
+import 'package:wecomi_flutter/detail_manga/compoments/view_like/body_like.dart';
+import 'compoments/view_comment/body_comments.dart';
+import 'compoments/view_content/body_content.dart';
 
 class DetailScreenManga extends StatefulWidget {
   const DetailScreenManga({Key? key}) : super(key: key);
@@ -19,7 +19,7 @@ class _DetailScreenManga extends State<DetailScreenManga>
     with TickerProviderStateMixin {
   late ScrollController _scrollController;
   late TabController _tabController;
-  int _index = 0;
+
   @override
   void initState() {
     super.initState();
@@ -55,8 +55,8 @@ class _DetailScreenManga extends State<DetailScreenManga>
 
   @override
   Widget build(BuildContext context) {
-    final ratioW = MediaQuery.of(context).size.width / 414;
-    final ratioH = MediaQuery.of(context).size.height / 896;
+    final ratioW = MediaQuery.of(context).size.width / 375;
+    final ratioH = MediaQuery.of(context).size.height / 812;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -118,7 +118,7 @@ class _DetailScreenManga extends State<DetailScreenManga>
                     child: Container(
                       child: Container(
                         color: Colors.white,
-                        height: 48,
+                        height: 51 * ratioH,
                         child: TabBar(
                           tabs: [
                             Tab(
@@ -196,15 +196,17 @@ class bottomNavTabDetails extends StatefulWidget {
 class _bottomNavTabDetailsState extends State<bottomNavTabDetails> {
   @override
   Widget build(BuildContext context) {
+    final ratioW = MediaQuery.of(context).size.width / 375;
+    final ratioH = MediaQuery.of(context).size.height / 812;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+      padding: const EdgeInsets.fromLTRB(8, 0, 12, 0),
       child: Container(
-        height: 55,
+        height: 71 * ratioH,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Container(
-              padding: const EdgeInsets.only(left: 26),
+              padding: const EdgeInsets.only(left: 26, top: 6),
               child: Row(
                 children: [
                   Container(

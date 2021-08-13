@@ -3,7 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
-import 'package:wecomi_flutter/detail_manga/screen_detail_comment/comment.dart';
+
+import 'screen_detail_comment/comment.dart';
 
 class Comments extends StatelessWidget {
   @override

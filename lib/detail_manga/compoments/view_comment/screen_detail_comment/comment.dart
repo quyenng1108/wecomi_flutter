@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
-import 'package:wecomi_flutter/detail_manga/screen_detail_comment/compoments/body_details_comment.dart';
-import 'package:wecomi_flutter/detail_manga/screen_detail_comment/compoments/chat_input.dart';
+
+import 'compoments/body_details_comment.dart';
+import 'compoments/chat_input.dart';
 
 class Comment extends StatelessWidget {
   @override
@@ -14,7 +15,7 @@ class Comment extends StatelessWidget {
         padding: EdgeInsets.all(16),
         child: BodyComment(),
       ),
-      bottomNavigationBar: ChatInputField(),
+      bottomNavigationBar: Container(child: ChatInputField()),
     );
   }
 

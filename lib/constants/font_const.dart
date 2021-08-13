@@ -14,6 +14,7 @@ const kNormalBodyTextStyle =
     TextStyle(fontSize: 14, fontWeight: FontWeight.normal);
 const kMediumBodyTextStyle =
     TextStyle(fontSize: 14, fontWeight: FontWeight.w400);
+const kMediumText = TextStyle(fontSize: 14, fontWeight: FontWeight.w500);
 const kLargeNormalBodyTextStyle =
     TextStyle(fontSize: 16, fontWeight: FontWeight.normal);
 const kLargeMediumBodyTextStyle =
@@ -53,4 +54,9 @@ TextStyle textColor = TextStyle(
   fontSize: 12,
   fontWeight: FontWeight.w400,
   color: Color(0xffB85985),
+);
+TextStyle textColors = TextStyle(
+  fontSize: 14,
+  fontWeight: FontWeight.w500,
+  color: ThemeConfig.colorText,
 );

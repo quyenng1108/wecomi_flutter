@@ -1,10 +1,21 @@
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
+import 'package:sliding_sheet/sliding_sheet.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
-import 'package:wecomi_flutter/detail_manga/screen_detail_comment/comment.dart';
+import 'package:wecomi_flutter/detail_manga/compoments/view_content/screen/buildWidget.dart';
+import 'package:wecomi_flutter/detail_manga/compoments/view_content/screen/view_recomment_gift.dart';
+import 'package:wecomi_flutter/detail_manga/compoments/view_content/screen/view_topRank.dart';
 
-class Content extends StatelessWidget {
+class Content extends StatefulWidget {
+  const Content({
+    Key? key,
+  }) : super(key: key);
+  @override
+  _ContentState createState() => _ContentState();
+}
+
+class _ContentState extends State<Content> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -113,20 +124,28 @@ class Content extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              buildWidget(
+              BuildContent(
                 image_captions: "assets/images/gift.png",
                 title_captions: 'Đề xuất',
-                onClicked: () {},
+                onClicked: showSheet,
+                // => showBottomSheet(
+                //   context: context,
+                //   builder: (context) => buildSheet(),
               ),
-              buildWidget(
+              BuildContent(
                 image_captions: "assets/images/award.png",
                 title_captions: 'Quà tặng',
-                onClicked: () {},
+                onClicked: showSheet,
               ),
-              buildWidget(
+              BuildContent(
                 image_captions: "assets/images/cup.png",
                 title_captions: 'BXH Fan',
-                onClicked: () {},
+                onClicked: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => topRank(),
+                  ),
+                ),
               ),
             ],
           ),
@@ -135,55 +154,24 @@ class Content extends StatelessWidget {
       ],
     );
   }
-}
 
-class buildWidget extends StatelessWidget {
-  final String title_captions;
-  final String image_captions;
-  final VoidCallback onClicked;
-  const buildWidget({
-    Key? key,
-    required this.title_captions,
-    required this.image_captions,
-    required this.onClicked,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(5),
-      child: Container(
-        padding: EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: Color(0xffF05A77)),
-          color: Colors.white,
-        ),
-        child: TextButton(
-          onPressed: onClicked,
-          child: Column(
-            children: [
-              Image.asset(
-                image_captions,
-                height: 24,
-                width: 24,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: Text(
-                  title_captions,
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: ThemeConfig.colorText),
-                ),
-              ),
-            ],
+  // Widget buildSheet() => RecommentGift();
+  Future showSheet() => showSlidingBottomSheet(
+        context,
+        builder: (context) => SlidingSheetDialog(
+          cornerRadius: 20,
+          snapSpec: SnapSpec(
+            snappings: [0.4, 0.7],
           ),
+          builder: buildSheet,
         ),
-      ),
-    );
-  }
+      );
+  Widget buildSheet(context, state) => Material(
+        color: Colors.white,
+        child: RecommentGift(),
+      );
+  // DefaultTabController(length: 2, child: Scaffold());
+
 }
 
 class MyListView extends StatelessWidget {
