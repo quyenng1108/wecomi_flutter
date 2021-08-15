@@ -5,6 +5,8 @@ import 'package:wecomi_flutter/constants/font_const.dart';
 class MayBeLike extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final ratioW = MediaQuery.of(context).size.width / 375;
+    final ratioH = MediaQuery.of(context).size.height / 812;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -21,7 +23,7 @@ class MayBeLike extends StatelessWidget {
           ),
         ),
         Container(
-          height: 300,
+          height: 250 * ratioH,
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: <Widget>[
@@ -71,7 +73,7 @@ class MyListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 130,
+      width: 104,
       child: InkWell(
         onTap: () {},
         child: Card(
@@ -87,7 +89,7 @@ class MyListView extends StatelessWidget {
                 bottom: 0,
                 top: 0,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  // padding: const EdgeInsets.symmetric(horizontal: 2),
                   // decoration: BoxDecoration(color: Colors.black12),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),

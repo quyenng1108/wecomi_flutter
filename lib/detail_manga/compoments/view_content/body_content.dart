@@ -18,9 +18,13 @@ class Content extends StatefulWidget {
 class _ContentState extends State<Content> {
   @override
   Widget build(BuildContext context) {
+    final ratioW = MediaQuery.of(context).size.width / 375;
+    final ratioH = MediaQuery.of(context).size.height / 812;
     return Column(
       children: <Widget>[
         Container(
+          height: 71 * ratioH,
+          width: 343 * ratioW,
           padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
@@ -74,7 +78,7 @@ class _ContentState extends State<Content> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(height: 10.0),
+              SizedBox(height: 10.0 * ratioH),
               ExpandableText(
                 'Bị đồng nghiệp hãm hại ngay ngày sinh nhật thứ 22, Mei Fug trở thành một kẻ thất nghiệp không nhà không cửa. Trong lúc cô đang tuyệt vọng, một bàn tay đưa ra kéo cô về với hiện thực. Có lẽ yêu đương lúc này cũng không phải ý tồi. Lợi dụng anh ta để trả th....',
                 expandText: '\nshow more',
@@ -88,7 +92,7 @@ class _ContentState extends State<Content> {
           ),
         ),
         Container(
-          height: 50,
+          height: 50 * ratioH,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
@@ -100,7 +104,7 @@ class _ContentState extends State<Content> {
         ),
         const Divider(),
         Container(
-          padding: EdgeInsets.only(top: 10),
+          padding: EdgeInsets.only(top: 10 * ratioH),
           child: Row(
             children: <Widget>[
               CircleAvatar(
@@ -128,9 +132,6 @@ class _ContentState extends State<Content> {
                 image_captions: "assets/images/gift.png",
                 title_captions: 'Đề xuất',
                 onClicked: showSheet,
-                // => showBottomSheet(
-                //   context: context,
-                //   builder: (context) => buildSheet(),
               ),
               BuildContent(
                 image_captions: "assets/images/award.png",
@@ -240,20 +241,24 @@ class Counter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Text(
-          number,
-          style: TextStyle(
-            fontSize: 15,
-            color: ThemeConfig.colorText,
+    return TextButton(
+      onPressed: () {},
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Text(
+                number,
+                style: TextStyle(color: ThemeConfig.colorText),
+              ),
+            ],
           ),
-        ),
-        Text(
-          title,
-          style: textComment,
-        ),
-      ],
+          Text(
+            title,
+            style: textComment,
+          ),
+        ],
+      ),
     );
   }
 }

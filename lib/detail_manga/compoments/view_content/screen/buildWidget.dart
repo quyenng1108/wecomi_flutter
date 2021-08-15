@@ -15,12 +15,14 @@ class BuildContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(5),
+    final ratioW = MediaQuery.of(context).size.width / 375;
+    final ratioH = MediaQuery.of(context).size.height / 812;
+    return Container(
       child: Container(
-        padding: EdgeInsets.all(10.0),
+        height: 68 * ratioH,
+        width: 109 * ratioW,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(8),
           border: Border.all(color: Color(0xffF05A77)),
           color: Colors.white,
         ),
@@ -30,11 +32,11 @@ class BuildContent extends StatelessWidget {
             children: [
               Image.asset(
                 image_captions,
-                height: 24,
-                width: 24,
+                height: 24 * ratioH,
+                width: 24 * ratioW,
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 5),
+                padding: EdgeInsets.only(top: 8 * ratioH),
                 child: Text(
                   title_captions,
                   style: TextStyle(

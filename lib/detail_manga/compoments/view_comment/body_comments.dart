@@ -9,6 +9,8 @@ import 'screen_detail_comment/comment.dart';
 class Comments extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final ratioW = MediaQuery.of(context).size.width / 375;
+    final ratioH = MediaQuery.of(context).size.height / 812;
     return Column(
       children: <Widget>[
         Container(
@@ -43,7 +45,7 @@ class Comments extends StatelessWidget {
           ),
         ),
         Container(
-          padding: const EdgeInsets.only(bottom: 15),
+          padding: EdgeInsets.only(bottom: 15 * ratioH),
           child: Column(
             children: [
               buildComments(
@@ -111,7 +113,7 @@ class buildComments extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 15),
+      padding: const EdgeInsets.only(top: 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

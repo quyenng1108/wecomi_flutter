@@ -7,6 +7,7 @@ import 'package:wecomi_flutter/detail_manga/compoments/view_chapter/body_chapter
 import 'package:wecomi_flutter/detail_manga/compoments/view_like/body_like.dart';
 import 'compoments/view_comment/body_comments.dart';
 import 'compoments/view_content/body_content.dart';
+import 'models/linked_offset_widget.dart';
 
 class DetailScreenManga extends StatefulWidget {
   const DetailScreenManga({Key? key}) : super(key: key);
@@ -69,14 +70,20 @@ class _DetailScreenManga extends State<DetailScreenManga>
               SliverSafeArea(
                 top: false,
                 sliver: SliverAppBar(
-                  title: Text(
-                    'Nàng Ther',
-                    style: TextStyle(color: Colors.white),
+                  title: LinkedOffsetWidget(
+                    originTransitionOffsetY: 40,
+                    finalTransitionOffsetY: 0,
+                    child: Text(
+                      'Sinh nhật đáng nhớ',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    scrollController: _scrollController,
+                    onOffsetChanged: (double offset) {},
                   ),
                   stretch: true,
                   centerTitle: true,
                   leading: IconButton(
-                    icon: Icon(Icons.arrow_back),
+                    icon: Icon(Icons.arrow_back, color: Colors.white),
                     onPressed: () {},
                   ),
                   actions: [
@@ -103,6 +110,59 @@ class _DetailScreenManga extends State<DetailScreenManga>
                       stretchModes: <StretchMode>[
                         StretchMode.zoomBackground,
                       ],
+                      title: Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 16.0 * ratioH, horizontal: 16.0 * ratioW),
+                        child: LinkedOffsetWidget(
+                          scrollController: _scrollController,
+                          originTransitionOffsetY: 0,
+                          finalTransitionOffsetY: -100,
+                          onOffsetChanged: (double offset) {},
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Sinh nhật đáng nhớ',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 12),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Đang cập nhật',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 8),
+                                  ),
+                                  Container(
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.only(
+                                              right: 5 * ratioW),
+                                          child: Image.asset(
+                                            "assets/images/lich.png",
+                                            width: 13 * ratioW,
+                                            height: 13 * ratioH,
+                                          ),
+                                        ),
+                                        Text(
+                                          "Thứ 3 & 6",
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 8),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      titlePadding: EdgeInsets.zero,
                     ),
                   ),
                   backgroundColor: ThemeConfig.bgColor,
@@ -112,7 +172,7 @@ class _DetailScreenManga extends State<DetailScreenManga>
                   primary: true,
                   forceElevated: innerBoxIsScrolled,
                   automaticallyImplyLeading: true,
-                  expandedHeight: ratioH * 274,
+                  expandedHeight: ratioH * 251,
                   bottom: PreferredSize(
                     preferredSize: Size.fromHeight(40),
                     child: Container(
@@ -199,22 +259,28 @@ class _bottomNavTabDetailsState extends State<bottomNavTabDetails> {
     final ratioW = MediaQuery.of(context).size.width / 375;
     final ratioH = MediaQuery.of(context).size.height / 812;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 0, 12, 0),
+      padding: EdgeInsets.fromLTRB(8, 0, 16 * ratioH, 0),
       child: Container(
         height: 71 * ratioH,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Container(
-              padding: const EdgeInsets.only(left: 26, top: 6),
+              //padding: const EdgeInsets.only(left: 26, top: 6),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
+                    padding: EdgeInsets.only(left: 26 * ratioW, top: 6),
                     child: TextButton(
                       onPressed: showSheet,
                       child: Column(
                         children: [
-                          Image.asset("assets/images/share.png"),
+                          Image.asset(
+                            "assets/images/share.png",
+                            height: 20 * ratioH,
+                            width: 20 * ratioW,
+                          ),
                           Container(
                             child: Text(
                               "Chia sẻ",
@@ -226,11 +292,16 @@ class _bottomNavTabDetailsState extends State<bottomNavTabDetails> {
                     ),
                   ),
                   Container(
+                    padding: EdgeInsets.only(top: 6),
                     child: TextButton(
                       onPressed: () {},
                       child: Column(
                         children: [
-                          Image.asset("assets/images/heart-add.png"),
+                          Image.asset(
+                            "assets/images/heart-add.png",
+                            height: 20 * ratioH,
+                            width: 20 * ratioW,
+                          ),
                           Container(
                             child: Text(
                               "Theo dõi",
@@ -244,22 +315,28 @@ class _bottomNavTabDetailsState extends State<bottomNavTabDetails> {
                 ],
               ),
             ),
-            TextButton(
-              onPressed: () {},
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: ThemeConfig.bgColor),
-                  color: ThemeConfig.bgColor,
-                ),
+            Container(
+              child: TextButton(
+                onPressed: () {},
                 child: Container(
-                  padding: const EdgeInsets.fromLTRB(50, 10, 50, 10),
-                  child: Text(
-                    "Đọc tiếp",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700),
+                  height: 48 * ratioH,
+                  width: 167 * ratioW,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: ThemeConfig.bgColor),
+                    color: ThemeConfig.bgColor,
+                  ),
+                  child: Container(
+                    padding:
+                        EdgeInsets.fromLTRB(0, 13.0 * ratioH, 0, 13.0 * ratioH),
+                    child: Text(
+                      "Đọc tiếp",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
               ),
