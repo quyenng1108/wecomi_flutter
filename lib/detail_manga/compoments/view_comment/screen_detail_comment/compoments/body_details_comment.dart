@@ -7,6 +7,8 @@ import 'package:wecomi_flutter/constants/theme.dart';
 class BodyComment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final ratioW = MediaQuery.of(context).size.width / 375;
+    final ratioH = MediaQuery.of(context).size.height / 812;
     return Column(
       children: <Widget>[
         Container(
@@ -54,7 +56,8 @@ class BodyComment extends StatelessWidget {
         ),
         const Divider(),
         Container(
-          //padding: const EdgeInsets.fromLTRB(20, 35, 20, 15),
+          height: 42 * ratioH,
+          width: 343 * ratioW,
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
@@ -64,11 +67,11 @@ class BodyComment extends StatelessWidget {
             child: TextButton(
               onPressed: () {},
               child: Text(
-                "Chia sẻ lên Wecomi Forum",
+                "Tải thêm bình luận",
                 style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700),
+                    color: ThemeConfig.bgColor,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500),
               ),
             ),
           ),

@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:tuple/tuple.dart';
 import 'package:wecomi_flutter/components/bottom_nav_bar_icon.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
+import 'package:wecomi_flutter/detail_manga/models/linked_offset_widget.dart';
 
 class topRank extends StatefulWidget {
   const topRank({Key? key}) : super(key: key);
@@ -13,11 +16,26 @@ class topRank extends StatefulWidget {
 class _topRankState extends State<topRank> with TickerProviderStateMixin {
   late ScrollController _scrollController;
   late TabController _tabController;
+  static DateTime now = DateTime.now();
+  static DateTime agoWeek = DateTime(2021, 08, 09);
+  final List<Tuple5> _page = [
+    Tuple5('Sinh nhật đáng nhớ', DateFormat('yyyy/MM/dd').format(now), '~',
+        DateFormat('yyyy/MM/dd').format(agoWeek), ''),
+    Tuple5('Sinh nhật đáng nhớ', '', '', '', '')
+  ];
+
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(() => setState(() {}));
     _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -37,13 +55,16 @@ class _topRankState extends State<topRank> with TickerProviderStateMixin {
                 top: false,
                 sliver: SliverAppBar(
                   title: Text(
-                    'Nàng Ther',
+                    'BXH FAN',
                     style: TextStyle(color: Colors.white),
                   ),
                   stretch: true,
                   centerTitle: true,
                   leading: IconButton(
-                    icon: Icon(Icons.arrow_back),
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                    ),
                     onPressed: () {},
                   ),
                   actions: [
@@ -68,6 +89,52 @@ class _topRankState extends State<topRank> with TickerProviderStateMixin {
                               fit: BoxFit.cover),
                         ),
                       ),
+                      title: Container(
+                        height: ratioH * 192,
+                        width: 375 * ratioW,
+                        padding: EdgeInsets.symmetric(
+                            vertical: 15.0 * ratioH, horizontal: 19.0 * ratioW),
+                        child: LinkedOffsetWidget(
+                          originTransitionOffsetY: 0,
+                          finalTransitionOffsetY: -50 * ratioH,
+                          onOffsetChanged: (double offset) {},
+                          scrollController: _scrollController,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                _page[_tabController.index].item1,
+                                style: TextStyle(
+                                    fontSize: 11, color: Colors.white),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(
+                                    top: 4 * ratioH, left: 5 * ratioW),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      _page[_tabController.index].item2,
+                                      style: TextStyle(
+                                          fontSize: 8, color: Colors.white),
+                                    ),
+                                    Text(
+                                      _page[_tabController.index].item3,
+                                      style: TextStyle(
+                                          fontSize: 8, color: Colors.white),
+                                    ),
+                                    Text(
+                                      _page[_tabController.index].item4,
+                                      style: TextStyle(
+                                          fontSize: 8, color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
                       stretchModes: <StretchMode>[
                         StretchMode.zoomBackground,
                       ],
@@ -80,7 +147,7 @@ class _topRankState extends State<topRank> with TickerProviderStateMixin {
                   primary: true,
                   forceElevated: innerBoxIsScrolled,
                   automaticallyImplyLeading: true,
-                  expandedHeight: ratioH * 192,
+                  expandedHeight: ratioH * 240,
                   bottom: PreferredSize(
                     preferredSize: Size.fromHeight(40),
                     child: Container(

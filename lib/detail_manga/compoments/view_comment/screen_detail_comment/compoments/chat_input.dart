@@ -9,10 +9,12 @@ class ChatInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ratioW = MediaQuery.of(context).size.width / 375;
+    final ratioH = MediaQuery.of(context).size.height / 812;
     return Container(
+      height: 65 * ratioH,
       padding: EdgeInsets.symmetric(
         horizontal: 16,
-        vertical: 8,
       ),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -26,21 +28,26 @@ class ChatInputField extends StatelessWidget {
       ),
       child: SafeArea(
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
+            Container(
+              height: 42 * ratioH,
+              decoration: BoxDecoration(
+                color: Color(0xffF4F6F9),
+                borderRadius: BorderRadius.circular(10),
+              ),
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Color(0xffF4F6F9),
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                width: 290 * ratioW,
                 child: Row(
                   children: [
                     Expanded(
                       child: TextField(
+                        style: TextStyle(
+                          fontSize: 12,
+                        ),
                         decoration: InputDecoration(
-                            hintText: "Viết bình luận của bạn ở đây",
+                            hintText: "Viết bình luận của bạn ở đây...",
                             border: InputBorder.none),
                       ),
                     ),
@@ -49,7 +56,11 @@ class ChatInputField extends StatelessWidget {
               ),
             ),
             IconButton(
-              icon: Image.asset("assets/images/Rocket.png"),
+              icon: Image.asset(
+                "assets/images/Rocket.png",
+                width: 25 * ratioW,
+                height: 25 * ratioH,
+              ),
               onPressed: () => Navigator.pop(context),
             ),
           ],
