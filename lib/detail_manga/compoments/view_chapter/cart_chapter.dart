@@ -83,14 +83,6 @@ class CardChapter extends StatelessWidget {
                         ],
                       ),
                     ),
-                    // Opacity(
-                    //   opacity: 0.64,
-                    //   child: Text(
-                    //     chapter.date,
-                    //     maxLines: 1,
-                    //     style: textComment,
-                    //   ),
-                    // )
                   ],
                 ),
               ),

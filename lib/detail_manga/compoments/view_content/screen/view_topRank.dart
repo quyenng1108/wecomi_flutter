@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:tuple/tuple.dart';
 import 'package:wecomi_flutter/components/bottom_nav_bar_icon.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
-import 'package:wecomi_flutter/detail_manga/models/linked_offset_widget.dart';
+import 'package:wecomi_flutter/detail_manga/compoments/linked_offset/linked_offset_widget.dart';
 
 class topRank extends StatefulWidget {
   const topRank({Key? key}) : super(key: key);

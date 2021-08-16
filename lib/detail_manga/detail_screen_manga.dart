@@ -5,9 +5,9 @@ import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
 import 'package:wecomi_flutter/detail_manga/compoments/view_chapter/body_chapter.dart';
 import 'package:wecomi_flutter/detail_manga/compoments/view_like/body_like.dart';
+import 'compoments/linked_offset/linked_offset_widget.dart';
 import 'compoments/view_comment/body_comments.dart';
 import 'compoments/view_content/body_content.dart';
-import 'models/linked_offset_widget.dart';
 
 class DetailScreenManga extends StatefulWidget {
   const DetailScreenManga({Key? key}) : super(key: key);
