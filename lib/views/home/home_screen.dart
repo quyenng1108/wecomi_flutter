@@ -10,6 +10,8 @@ import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/models/comic.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/comic_provider.dart';
 import 'package:wecomi_flutter/views/account/account_screen.dart';
+import 'package:wecomi_flutter/views/search/search_screen.dart';
+import 'package:wecomi_flutter/views/see_all_screen/see_all_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final ScrollController scrollController;
@@ -37,15 +39,15 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-   
-    });
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {});
   }
-   @override
+
+  @override
   void dispose() {
     super.dispose();
     comicProvider.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     comicProvider = Provider.of<ComicProvider>(context);
@@ -181,7 +183,8 @@ class _HomeScreenState extends State<HomeScreen>
                               child: Image.asset("assets/icons/Search.png",
                                   height: width * 0.064, width: width * 0.064),
                               onTap: () {
-                                // Do something
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => SearchScreen()));
                               },
                             ),
                             GestureDetector(
@@ -416,6 +419,12 @@ class _HomeScreenState extends State<HomeScreen>
                             ),
                             HomeCategoryTitles(
                               title: "Đề xuất",
+                              onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => SeeAllScreen(
+                                          screenName: "Đề xuất",
+                                          parentCategoryId: 1,
+                                          id: 9998))),
                             ),
                             SizedBox(
                               height: height * 0.0074,
@@ -448,6 +457,12 @@ class _HomeScreenState extends State<HomeScreen>
                             ),
                             HomeCategoryTitles(
                               title: "Truyện hot",
+                              onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => SeeAllScreen(
+                                          screenName: "Truyện hot",
+                                          parentCategoryId: 1,
+                                          id: 9998))),
                             ),
                             SizedBox(
                               height: height * 0.0148,
@@ -473,6 +488,12 @@ class _HomeScreenState extends State<HomeScreen>
                             ),
                             HomeCategoryTitles(
                               title: "Có thể bạn thích",
+                              onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => SeeAllScreen(
+                                          screenName: "Có thể bạn thích",
+                                          parentCategoryId: 1,
+                                          id: 9999))),
                             ),
                             // SizedBox(
                             //   height: height * 0.0148,

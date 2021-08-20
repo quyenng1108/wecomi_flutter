@@ -15,7 +15,7 @@ class CustomBackButton extends StatelessWidget {
                   child: Container(
                     alignment: Alignment.centerLeft,
                     child: IconButton(
-                      onPressed: () async {
+                      onPressed: () {
                         Navigator.pop(context);
                       },
                       icon: Icon(

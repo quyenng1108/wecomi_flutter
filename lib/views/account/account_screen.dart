@@ -297,10 +297,10 @@ class NotLoggedInLayout extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Bạn chưa có tài khoản",
+                  Text("Bạn chưa đăng nhập",
                       style: extraLargeMediumBodyTextStyle),
                   SizedBox(height: height * 0.005),
-                  Text("Tạo tài khoản để xem nhiều truyện hay",
+                  Text("Đăng nhập để xem nhiều truyện hay",
                       style: regularLightBlackBodyTextStyle)
                 ],
               ),
