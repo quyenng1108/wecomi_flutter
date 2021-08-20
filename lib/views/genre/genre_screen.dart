@@ -11,10 +11,11 @@ import 'package:wecomi_flutter/models/book_by_category.dart';
 import 'package:wecomi_flutter/models/comic.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/comic_provider.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/genre_provider.dart';
+import 'package:wecomi_flutter/views/search/search_screen.dart';
 
 class GenreScreen extends StatefulWidget {
   final ScrollController? scrollController;
-  GenreScreen({ @required this.scrollController });
+  GenreScreen({@required this.scrollController});
   @override
   _GenreScreenState createState() => _GenreScreenState();
 }
@@ -34,11 +35,11 @@ class _GenreScreenState extends State<GenreScreen>
   void initState() {
     super.initState();
 
-    if(this.mounted){
-          _tabController = TabController(length: 2, vsync: this);
-    //   WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    if (this.mounted) {
+      _tabController = TabController(length: 2, vsync: this);
+      //   WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
 
-    // });
+      // });
     }
   }
 
@@ -52,7 +53,6 @@ class _GenreScreenState extends State<GenreScreen>
 
   @override
   Widget build(BuildContext context) {
-    print('hi');
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -81,6 +81,7 @@ class _GenreScreenState extends State<GenreScreen>
                     Container(
                         width: width * 0.5786,
                         decoration: BoxDecoration(
+                          
                             color: Color(0xffDA7395),
                             borderRadius: BorderRadius.circular(8)),
                         child: Consumer<GenreProvider>(
@@ -92,8 +93,11 @@ class _GenreScreenState extends State<GenreScreen>
                                     genreProvider.showProgress();
                                     Future.delayed(Duration(milliseconds: 500))
                                         .then((value) => genreProvider
-                                            .getCategory(index + 1)).then((value) => genreProvider.getBooksByCategory(_index + 1, 9998));
-                                    // print(_index);
+                                            .getCategory(index + 1))
+                                        .then((value) =>
+                                            genreProvider.getBooksByCategory(
+                                                _index + 1, 9998));
+                                    print(_index);
                                   },
                                   controller: _tabController,
                                   indicator: BoxDecoration(
@@ -124,7 +128,8 @@ class _GenreScreenState extends State<GenreScreen>
                         color: Colors.white,
                       ),
                       onTap: () {
-                        // Do something
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => SearchScreen()));
                       },
                     ),
                   ],
@@ -150,41 +155,41 @@ class _GenreScreenState extends State<GenreScreen>
                                 margin: EdgeInsets.only(top: height * 0.0197),
                                 height: 35,
                                 child:
-                                // child: genreProvider.isLoading
-                                //     ? ListView.separated(
-                                //         scrollDirection: Axis.horizontal,
-                                //         itemCount: 5,
-                                //         separatorBuilder: (context, index) =>
-                                //             Divider(),
-                                //         padding: EdgeInsets.symmetric(
-                                //             horizontal: width * 0.0426),
-                                //         physics: NeverScrollableScrollPhysics(),
-                                //         itemBuilder: (context, index) =>
-                                //             Shimmer.fromColors(
-                                //                 loop: 1,
-                                //                 // enabled: false,
-                                //                 period:
-                                //                     Duration(milliseconds: 700),
-                                //                 baseColor: Color(0xffE4E8EF),
-                                //                 highlightColor:
-                                //                     Color(0xffC9D1E0),
-                                //                 child: Container(
-                                //                   width: 80,
-                                //                   padding: EdgeInsets.symmetric(
-                                //                       horizontal: 16),
-                                //                   margin:
-                                //                       EdgeInsets.only(left: 12),
-                                //                   decoration: BoxDecoration(
-                                //                     borderRadius:
-                                //                         BorderRadius.circular(
-                                //                             16),
-                                //                     color: Color(0xffE4E8EF),
-                                //                   ),
-                                //                 )),
-                                //       )
-                                //     : 
-                                ListView.builder(
-                                      controller: _scrollController,
+                                    // child: genreProvider.isLoading
+                                    //     ? ListView.separated(
+                                    //         scrollDirection: Axis.horizontal,
+                                    //         itemCount: 5,
+                                    //         separatorBuilder: (context, index) =>
+                                    //             Divider(),
+                                    //         padding: EdgeInsets.symmetric(
+                                    //             horizontal: width * 0.0426),
+                                    //         physics: NeverScrollableScrollPhysics(),
+                                    //         itemBuilder: (context, index) =>
+                                    //             Shimmer.fromColors(
+                                    //                 loop: 1,
+                                    //                 // enabled: false,
+                                    //                 period:
+                                    //                     Duration(milliseconds: 700),
+                                    //                 baseColor: Color(0xffE4E8EF),
+                                    //                 highlightColor:
+                                    //                     Color(0xffC9D1E0),
+                                    //                 child: Container(
+                                    //                   width: 80,
+                                    //                   padding: EdgeInsets.symmetric(
+                                    //                       horizontal: 16),
+                                    //                   margin:
+                                    //                       EdgeInsets.only(left: 12),
+                                    //                   decoration: BoxDecoration(
+                                    //                     borderRadius:
+                                    //                         BorderRadius.circular(
+                                    //                             16),
+                                    //                     color: Color(0xffE4E8EF),
+                                    //                   ),
+                                    //                 )),
+                                    //       )
+                                    //     :
+                                    ListView.builder(
+                                        controller: _scrollController,
                                         padding: EdgeInsets.symmetric(
                                             horizontal: width * 0.0426),
                                         physics:
@@ -201,11 +206,18 @@ class _GenreScreenState extends State<GenreScreen>
                                                 onTap: () {
                                                   setState(() {
                                                     _index = index;
-                                                  
                                                   });
                                                   scrollToIndex(index);
                                                   genreProvider.showProgress();
-                                                  Future.delayed(Duration(milliseconds: 700)).then((value) => genreProvider.getBooksByCategory(_index + 1, genreProvider.subCategory[index].categoryId!));
+                                                  Future.delayed(Duration(
+                                                          milliseconds: 700))
+                                                      .then((value) => genreProvider
+                                                          .getBooksByCategory(
+                                                              _index + 1,
+                                                              genreProvider
+                                                                  .subCategory[
+                                                                      index]
+                                                                  .categoryId!));
                                                 },
                                                 child: Container(
                                                     padding:
@@ -241,8 +253,10 @@ class _GenreScreenState extends State<GenreScreen>
                               ),
                               Expanded(
                                 child: ListView.separated(
-                                  controller: widget.scrollController,
-                                    physics: genreProvider.isLoading ? NeverScrollableScrollPhysics() : AlwaysScrollableScrollPhysics(),
+                                    controller: widget.scrollController,
+                                    physics: genreProvider.isLoading
+                                        ? NeverScrollableScrollPhysics()
+                                        : AlwaysScrollableScrollPhysics(),
                                     padding: EdgeInsets.only(
                                         top: height * 0.0197,
                                         bottom: height * 0.0394,
@@ -252,14 +266,17 @@ class _GenreScreenState extends State<GenreScreen>
                                       var category;
                                       var secondCategory;
                                       var categoryList;
-                                      if(Provider.of<GenreProvider>(context).isLoading == false){
+                                      if (Provider.of<GenreProvider>(context)
+                                              .isLoading ==
+                                          false) {
                                         categoryList = genreProvider
-                                          .booksByCategory[index].categoryList!
-                                          .split(";");
-                                      if (categoryList.length > 1) {
-                                        category = categoryList[0];
-                                        secondCategory = categoryList[1];
-                                      }
+                                            .booksByCategory[index]
+                                            .categoryList!
+                                            .split(";");
+                                        if (categoryList.length > 1) {
+                                          category = categoryList[0];
+                                          secondCategory = categoryList[1];
+                                        }
                                       }
                                       return genreProvider.isLoading
                                           ? Shimmer.fromColors(
@@ -317,8 +334,9 @@ class _GenreScreenState extends State<GenreScreen>
                                         Divider(
                                           height: 0,
                                         ),
-                                    itemCount:
-                                        genreProvider.isLoading ? 4 : genreProvider.booksByCategory.length),
+                                    itemCount: genreProvider.isLoading
+                                        ? 4
+                                        : genreProvider.booksByCategory.length),
                               )
                             ],
                           ),
@@ -329,40 +347,40 @@ class _GenreScreenState extends State<GenreScreen>
                               Container(
                                 margin: EdgeInsets.only(top: height * 0.0197),
                                 height: 35,
-                                child: 
-                                // genreProvider.isLoading
-                                //     ? ListView.separated(
-                                //         scrollDirection: Axis.horizontal,
-                                //         itemCount: 5,
-                                //         separatorBuilder: (context, index) =>
-                                //             Divider(),
-                                //         padding: EdgeInsets.symmetric(
-                                //             horizontal: width * 0.0426),
-                                //         physics: NeverScrollableScrollPhysics(),
-                                //         itemBuilder: (context, index) =>
-                                //             Shimmer.fromColors(
-                                //                 loop: 1,
-                                //                 // enabled: false,
-                                //                 period:
-                                //                     Duration(milliseconds: 700),
-                                //                 baseColor: Color(0xffE4E8EF),
-                                //                 highlightColor:
-                                //                     Color(0xffC9D1E0),
-                                //                 child: Container(
-                                //                   width: 80,
-                                //                   padding: EdgeInsets.symmetric(
-                                //                       horizontal: 16),
-                                //                   margin:
-                                //                       EdgeInsets.only(left: 12),
-                                //                   decoration: BoxDecoration(
-                                //                     borderRadius:
-                                //                         BorderRadius.circular(
-                                //                             16),
-                                //                     color: Color(0xffE4E8EF),
-                                //                   ),
-                                //                 )),
-                                //       )
-                                    // : 
+                                child:
+                                    // genreProvider.isLoading
+                                    //     ? ListView.separated(
+                                    //         scrollDirection: Axis.horizontal,
+                                    //         itemCount: 5,
+                                    //         separatorBuilder: (context, index) =>
+                                    //             Divider(),
+                                    //         padding: EdgeInsets.symmetric(
+                                    //             horizontal: width * 0.0426),
+                                    //         physics: NeverScrollableScrollPhysics(),
+                                    //         itemBuilder: (context, index) =>
+                                    //             Shimmer.fromColors(
+                                    //                 loop: 1,
+                                    //                 // enabled: false,
+                                    //                 period:
+                                    //                     Duration(milliseconds: 700),
+                                    //                 baseColor: Color(0xffE4E8EF),
+                                    //                 highlightColor:
+                                    //                     Color(0xffC9D1E0),
+                                    //                 child: Container(
+                                    //                   width: 80,
+                                    //                   padding: EdgeInsets.symmetric(
+                                    //                       horizontal: 16),
+                                    //                   margin:
+                                    //                       EdgeInsets.only(left: 12),
+                                    //                   decoration: BoxDecoration(
+                                    //                     borderRadius:
+                                    //                         BorderRadius.circular(
+                                    //                             16),
+                                    //                     color: Color(0xffE4E8EF),
+                                    //                   ),
+                                    //                 )),
+                                    //       )
+                                    // :
                                     ListView.builder(
                                         controller: _scrollController,
                                         padding: EdgeInsets.symmetric(
@@ -382,6 +400,16 @@ class _GenreScreenState extends State<GenreScreen>
                                                   setState(() {
                                                     _index = index;
                                                     scrollToIndex(_index);
+                                                    genreProvider.showProgress();
+                                                  Future.delayed(Duration(
+                                                          milliseconds: 700))
+                                                      .then((value) => genreProvider
+                                                          .getBooksByCategory(
+                                                              _index + 1,
+                                                              genreProvider
+                                                                  .subCategory[
+                                                                      index]
+                                                                  .categoryId!));
                                                   });
                                                 },
                                                 child: Container(
@@ -418,7 +446,7 @@ class _GenreScreenState extends State<GenreScreen>
                               ),
                               Expanded(
                                 child: ListView.separated(
-                                  controller: widget.scrollController,
+                                    controller: widget.scrollController,
                                     padding: EdgeInsets.only(
                                         top: height * 0.0197,
                                         bottom: height * 0.0394,
