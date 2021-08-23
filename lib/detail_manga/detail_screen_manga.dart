@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 import 'package:wecomi_flutter/components/bottom_nav_bar_icon.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
 import 'package:wecomi_flutter/detail_manga/compoments/view_chapter/body_chapter.dart';
 import 'package:wecomi_flutter/detail_manga/compoments/view_like/body_like.dart';
+import 'package:wecomi_flutter/detail_manga/repositories/book_provider.dart';
+import 'package:wecomi_flutter/detail_manga/repositories/getchapter_by_bookuuid.dart';
 import 'compoments/linked_offset/linked_offset_widget.dart';
 import 'compoments/view_comment/body_comments.dart';
 import 'compoments/view_content/body_content.dart';
 
 class DetailScreenManga extends StatefulWidget {
-  const DetailScreenManga({Key? key}) : super(key: key);
+  late String bookID;
+  DetailScreenManga({Key? key, required this.bookID})
+      : super(
+          key: key,
+        );
 
   @override
   _DetailScreenManga createState() => _DetailScreenManga();
@@ -21,11 +29,17 @@ class _DetailScreenManga extends State<DetailScreenManga>
   late ScrollController _scrollController;
   late TabController _tabController;
 
-  @override
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(() => setState(() {}));
     _tabController = TabController(length: 2, vsync: this);
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      Provider.of<BookProvider>(context, listen: false).fetBook(widget.bookID);
+    });
+    // WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    //   Provider.of<ChapterByBookIDProvider>(context, listen: false)
+    //       .getChapterByBookId(widget.bookID);
+    // });
   }
 
   double get _horizontalTitlePadding {
@@ -73,9 +87,23 @@ class _DetailScreenManga extends State<DetailScreenManga>
                   title: LinkedOffsetWidget(
                     originTransitionOffsetY: 40,
                     finalTransitionOffsetY: 0,
-                    child: Text(
-                      'Sinh nhật đáng nhớ',
-                      style: TextStyle(color: Colors.white),
+                    child: Consumer<BookProvider>(
+                      builder: (context, bookProvider, child) {
+                        return bookProvider.book.length == 0 &&
+                                !bookProvider.isLoading
+                            ? LinearProgressIndicator()
+                            : bookProvider.isLoading
+                                ? Shimmer.fromColors(
+                                    child: Container(
+                                        width: 229 * ratioW,
+                                        height: 35 * ratioH),
+                                    baseColor: Colors.grey[300]!,
+                                    highlightColor: Colors.grey[100]!)
+                                : Text(
+                                    "${bookProvider.book[0].bookName}",
+                                    style: TextStyle(color: Colors.white),
+                                  );
+                      },
                     ),
                     scrollController: _scrollController,
                     onOffsetChanged: (double offset) {},
@@ -84,7 +112,9 @@ class _DetailScreenManga extends State<DetailScreenManga>
                   centerTitle: true,
                   leading: IconButton(
                     icon: Icon(Icons.arrow_back, color: Colors.white),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                   ),
                   actions: [
                     IconButton(
@@ -101,10 +131,22 @@ class _DetailScreenManga extends State<DetailScreenManga>
                     child: FlexibleSpaceBar(
                       collapseMode: CollapseMode.pin,
                       background: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage('assets/images/bg.png'),
-                              fit: BoxFit.cover),
+                        child: Consumer<BookProvider>(
+                          builder: (context, bookProvider, child) {
+                            return bookProvider.book.length == 0 &&
+                                    !bookProvider.isLoading
+                                ? LinearProgressIndicator()
+                                : bookProvider.isLoading
+                                    ? Shimmer.fromColors(
+                                        child: Container(),
+                                        baseColor: Colors.grey[300]!,
+                                        highlightColor: Colors.grey[100]!)
+                                    : Container(
+                                        child: Image.network(
+                                            '${bookProvider.book[0].bookCoverImg![1].imgUrl}',
+                                            fit: BoxFit.cover),
+                                      );
+                          },
                         ),
                       ),
                       stretchModes: <StretchMode>[
@@ -122,19 +164,45 @@ class _DetailScreenManga extends State<DetailScreenManga>
                             mainAxisAlignment: MainAxisAlignment.end,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Sinh nhật đáng nhớ',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 12),
+                              Consumer<BookProvider>(
+                                builder: (context, bookProvider, child) {
+                                  return bookProvider.book.length == 0 &&
+                                          !bookProvider.isLoading
+                                      ? LinearProgressIndicator()
+                                      : bookProvider.isLoading
+                                          ? Shimmer.fromColors(
+                                              child: Container(),
+                                              baseColor: Colors.grey[300]!,
+                                              highlightColor: Colors.grey[100]!)
+                                          : Text(
+                                              '${bookProvider.book[0].bookName}',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12),
+                                            );
+                                },
                               ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    'Đang cập nhật',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 8),
+                                  Consumer<BookProvider>(
+                                    builder: (context, bookProvider, child) {
+                                      if (bookProvider.book[0].updateStatus ==
+                                          0) {
+                                        return Text(
+                                          'Đang cập nhật',
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 8),
+                                        );
+                                      } else {
+                                        return Text(
+                                          'Đã hoàn thành',
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 8),
+                                        );
+                                      }
+                                    },
                                   ),
                                   Container(
                                     child: Row(
@@ -225,7 +293,7 @@ class _DetailScreenManga extends State<DetailScreenManga>
             children: [
               Content(),
               Comments(),
-              MayBeLike(),
+              ReCommend(),
             ],
           ),
         ),
@@ -234,13 +302,7 @@ class _DetailScreenManga extends State<DetailScreenManga>
   }
 
   Widget _tab2() {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Container(
-        padding: EdgeInsets.all(16),
-        child: BodyChapter(),
-      ),
-    );
+    return Container(child: BodyChapter(bookID: widget.bookID,));
   }
 }
 
@@ -370,21 +432,21 @@ class _bottomNavTabDetailsState extends State<bottomNavTabDetails> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
               ),
             ),
-            buildSheetBottom(
+            _buildSheetBottom(
               title: 'Sao chép đường liên kết',
-              image_icon: 'assets/images/link.png',
+              icon: 'assets/images/link.png',
             ),
-            buildSheetBottom(
+            _buildSheetBottom(
               title: 'Chia sẻ qua Facebook ',
-              image_icon: 'assets/images/Facebook.png',
+              icon: 'assets/images/Facebook.png',
             ),
-            buildSheetBottom(
+            _buildSheetBottom(
               title: 'Chia sẻ qua Tin nhắn',
-              image_icon: 'assets/images/Mess.png',
+              icon: 'assets/images/Mess.png',
             ),
-            buildSheetBottom(
+            _buildSheetBottom(
               title: 'Chia sẻ qua Twitter',
-              image_icon: 'assets/images/Twitter.png',
+              icon: 'assets/images/Twitter.png',
             ),
             const Divider(),
             Padding(
@@ -431,19 +493,7 @@ class _bottomNavTabDetailsState extends State<bottomNavTabDetails> {
           ],
         ),
       );
-}
-
-class buildSheetBottom extends StatelessWidget {
-  final String title;
-  final String image_icon;
-  const buildSheetBottom({
-    Key? key,
-    required this.title,
-    required this.image_icon,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildSheetBottom({String? title, String? icon}) {
     return Column(
       children: [
         const Divider(),
@@ -453,10 +503,10 @@ class buildSheetBottom extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                title,
+                title!,
                 textAlign: TextAlign.center,
               ),
-              Image.asset(image_icon),
+              Image.asset(icon!),
             ],
           ),
         ),

@@ -89,19 +89,19 @@ class _topRankState extends State<topRank> with TickerProviderStateMixin {
                               fit: BoxFit.cover),
                         ),
                       ),
+                      stretchModes: <StretchMode>[
+                        StretchMode.zoomBackground,
+                      ],
                       title: Container(
-                        height: ratioH * 192,
-                        width: 375 * ratioW,
-                        padding: EdgeInsets.symmetric(
-                            vertical: 15.0 * ratioH, horizontal: 19.0 * ratioW),
+                        padding: EdgeInsets.symmetric(vertical: 22.0 * ratioH),
                         child: LinkedOffsetWidget(
                           originTransitionOffsetY: 0,
-                          finalTransitionOffsetY: -50 * ratioH,
+                          finalTransitionOffsetY: -60 * ratioH,
                           onOffsetChanged: (double offset) {},
                           scrollController: _scrollController,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
                                 _page[_tabController.index].item1,
@@ -109,9 +109,8 @@ class _topRankState extends State<topRank> with TickerProviderStateMixin {
                                     fontSize: 11, color: Colors.white),
                               ),
                               Container(
-                                padding: EdgeInsets.only(
-                                    top: 4 * ratioH, left: 5 * ratioW),
                                 child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
                                       _page[_tabController.index].item2,
@@ -135,9 +134,7 @@ class _topRankState extends State<topRank> with TickerProviderStateMixin {
                           ),
                         ),
                       ),
-                      stretchModes: <StretchMode>[
-                        StretchMode.zoomBackground,
-                      ],
+                      titlePadding: EdgeInsets.zero,
                     ),
                   ),
                   backgroundColor: ThemeConfig.bgColor,
@@ -195,7 +192,7 @@ class _topRankState extends State<topRank> with TickerProviderStateMixin {
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.fromLTRB(46, 32, 46, 0),
+            padding: EdgeInsets.fromLTRB(46 * ratioW, 22 * ratioH, 46, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -253,7 +250,8 @@ class _topRankState extends State<topRank> with TickerProviderStateMixin {
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.fromLTRB(46, 32, 46, 0),
+            padding:
+                EdgeInsets.fromLTRB(46 * ratioW, 22 * ratioH, 46 * ratioW, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
