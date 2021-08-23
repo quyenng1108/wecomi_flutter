@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -11,6 +10,7 @@ import 'package:wecomi_flutter/models/book_by_category.dart';
 import 'package:wecomi_flutter/models/comic.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/comic_provider.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/genre_provider.dart';
+import 'package:wecomi_flutter/views/book/book_screen.dart';
 import 'package:wecomi_flutter/views/search/search_screen.dart';
 
 class GenreScreen extends StatefulWidget {
@@ -297,38 +297,42 @@ class _GenreScreenState extends State<GenreScreen>
                                                 ),
                                               ),
                                             )
-                                          : ListItemBook(
-                                              source: genreProvider
-                                                  .booksByCategory[index]
-                                                  .imgUrl,
-                                              title: genreProvider
-                                                  .booksByCategory[index]
-                                                  .bookName,
-                                              author: genreProvider
-                                                  .booksByCategory[index]
-                                                  .authorNick,
-                                              rating: genreProvider
-                                                  .booksByCategory[index]
-                                                  .rating,
-                                              chapterNum: genreProvider
-                                                  .booksByCategory[index]
-                                                  .numberOfChapter,
-                                              category: categoryList.length > 1
-                                                  ? Text(
-                                                      "$category • $secondCategory",
-                                                      style:
-                                                          smallRegularBodyTextStyle
-                                                              .copyWith(
-                                                                  color:
-                                                                      lightBlack),
-                                                    )
-                                                  : Text(
-                                                      "${genreProvider.booksByCategory[index].categoryList}",
-                                                      style: smallRegularBodyTextStyle
-                                                          .copyWith(
-                                                              color:
-                                                                  lightBlack)),
-                                            );
+                                          : InkWell(
+                                            onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) =>BookScreen(bookID: genreProvider
+                                                    .booksByCategory[index].bookUuid!))),
+                                            child: ListItemBook(
+                                                source: genreProvider
+                                                    .booksByCategory[index]
+                                                    .imgUrl,
+                                                title: genreProvider
+                                                    .booksByCategory[index]
+                                                    .bookName,
+                                                author: genreProvider
+                                                    .booksByCategory[index]
+                                                    .authorNick,
+                                                rating: genreProvider
+                                                    .booksByCategory[index]
+                                                    .rating,
+                                                chapterNum: genreProvider
+                                                    .booksByCategory[index]
+                                                    .numberOfChapter,
+                                                category: categoryList.length > 1
+                                                    ? Text(
+                                                        "$category • $secondCategory",
+                                                        style:
+                                                            smallRegularBodyTextStyle
+                                                                .copyWith(
+                                                                    color:
+                                                                        lightBlack),
+                                                      )
+                                                    : Text(
+                                                        "${genreProvider.booksByCategory[index].categoryList}",
+                                                        style: smallRegularBodyTextStyle
+                                                            .copyWith(
+                                                                color:
+                                                                    lightBlack)),
+                                              ),
+                                          );
                                     },
                                     separatorBuilder: (context, index) =>
                                         Divider(

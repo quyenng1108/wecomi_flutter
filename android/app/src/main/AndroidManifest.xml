@@ -36,6 +36,7 @@
             </intent-filter>
             <meta-data android:name="com.facebook.sdk.ApplicationId" 
         android:value="@string/facebook_app_id"/>
+    </activity>
     
     <activity android:name="com.facebook.FacebookActivity"
         android:configChanges=
@@ -52,7 +53,6 @@
         </intent-filter>
     </activity>
 
-        </activity>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

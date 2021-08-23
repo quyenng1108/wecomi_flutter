@@ -10,6 +10,7 @@ import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/models/comic.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/comic_provider.dart';
 import 'package:wecomi_flutter/views/account/account_screen.dart';
+import 'package:wecomi_flutter/views/book/book_screen.dart';
 import 'package:wecomi_flutter/views/search/search_screen.dart';
 import 'package:wecomi_flutter/views/see_all_screen/see_all_screen.dart';
 
@@ -449,6 +450,15 @@ class _HomeScreenState extends State<HomeScreen>
                                       category: comicProvider
                                           .recommendedComic?[i].categoryName,
                                       secondCategory: 'Tổng tài',
+                                      press: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => BookScreen(
+                                                bookID: comicProvider
+                                                    .recommendedComic![i]
+                                                    .bookUuid
+                                                    .toString()),
+                                          )),
                                     ),
                                 ],
                               ),
@@ -669,7 +679,9 @@ class RecommendedItems extends StatelessWidget {
     @required this.title,
     @required this.category,
     @required this.secondCategory,
+    required this.press,
   });
+  final VoidCallback press;
   final String? source;
   final String? title;
   final String? category;
@@ -721,7 +733,7 @@ class RecommendedItems extends StatelessWidget {
           ],
         ),
       ),
-      onTap: () {},
+      onTap: press,
     );
   }
 }
