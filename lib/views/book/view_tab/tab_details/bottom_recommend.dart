@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
-import 'package:wecomi_flutter/detail_manga/repositories/comic_provider.dart';
-
-import '../../detail_screen_manga.dart';
+import '../../book_screen.dart';
 
 class ReCommend extends StatefulWidget {
   ReCommend({Key? key}) : super(key: key);
@@ -53,26 +51,27 @@ class _ReCommendState extends State<ReCommend> {
                       child: ListView.builder(
                         primary: false,
                         shrinkWrap: true,
-                        itemCount: comicProvider.reCommend!.length,
+                        itemCount: comicProvider.recommendedComic!.length,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
                           return _recommed(
                               press: () =>
                                   Navigator.push(context, MaterialPageRoute(
                                     builder: (context) {
-                                      return DetailScreenManga(
+                                      return BookScreen(
                                         bookID: comicProvider
-                                            .reCommend![index].bookUuid
+                                            .recommendedComic![index].bookUuid
                                             .toString(),
                                       );
                                     },
                                   )),
-                              img: comicProvider.reCommend![index].imgUrl
+                              img: comicProvider.recommendedComic![index].imgUrl
                                   .toString(),
-                              bookName: comicProvider.reCommend![index].bookname
+                              bookName: comicProvider
+                                  .recommendedComic![index].bookname
                                   .toString(),
                               catogoryName: comicProvider
-                                  .reCommend![index].categoryName
+                                  .recommendedComic![index].categoryName
                                   .toString());
                         },
                       ),
@@ -116,7 +115,7 @@ class _ReCommendState extends State<ReCommend> {
               Text(
                 '$catogoryName • $subCategory',
                 textAlign: TextAlign.center,
-                style: timeComment,
+                style: realTimeComment,
               ),
             ],
           ),

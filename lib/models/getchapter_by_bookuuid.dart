@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:wecomi_flutter/detail_manga/models/getchapter_byBookuuid_provider.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/getchapter_byBookuuid_provider.dart';
 
 class ChapterByBookIDProvider extends ChangeNotifier {
   List<ChapterByBookUuid> chapterByBookId = [];

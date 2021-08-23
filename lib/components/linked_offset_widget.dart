@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:wecomi_flutter/detail_manga/compoments/linked_offset/until.dart';
+import 'package:wecomi_flutter/components/until.dart';
 
 typedef OnOffsetChanged = Function(double offset);
 

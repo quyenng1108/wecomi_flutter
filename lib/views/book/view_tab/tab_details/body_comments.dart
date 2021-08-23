@@ -3,8 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
-
-import 'screen_detail_comment/comment.dart';
+import 'package:wecomi_flutter/views/book/screen/screen_comment.dart';
 
 class Comments extends StatelessWidget {
   @override
@@ -22,7 +21,7 @@ class Comments extends StatelessWidget {
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Comment(),
+                    builder: (context) => ScreenComment(),
                   ),
                 ),
                 child: Row(
@@ -48,37 +47,37 @@ class Comments extends StatelessWidget {
           padding: EdgeInsets.only(bottom: 15 * ratioH),
           child: Column(
             children: [
-              buildComments(
-                avatar_image: "assets/images/avt.png",
-                name_comment: "Trúc Lâm",
+              BuildComments(
+                avatar: "assets/images/avt.png",
+                nameComment: "Trúc Lâm",
                 chapter: "Chap 13",
                 comments:
                     "Nghỉ dịch ở nhà chán quá, mong truyện ra lẹ lẹ lên cho có cái để ngồi đọc.",
-                time_comment: "12 giờ trước",
-                lv_comment: "Lv.8",
-                heart_like: "12",
-                int_comment: "11",
+                timeComment: "12 giờ trước",
+                levelAcccount: "Lv.8",
+                heartLike: "12",
+                numberComment: "11",
               ),
-              buildComments(
-                avatar_image: "assets/images/avt.png",
-                name_comment: "Vũ Thị Linh",
+              BuildComments(
+                avatar: "assets/images/avt.png",
+                nameComment: "Vũ Thị Linh",
                 chapter: "Chap 5",
                 comments:
                     "Đợi từng giờ từng phút để hóng chap mới. Yêu anh hoàng tử <3 <3 <3",
-                time_comment: "2 giờ trước",
-                lv_comment: "Lv.7",
-                heart_like: "10",
-                int_comment: "6",
+                timeComment: "2 giờ trước",
+                levelAcccount: "7",
+                heartLike: "10",
+                numberComment: "6",
               ),
-              buildComments(
-                avatar_image: "assets/images/avt.png",
-                name_comment: "Phúc Trần",
+              BuildComments(
+                avatar: "assets/images/avt.png",
+                nameComment: "Phúc Trần",
                 chapter: "Chap 20",
                 comments: "Đợi từng giờ từng phút để hóng chap mới.",
-                time_comment: "1 giờ trước",
-                lv_comment: "Lv.10",
-                heart_like: "20",
-                int_comment: "10",
+                timeComment: "1 giờ trước",
+                levelAcccount: "Lv.10",
+                heartLike: "20",
+                numberComment: "10",
               ),
             ],
           ),
@@ -89,25 +88,25 @@ class Comments extends StatelessWidget {
   }
 }
 
-class buildComments extends StatelessWidget {
-  final String avatar_image;
-  final String name_comment;
-  final String lv_comment;
+class BuildComments extends StatelessWidget {
+  final String avatar;
+  final String nameComment;
+  final String levelAcccount;
   final String chapter;
   final String comments;
-  final String time_comment;
-  final String heart_like;
-  final String int_comment;
-  const buildComments({
+  final String timeComment;
+  final String heartLike;
+  final String numberComment;
+  const BuildComments({
     Key? key,
-    required this.avatar_image,
-    required this.name_comment,
-    required this.lv_comment,
+    required this.avatar,
+    required this.nameComment,
+    required this.levelAcccount,
     required this.chapter,
     required this.comments,
-    required this.time_comment,
-    required this.heart_like,
-    required this.int_comment,
+    required this.timeComment,
+    required this.heartLike,
+    required this.numberComment,
   }) : super(key: key);
 
   @override
@@ -121,7 +120,7 @@ class buildComments extends StatelessWidget {
             padding: const EdgeInsets.only(right: 8.0),
             child: CircleAvatar(
               radius: 18,
-              backgroundImage: AssetImage(avatar_image),
+              backgroundImage: AssetImage(avatar),
             ),
           ),
           Expanded(
@@ -141,7 +140,7 @@ class buildComments extends StatelessWidget {
                         child: Row(
                           children: [
                             Text(
-                              name_comment,
+                              nameComment,
                               style: kMediumBodyTextStyle,
                             ),
                             Padding(
@@ -155,7 +154,7 @@ class buildComments extends StatelessWidget {
                                       Border.all(color: ThemeConfig.colorText),
                                 ),
                                 child: Text(
-                                  lv_comment,
+                                  levelAcccount,
                                   style: TextStyle(
                                       fontSize: 8,
                                       fontWeight: FontWeight.w500,
@@ -191,8 +190,8 @@ class buildComments extends StatelessWidget {
                         child: Row(
                           children: [
                             Text(
-                              time_comment,
-                              style: timeComment,
+                              timeComment,
+                              style: realTimeComment,
                             ),
                           ],
                         ),
@@ -204,10 +203,10 @@ class buildComments extends StatelessWidget {
                             child: Row(
                               children: [
                                 Image.asset(
-                                  "assets/images/heart.png",
+                                  "assets/icons/heart.png",
                                 ),
                                 Text(
-                                  heart_like,
+                                  heartLike,
                                   style: textComment,
                                 ),
                               ],
@@ -217,10 +216,10 @@ class buildComments extends StatelessWidget {
                             child: Row(
                               children: [
                                 Image.asset(
-                                  "assets/images/comment.png",
+                                  "assets/icons/comment.png",
                                 ),
                                 Text(
-                                  int_comment,
+                                  numberComment,
                                   style: textComment,
                                 ),
                               ],

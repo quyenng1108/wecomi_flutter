@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wecomi_flutter/components/chat_input.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
+import 'body_comment.dart';
 
-import 'compoments/body_details_comment.dart';
-import 'compoments/chat_input.dart';
-
-class Comment extends StatelessWidget {
+class ScreenComment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

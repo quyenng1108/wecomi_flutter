@@ -3,29 +3,27 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 import 'package:wecomi_flutter/components/bottom_nav_bar_icon.dart';
+import 'package:wecomi_flutter/components/linked_offset_widget.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
-import 'package:wecomi_flutter/detail_manga/compoments/view_chapter/body_chapter.dart';
-import 'package:wecomi_flutter/detail_manga/compoments/view_like/body_like.dart';
-import 'package:wecomi_flutter/detail_manga/repositories/book_provider.dart';
-import 'package:wecomi_flutter/detail_manga/repositories/getchapter_by_bookuuid.dart';
-import 'compoments/linked_offset/linked_offset_widget.dart';
-import 'compoments/view_comment/body_comments.dart';
-import 'compoments/view_content/body_content.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/book_provider.dart';
+import 'package:wecomi_flutter/views/book/view_tab/tab_chapter/tab_chapter.dart';
+import 'package:wecomi_flutter/views/book/view_tab/tab_details/body_comments.dart';
+import 'package:wecomi_flutter/views/book/view_tab/tab_details/bottom_recommend.dart';
+import 'package:wecomi_flutter/views/book/view_tab/tab_details/header_detials_book.dart';
 
-class DetailScreenManga extends StatefulWidget {
-  late String bookID;
-  DetailScreenManga({Key? key, required this.bookID})
+class BookScreen extends StatefulWidget {
+  String bookID;
+  BookScreen({Key? key, required this.bookID})
       : super(
           key: key,
         );
 
   @override
-  _DetailScreenManga createState() => _DetailScreenManga();
+  _BookScreenState createState() => _BookScreenState();
 }
 
-class _DetailScreenManga extends State<DetailScreenManga>
-    with TickerProviderStateMixin {
+class _BookScreenState extends State<BookScreen> with TickerProviderStateMixin {
   late ScrollController _scrollController;
   late TabController _tabController;
 
@@ -36,10 +34,6 @@ class _DetailScreenManga extends State<DetailScreenManga>
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       Provider.of<BookProvider>(context, listen: false).fetBook(widget.bookID);
     });
-    // WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-    //   Provider.of<ChapterByBookIDProvider>(context, listen: false)
-    //       .getChapterByBookId(widget.bookID);
-    // });
   }
 
   double get _horizontalTitlePadding {
@@ -120,7 +114,7 @@ class _DetailScreenManga extends State<DetailScreenManga>
                     IconButton(
                       color: Colors.green,
                       icon: CustomizedBottomNavBarIcon(
-                          source: "assets/images/Received.png", size: 35),
+                          source: "assets/icons/Received.png", size: 35),
                       onPressed: () {
                         Navigator.pop(context);
                       },
@@ -211,7 +205,7 @@ class _DetailScreenManga extends State<DetailScreenManga>
                                           padding: EdgeInsets.only(
                                               right: 5 * ratioW),
                                           child: Image.asset(
-                                            "assets/images/lich.png",
+                                            "assets/icons/lich.png",
                                             width: 13 * ratioW,
                                             height: 13 * ratioH,
                                           ),
@@ -278,7 +272,7 @@ class _DetailScreenManga extends State<DetailScreenManga>
           ),
         ),
       ),
-      bottomNavigationBar: bottomNavTabDetails(),
+      bottomNavigationBar: BottomNavTabDetails(),
     );
   }
 
@@ -302,20 +296,23 @@ class _DetailScreenManga extends State<DetailScreenManga>
   }
 
   Widget _tab2() {
-    return Container(child: BodyChapter(bookID: widget.bookID,));
+    return Container(
+        child: TabChapter(
+      bookID: widget.bookID,
+    ));
   }
 }
 
-class bottomNavTabDetails extends StatefulWidget {
-  const bottomNavTabDetails({
+class BottomNavTabDetails extends StatefulWidget {
+  const BottomNavTabDetails({
     Key? key,
   }) : super(key: key);
 
   @override
-  _bottomNavTabDetailsState createState() => _bottomNavTabDetailsState();
+  _BottomNavTabDetails createState() => _BottomNavTabDetails();
 }
 
-class _bottomNavTabDetailsState extends State<bottomNavTabDetails> {
+class _BottomNavTabDetails extends State<BottomNavTabDetails> {
   @override
   Widget build(BuildContext context) {
     final ratioW = MediaQuery.of(context).size.width / 375;
@@ -339,7 +336,7 @@ class _bottomNavTabDetailsState extends State<bottomNavTabDetails> {
                       child: Column(
                         children: [
                           Image.asset(
-                            "assets/images/share.png",
+                            "assets/icons/share.png",
                             height: 20 * ratioH,
                             width: 20 * ratioW,
                           ),
@@ -360,7 +357,7 @@ class _bottomNavTabDetailsState extends State<bottomNavTabDetails> {
                       child: Column(
                         children: [
                           Image.asset(
-                            "assets/images/heart-add.png",
+                            "assets/icons/heart-add.png",
                             height: 20 * ratioH,
                             width: 20 * ratioW,
                           ),
@@ -434,19 +431,19 @@ class _bottomNavTabDetailsState extends State<bottomNavTabDetails> {
             ),
             _buildSheetBottom(
               title: 'Sao chép đường liên kết',
-              icon: 'assets/images/link.png',
+              icon: 'assets/icons/link.png',
             ),
             _buildSheetBottom(
               title: 'Chia sẻ qua Facebook ',
-              icon: 'assets/images/Facebook.png',
+              icon: 'assets/icons/Facebook.png',
             ),
             _buildSheetBottom(
               title: 'Chia sẻ qua Tin nhắn',
-              icon: 'assets/images/Mess.png',
+              icon: 'assets/icons/Mess.png',
             ),
             _buildSheetBottom(
               title: 'Chia sẻ qua Twitter',
-              icon: 'assets/images/Twitter.png',
+              icon: 'assets/icons/Twitter.png',
             ),
             const Divider(),
             Padding(

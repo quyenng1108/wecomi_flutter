@@ -5,10 +5,9 @@ import 'package:shimmer/shimmer.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
-import 'package:wecomi_flutter/detail_manga/compoments/view_content/screen/buildWidget.dart';
-import 'package:wecomi_flutter/detail_manga/compoments/view_content/screen/view_recomment_gift.dart';
-import 'package:wecomi_flutter/detail_manga/compoments/view_content/screen/view_topRank.dart';
-import 'package:wecomi_flutter/detail_manga/repositories/book_provider.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/book_provider.dart';
+import 'package:wecomi_flutter/views/book/screen/screen_recomment_gift.dart';
+import 'package:wecomi_flutter/views/book/screen/screen_top_rank.dart';
 
 class Content extends StatefulWidget {
   const Content({
@@ -62,7 +61,7 @@ class _ContentState extends State<Content> {
                                             style: TextStyle(
                                                 color: ThemeConfig.colorText),
                                           ),
-                                          Image.asset("assets/images/Star.png")
+                                          Image.asset("assets/icons/Star.png")
                                         ],
                                       ),
                                       Text(
@@ -167,7 +166,7 @@ class _ContentState extends State<Content> {
           child: Row(
             children: <Widget>[
               CircleAvatar(
-                backgroundImage: AssetImage("assets/images/bg.png"),
+                backgroundImage: AssetImage("assets/images/bxhno1.png"),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 15.0),
@@ -188,22 +187,22 @@ class _ContentState extends State<Content> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               BuildContent(
-                image_captions: "assets/images/gift.png",
-                title_captions: 'Đề xuất',
+                image: "assets/icons/gift.png",
+                title: 'Đề xuất',
                 onClicked: showSheet,
               ),
               BuildContent(
-                image_captions: "assets/images/award.png",
-                title_captions: 'Quà tặng',
+                image: "assets/icons/award.png",
+                title: 'Quà tặng',
                 onClicked: showSheet,
               ),
               BuildContent(
-                image_captions: "assets/images/cup.png",
-                title_captions: 'BXH Fan',
+                image: "assets/icons/cup.png",
+                title: 'BXH Fan',
                 onClicked: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => topRank(),
+                    builder: (context) => TopRank(),
                   ),
                 ),
               ),
@@ -215,7 +214,6 @@ class _ContentState extends State<Content> {
     );
   }
 
-  // Widget buildSheet() => RecommentGift();
   Future showSheet() => showSlidingBottomSheet(
         context,
         builder: (context) => SlidingSheetDialog(
@@ -305,6 +303,57 @@ class Counter extends StatelessWidget {
             style: textComment,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class BuildContent extends StatelessWidget {
+  final String title;
+  final String image;
+  final VoidCallback onClicked;
+  const BuildContent({
+    Key? key,
+    required this.title,
+    required this.image,
+    required this.onClicked,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final ratioW = MediaQuery.of(context).size.width / 375;
+    final ratioH = MediaQuery.of(context).size.height / 812;
+    return Container(
+      child: Container(
+        height: 68 * ratioH,
+        width: 109 * ratioW,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Color(0xffF05A77)),
+          color: Colors.white,
+        ),
+        child: TextButton(
+          onPressed: onClicked,
+          child: Column(
+            children: [
+              Image.asset(
+                image,
+                height: 24 * ratioH,
+                width: 24 * ratioW,
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 8 * ratioH),
+                child: Text(
+                  title,
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: ThemeConfig.colorText),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

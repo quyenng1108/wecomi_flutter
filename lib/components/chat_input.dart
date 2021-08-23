@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:wecomi_flutter/constants/theme.dart';
 
 class ChatInputField extends StatelessWidget {
   const ChatInputField({

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:wecomi_flutter/components/bottom_nav_bar_icon.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
 
@@ -11,19 +10,16 @@ class RecommentGift extends StatefulWidget {
 
 class _RecommentGiftState extends State<RecommentGift>
     with TickerProviderStateMixin {
-  late ScrollController _scrollController;
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController()..addListener(() => setState(() {}));
     _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
-    final ratioW = MediaQuery.of(context).size.width / 375;
     final ratioH = MediaQuery.of(context).size.height / 812;
     return DefaultTabController(
       length: 2,
@@ -177,31 +173,31 @@ class _RecommentGiftState extends State<RecommentGift>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    buildGift(
+                    BuildGift(
                       ratioW: ratioW,
                       ratioH: ratioH,
-                      image: 'assets/images/flower.png',
+                      image: 'assets/icons/flower.png',
                       subTitle: '19 điểm',
                       title: 'Hoa',
                     ),
-                    buildGift(
+                    BuildGift(
                       ratioW: ratioW,
                       ratioH: ratioH,
-                      image: 'assets/images/heart-circle.png',
+                      image: 'assets/icons/heart-circle.png',
                       subTitle: '99 điểm',
                       title: 'Tim',
                     ),
-                    buildGift(
+                    BuildGift(
                       ratioW: ratioW,
                       ratioH: ratioH,
-                      image: 'assets/images/coffee.png',
+                      image: 'assets/icons/coffee.png',
                       subTitle: '199 điểm',
                       title: 'Cà Phê',
                     ),
-                    buildGift(
+                    BuildGift(
                       ratioW: ratioW,
                       ratioH: ratioH,
-                      image: 'assets/images/medal-star.png',
+                      image: 'assets/icons/medal-star.png',
                       subTitle: '999 điểm',
                       title: 'Huy Hiệu',
                     ),
@@ -216,7 +212,7 @@ class _RecommentGiftState extends State<RecommentGift>
                     child: Row(
                       children: [
                         Image.asset(
-                          "assets/images/gift.png",
+                          "assets/icons/gift.png",
                           height: 24 * ratioH,
                           width: 24 * ratioW,
                         ),
@@ -382,12 +378,12 @@ class _RecommentGiftState extends State<RecommentGift>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    buildRecomment(
+                    BuildRecomment(
                       ratioW: ratioW,
                       ratioH: ratioH,
                       title: '1 đề xuất',
                     ),
-                    buildRecomment(
+                    BuildRecomment(
                       ratioW: ratioW,
                       ratioH: ratioH,
                       title: '2 đề xuất',
@@ -450,9 +446,9 @@ class _RecommentGiftState extends State<RecommentGift>
   }
 }
 
-class buildRecomment extends StatelessWidget {
+class BuildRecomment extends StatelessWidget {
   final String title;
-  const buildRecomment({
+  const BuildRecomment({
     Key? key,
     required this.ratioW,
     required this.ratioH,
@@ -494,11 +490,11 @@ class buildRecomment extends StatelessWidget {
   }
 }
 
-class buildGift extends StatelessWidget {
+class BuildGift extends StatelessWidget {
   final String image;
   final String title;
   final String subTitle;
-  const buildGift({
+  const BuildGift({
     Key? key,
     required this.ratioW,
     required this.ratioH,

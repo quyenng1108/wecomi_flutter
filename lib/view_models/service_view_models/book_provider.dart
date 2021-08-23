@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:wecomi_flutter/detail_manga/models/book.dart';
+import 'package:wecomi_flutter/models/book.dart';
 
 class BookProvider with ChangeNotifier {
   List<Book> book = [];

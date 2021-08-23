@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:wecomi_flutter/components/bottom_nav_bar_icon.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
-import 'package:wecomi_flutter/view_models/app_provider.dart';
 import 'package:wecomi_flutter/views/account/account_screen.dart';
 import 'package:wecomi_flutter/views/genre/genre_screen.dart';
 import 'package:wecomi_flutter/views/home/home_screen.dart';

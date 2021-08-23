@@ -1,29 +1,28 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:tuple/tuple.dart';
 import 'package:wecomi_flutter/components/bottom_nav_bar_icon.dart';
+import 'package:wecomi_flutter/components/linked_offset_widget.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
-import 'package:wecomi_flutter/detail_manga/compoments/linked_offset/linked_offset_widget.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/book_provider.dart';
 
-class topRank extends StatefulWidget {
-  const topRank({Key? key}) : super(key: key);
+class TopRank extends StatefulWidget {
+  const TopRank({Key? key}) : super(key: key);
 
   @override
-  _topRankState createState() => _topRankState();
+  _TopRankState createState() => _TopRankState();
 }
 
-class _topRankState extends State<topRank> with TickerProviderStateMixin {
+class _TopRankState extends State<TopRank> with TickerProviderStateMixin {
   late ScrollController _scrollController;
   late TabController _tabController;
-  static DateTime now = DateTime.now();
-  static DateTime agoWeek = DateTime(2021, 08, 09);
-  final List<Tuple5> _page = [
-    Tuple5('Sinh nhật đáng nhớ', DateFormat('yyyy/MM/dd').format(now), '~',
-        DateFormat('yyyy/MM/dd').format(agoWeek), ''),
-    Tuple5('Sinh nhật đáng nhớ', '', '', '', '')
+  List _image = [
+    'assets/images/bxhno1.png',
+    'assets/images/bxhno2.png',
+    'assets/images/bxhno3.png'
   ];
-
   @override
   void initState() {
     super.initState();
@@ -65,13 +64,15 @@ class _topRankState extends State<topRank> with TickerProviderStateMixin {
                       Icons.arrow_back,
                       color: Colors.white,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                   ),
                   actions: [
                     IconButton(
                       color: Colors.green,
                       icon: CustomizedBottomNavBarIcon(
-                          source: "assets/images/Received.png",
+                          source: "assets/icons/Received.png",
                           size: 20 * ratioH),
                       onPressed: () {
                         Navigator.pop(context);
@@ -83,10 +84,22 @@ class _topRankState extends State<topRank> with TickerProviderStateMixin {
                     child: FlexibleSpaceBar(
                       collapseMode: CollapseMode.pin,
                       background: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage('assets/images/bg.png'),
-                              fit: BoxFit.cover),
+                        child: Consumer<BookProvider>(
+                          builder: (context, bookProvider, child) {
+                            return bookProvider.book.length == 0 &&
+                                    !bookProvider.isLoading
+                                ? LinearProgressIndicator()
+                                : bookProvider.isLoading
+                                    ? Shimmer.fromColors(
+                                        child: Container(),
+                                        baseColor: Colors.grey[300]!,
+                                        highlightColor: Colors.grey[100]!)
+                                    : Container(
+                                        child: Image.network(
+                                            '${bookProvider.book[0].bookCoverImg![1].imgUrl}',
+                                            fit: BoxFit.cover),
+                                      );
+                          },
                         ),
                       ),
                       stretchModes: <StretchMode>[
@@ -95,44 +108,64 @@ class _topRankState extends State<topRank> with TickerProviderStateMixin {
                       title: Container(
                         padding: EdgeInsets.symmetric(vertical: 22.0 * ratioH),
                         child: LinkedOffsetWidget(
-                          originTransitionOffsetY: 0,
-                          finalTransitionOffsetY: -60 * ratioH,
-                          onOffsetChanged: (double offset) {},
-                          scrollController: _scrollController,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                _page[_tabController.index].item1,
-                                style: TextStyle(
-                                    fontSize: 11, color: Colors.white),
-                              ),
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      _page[_tabController.index].item2,
-                                      style: TextStyle(
-                                          fontSize: 8, color: Colors.white),
-                                    ),
-                                    Text(
-                                      _page[_tabController.index].item3,
-                                      style: TextStyle(
-                                          fontSize: 8, color: Colors.white),
-                                    ),
-                                    Text(
-                                      _page[_tabController.index].item4,
-                                      style: TextStyle(
-                                          fontSize: 8, color: Colors.white),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                            originTransitionOffsetY: 0,
+                            finalTransitionOffsetY: -60 * ratioH,
+                            onOffsetChanged: (double offset) {},
+                            scrollController: _scrollController,
+                            child: Consumer<BookProvider>(
+                                builder: (context, bookProvider, child) {
+                              final List<Tuple3> _page = [
+                                Tuple3(
+                                    bookProvider.book[0].bookName,
+                                    '${bookProvider.book[0].lastUpdateTime}',
+                                    ''),
+                                Tuple3(bookProvider.book[0].bookName, '', '')
+                              ];
+                              return bookProvider.book.length == 0 &&
+                                      !bookProvider.isLoading
+                                  ? LinearProgressIndicator()
+                                  : bookProvider.isLoading
+                                      ? Shimmer.fromColors(
+                                          child: Container(),
+                                          baseColor: Colors.grey[300]!,
+                                          highlightColor: Colors.grey[100]!)
+                                      : Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              _page[_tabController.index].item1,
+                                              style: TextStyle(
+                                                  fontSize: 11,
+                                                  color: Colors.white),
+                                            ),
+                                            Container(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    _page[_tabController.index]
+                                                        .item2,
+                                                    style: TextStyle(
+                                                        fontSize: 8,
+                                                        color: Colors.white),
+                                                  ),
+                                                  Text(
+                                                    _page[_tabController.index]
+                                                        .item3,
+                                                    style: TextStyle(
+                                                        fontSize: 8,
+                                                        color: Colors.white),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        );
+                            })),
                       ),
                       titlePadding: EdgeInsets.zero,
                     ),
@@ -197,27 +230,27 @@ class _topRankState extends State<topRank> with TickerProviderStateMixin {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                buildRank(
+                BuildRank(
                   image: 'assets/images/bxhno3.png',
-                  rank: 'assets/images/top3.png',
+                  rank: 'assets/icons/top3.png',
                   sizeImage: 35,
                   sizeRaidius: 38,
                   name: 'Trúc Lâm',
                   total: 'Điểm fan: 480',
                   color: Colors.pink,
                 ),
-                buildRank(
+                BuildRank(
                   image: 'assets/images/bxhno1.png',
-                  rank: 'assets/images/top1.png',
+                  rank: 'assets/icons/top1.png',
                   sizeImage: 40,
                   sizeRaidius: 45,
                   name: 'Trúc Lâm',
                   total: 'Điểm fan: 480',
                   color: Colors.amber,
                 ),
-                buildRank(
+                BuildRank(
                   image: 'assets/images/bxhno2.png',
-                  rank: 'assets/images/top2.png',
+                  rank: 'assets/icons/top2.png',
                   sizeImage: 35,
                   sizeRaidius: 38,
                   name: 'Trúc Lâm',
@@ -230,11 +263,14 @@ class _topRankState extends State<topRank> with TickerProviderStateMixin {
           Expanded(
             child: Container(
               padding: EdgeInsets.all(16),
-              child: ListView.builder(
-                itemCount: 20,
-                itemBuilder: (context, index) {
-                  return buildBXH();
-                },
+              child: ListView(
+                children: [
+                  for (int i = 4; i <= 20; i++)
+                    BuildBXH(
+                      top: i,
+                      total: 250 - i - 1,
+                    )
+                ],
               ),
             ),
           ),
@@ -256,27 +292,27 @@ class _topRankState extends State<topRank> with TickerProviderStateMixin {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                buildRank(
+                BuildRank(
                   image: 'assets/images/bxhno3.png',
-                  rank: 'assets/images/top3.png',
+                  rank: 'assets/icons/top3.png',
                   sizeImage: 35,
                   sizeRaidius: 38,
                   name: 'Trúc Lâm',
                   total: 'Điểm fan: 480',
                   color: Colors.pink,
                 ),
-                buildRank(
+                BuildRank(
                   image: 'assets/images/bxhno1.png',
-                  rank: 'assets/images/top1.png',
+                  rank: 'assets/icons/top1.png',
                   sizeImage: 40,
                   sizeRaidius: 45,
                   name: 'Trúc Lâm',
                   total: 'Điểm fan: 480',
                   color: Colors.amber,
                 ),
-                buildRank(
+                BuildRank(
                   image: 'assets/images/bxhno2.png',
-                  rank: 'assets/images/top2.png',
+                  rank: 'assets/icons/top2.png',
                   sizeImage: 35,
                   sizeRaidius: 38,
                   name: 'Trúc Lâm',
@@ -289,11 +325,14 @@ class _topRankState extends State<topRank> with TickerProviderStateMixin {
           Expanded(
             child: Container(
               padding: EdgeInsets.all(16),
-              child: ListView.builder(
-                itemCount: 20,
-                itemBuilder: (context, index) {
-                  return buildBXH();
-                },
+              child: ListView(
+                children: [
+                  for (int i = 4; i <= 20; i++)
+                    BuildBXH(
+                      top: i,
+                      total: 250 - i - 1,
+                    )
+                ],
               ),
             ),
           ),
@@ -303,9 +342,13 @@ class _topRankState extends State<topRank> with TickerProviderStateMixin {
   }
 }
 
-class buildBXH extends StatelessWidget {
-  const buildBXH({
+class BuildBXH extends StatelessWidget {
+  final int top;
+  final int total;
+  BuildBXH({
     Key? key,
+    required this.top,
+    required this.total,
   }) : super(key: key);
 
   @override
@@ -319,7 +362,7 @@ class buildBXH extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  "04",
+                  top.toString(),
                   style: TextStyle(color: Color(0xff999999)),
                 ),
                 Container(
@@ -334,7 +377,7 @@ class buildBXH extends StatelessWidget {
             ),
           ),
           Text(
-            "Điểm fan: 256",
+            total.toString(),
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w400,
@@ -347,7 +390,7 @@ class buildBXH extends StatelessWidget {
   }
 }
 
-class buildRank extends StatelessWidget {
+class BuildRank extends StatelessWidget {
   final String image;
   final String rank;
   final String name;
@@ -355,7 +398,7 @@ class buildRank extends StatelessWidget {
   final double sizeRaidius;
   final double sizeImage;
   final Color color;
-  const buildRank({
+  const BuildRank({
     Key? key,
     required this.image,
     required this.rank,

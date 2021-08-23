@@ -4,20 +4,20 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
-import 'package:wecomi_flutter/detail_manga/repositories/getchapter_by_bookuuid.dart';
+import 'package:wecomi_flutter/models/getchapter_by_bookuuid.dart';
 
-class BodyChapter extends StatefulWidget {
+class TabChapter extends StatefulWidget {
   String bookID;
-  BodyChapter({Key? key, required this.bookID})
+  TabChapter({Key? key, required this.bookID})
       : super(
           key: key,
         );
 
   @override
-  _BodyChapterState createState() => _BodyChapterState();
+  _TabChapterState createState() => _TabChapterState();
 }
 
-class _BodyChapterState extends State<BodyChapter> {
+class _TabChapterState extends State<TabChapter> {
   @override
   void initState() {
     super.initState();
@@ -53,7 +53,7 @@ class _BodyChapterState extends State<BodyChapter> {
                   children: [
                     Container(
                         padding: EdgeInsets.symmetric(horizontal: 10 * ratioW),
-                        child: Image.asset("assets/images/frame.png")),
+                        child: Image.asset("assets/icons/frame.png")),
                     Container(
                       width: 90 * ratioW,
                       child: TextButton(
@@ -93,7 +93,7 @@ class _BodyChapterState extends State<BodyChapter> {
                       child: ListView.builder(
                         itemCount: chapterByBook.chapterByBookId.length,
                         itemBuilder: (context, index) {
-                          return buildChapterList(
+                          return BuildChapterList(
                             ratioH: ratioH,
                             ratioW: ratioW,
                             chapterName: chapterByBook
@@ -122,8 +122,8 @@ class _BodyChapterState extends State<BodyChapter> {
   }
 }
 
-class buildChapterList extends StatelessWidget {
-  const buildChapterList({
+class BuildChapterList extends StatelessWidget {
+  const BuildChapterList({
     Key? key,
     required this.ratioH,
     required this.ratioW,
@@ -143,7 +143,6 @@ class buildChapterList extends StatelessWidget {
   final int likeNo;
   final int commentNo;
   final DateTime publishDate;
-  // static DateTime publishDate = DateTime();
 
   @override
   Widget build(BuildContext context) {
@@ -189,10 +188,8 @@ class buildChapterList extends StatelessWidget {
                           children: [
                             Padding(
                               padding: EdgeInsets.only(right: 5 * ratioW),
-                              child: Image.asset(
-                                  "assets/images/heart_white.png",
-                                  width: 13 * ratioW,
-                                  height: 12 * ratioH),
+                              child: Image.asset("assets/icons/heart_white.png",
+                                  width: 13 * ratioW, height: 12 * ratioH),
                             ),
                             Text(
                               likeNo.toString(),
@@ -206,7 +203,7 @@ class buildChapterList extends StatelessWidget {
                           Padding(
                             padding:
                                 EdgeInsets.symmetric(horizontal: 5 * ratioW),
-                            child: Image.asset("assets/images/comment.png",
+                            child: Image.asset("assets/icons/comment.png",
                                 width: 13 * ratioW, height: 12 * ratioH),
                           ),
                           Text(

@@ -41,7 +41,7 @@ TextStyle textComment1 = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: ThemeConfig.bgTextComment);
-TextStyle timeComment = TextStyle(
+TextStyle realTimeComment = TextStyle(
     fontSize: 10,
     fontWeight: FontWeight.w400,
     color: ThemeConfig.bgTextComment);
