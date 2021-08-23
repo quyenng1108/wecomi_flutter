@@ -216,7 +216,7 @@ class BuildComments extends StatelessWidget {
                             child: Row(
                               children: [
                                 Image.asset(
-                                  "assets/icons/comment.png",
+                                  "assets/images/comment.png",
                                 ),
                                 Text(
                                   numberComment,

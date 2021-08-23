@@ -56,7 +56,7 @@ class ChatInputField extends StatelessWidget {
             ),
             IconButton(
               icon: Image.asset(
-                "assets/images/Rocket.png",
+                "assets/icons/Rocket.png",
                 width: 25 * ratioW,
                 height: 25 * ratioH,
               ),

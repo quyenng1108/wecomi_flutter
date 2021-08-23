@@ -377,7 +377,7 @@ class BuildBXH extends StatelessWidget {
             ),
           ),
           Text(
-            total.toString(),
+            "Điểm Fan: " + total.toString(),
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w400,

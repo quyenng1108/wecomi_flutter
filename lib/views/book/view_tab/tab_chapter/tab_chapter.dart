@@ -168,7 +168,7 @@ class BuildChapterList extends StatelessWidget {
                 ),
                 Container(
                   padding: EdgeInsets.only(right: 10 * ratioW),
-                  child: Text(adultLimit.toString(),
+                  child: Text("Tuổi " + adultLimit.toString() + "+",
                       style:
                           TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
                 ),
@@ -203,7 +203,7 @@ class BuildChapterList extends StatelessWidget {
                           Padding(
                             padding:
                                 EdgeInsets.symmetric(horizontal: 5 * ratioW),
-                            child: Image.asset("assets/icons/comment.png",
+                            child: Image.asset("assets/images/comment.png",
                                 width: 13 * ratioW, height: 12 * ratioH),
                           ),
                           Text(
