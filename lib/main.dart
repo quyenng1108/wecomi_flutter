@@ -29,7 +29,6 @@ import 'package:wecomi_flutter/views/see_all_screen/see_all_screen.dart';
 import 'package:wecomi_flutter/views/signup/signup_screen.dart';
 import 'package:wecomi_flutter/views/splash_screen.dart';
 import 'package:wecomi_flutter/views/test.dart';
-import 'detail_manga/detail_screen_manga.dart';
 
 void main() {
   runApp(MultiProvider(
