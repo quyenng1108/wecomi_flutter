@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="app_name">Wecomi</string>
+   <string name="facebook_app_id">206110264819772</string>
+<string name="fb_login_protocol_scheme">fb206110264819772</string>
+
+</resources>

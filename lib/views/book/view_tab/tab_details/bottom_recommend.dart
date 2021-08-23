@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/comic_provider.dart';
 import '../../book_screen.dart';
 
 class ReCommend extends StatefulWidget {

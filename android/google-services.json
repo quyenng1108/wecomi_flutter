@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "582857801531",
+    "project_id": "wecomi",
+    "storage_bucket": "wecomi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:582857801531:android:ee1e5af2c6a67c54f5811e",
+        "android_client_info": {
+          "package_name": "com.example.wecomi_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "582857801531-ijmgtkpu9fsh3muc4206gb3t4sb1i8mk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0johEYQR6KHsqp7prCvhWcMvGeax9LEs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "582857801531-ijmgtkpu9fsh3muc4206gb3t4sb1i8mk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

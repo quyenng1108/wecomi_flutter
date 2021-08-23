@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
 
+import 'color_const.dart';
+
 //regular text
 const regularTextStyle = TextStyle(
     fontSize: 10, fontWeight: FontWeight.normal, color: Color(0xff373737));
