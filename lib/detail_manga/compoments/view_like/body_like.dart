@@ -5,6 +5,8 @@ import 'package:shimmer/shimmer.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/detail_manga/repositories/comic_provider.dart';
 
+import '../../detail_screen_manga.dart';
+
 class ReCommend extends StatefulWidget {
   ReCommend({Key? key}) : super(key: key);
   @override
@@ -55,6 +57,16 @@ class _ReCommendState extends State<ReCommend> {
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
                           return _recommed(
+                              press: () =>
+                                  Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) {
+                                      return DetailScreenManga(
+                                        bookID: comicProvider
+                                            .reCommend![index].bookUuid
+                                            .toString(),
+                                      );
+                                    },
+                                  )),
                               img: comicProvider.reCommend![index].imgUrl
                                   .toString(),
                               bookName: comicProvider.reCommend![index].bookname
@@ -71,39 +83,43 @@ class _ReCommendState extends State<ReCommend> {
   }
 
   Widget _recommed(
-      {String? bookName,
+      {VoidCallback? press,
+      String? bookName,
       String? catogoryName,
       String? img,
       String? subCategory}) {
     subCategory = 'Abc';
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 5),
-      child: Container(
-        width: 104,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: Image.network(
-                img!,
-                height: 136,
-                fit: BoxFit.cover,
-                width: 104,
+      child: InkWell(
+        onTap: press,
+        child: Container(
+          width: 104,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image.network(
+                  img!,
+                  height: 136,
+                  fit: BoxFit.cover,
+                  width: 104,
+                ),
               ),
-            ),
-            Text(
-              bookName!,
-              textAlign: TextAlign.center,
-              style: kSmallMediumBodyTextStyle,
-              maxLines: 1,
-            ),
-            Text(
-              '$catogoryName • $subCategory',
-              textAlign: TextAlign.center,
-              style: timeComment,
-            ),
-          ],
+              Text(
+                bookName!,
+                textAlign: TextAlign.center,
+                style: kSmallMediumBodyTextStyle,
+                maxLines: 1,
+              ),
+              Text(
+                '$catogoryName • $subCategory',
+                textAlign: TextAlign.center,
+                style: timeComment,
+              ),
+            ],
+          ),
         ),
       ),
     );
