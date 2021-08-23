@@ -91,8 +91,8 @@ class _HomeScreenState extends State<HomeScreen>
                           children: [
                             Center(
                               child: Container(
-                                height: width * 0.064,
-                                width: width * 0.117,
+                                height: 24,
+                                width: 50,
                                 decoration: BoxDecoration(
                                     color: Color(0xffE4E8EF),
                                     borderRadius: BorderRadius.circular(14),
@@ -107,7 +107,8 @@ class _HomeScreenState extends State<HomeScreen>
                               right: AppSession().sex == 1 ? 0 : 20,
                               duration: Duration(milliseconds: 700),
 
-                              child: InkWell(
+                              child: GestureDetector(
+                                // splashColor: null,
                                 onTap: () {
                                   setState(() {
                                     AppSession().sex == 1
@@ -139,9 +140,9 @@ class _HomeScreenState extends State<HomeScreen>
                                             ),
                                             child: Image.asset(
                                                 'assets/icons/Group-Male.png',
-                                                width: width * 0.064,
-                                                height: width * 0.064,
-                                                fit: BoxFit.fill))
+                                                width: 24,
+                                                height: 24,
+                                                fit: BoxFit.cover))
                                         : ClipRRect(
                                             key: Key("2"),
                                             borderRadius: BorderRadius.only(
@@ -150,9 +151,9 @@ class _HomeScreenState extends State<HomeScreen>
                                             ),
                                             child: Image.asset(
                                                 'assets/icons/Group-Female.png',
-                                                width: width * 0.064,
-                                                height: width * 0.064,
-                                                fit: BoxFit.fill))),
+                                                width: 24,
+                                                height: 24,
+                                                fit: BoxFit.cover))),
                               ),
                             )
                           ],
@@ -639,7 +640,7 @@ class HomeCategoryTitles extends StatelessWidget {
     var standardSpacing = EdgeInsets.symmetric(horizontal: width * 0.0427);
     return Container(
       margin: standardSpacing,
-      height: height * 0.0283,
+      height: 24,
       width: width,
       child: Row(
         children: [

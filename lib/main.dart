@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 import 'package:wecomi_flutter/components/signup_textfield.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/book_detail_provider.dart';
@@ -14,6 +15,7 @@ import 'package:wecomi_flutter/view_models/service_view_models/signup_provider.d
 import 'package:wecomi_flutter/view_models/ui_view_models/app_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:wecomi_flutter/views/account/account_screen.dart';
+import 'package:wecomi_flutter/views/chan.dart';
 import 'package:wecomi_flutter/views/chapter_detail/chapter_detail_screen.dart';
 import 'package:wecomi_flutter/views/forgot_password.dart/email_sent_screen.dart';
 import 'package:wecomi_flutter/views/forgot_password.dart/forgot_password_screen.dart';
@@ -30,6 +32,8 @@ import 'package:wecomi_flutter/views/test.dart';
 import 'detail_manga/detail_screen_manga.dart';
 
 void main() {
+      VisibilityDetectorController.instance.updateInterval = Duration.zero;
+
   // debugPaintSizeEnabled=true;
   runApp(MultiProvider(
     providers: [
@@ -58,7 +62,7 @@ class MyApp extends StatelessWidget {
         title: "Wecomi",
         theme: appProvider.theme,
         darkTheme: ThemeConfig.darkTheme,
-        home: SplashScreen(),
+        home: Test(),
       );
     });
   }

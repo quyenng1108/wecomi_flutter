@@ -17,6 +17,7 @@ class Test extends StatefulWidget {
 }
 
 List test = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+bool isReverse = false;
 
 class _TestState extends State<Test> {
   @override
@@ -40,56 +41,125 @@ class _TestState extends State<Test> {
       RefreshController(initialRefresh: false);
   @override
   Widget build(BuildContext context) {
+    // print(isReverse);
     ChapterProvider chapterProvider =
         Provider.of<ChapterProvider>(context, listen: false);
     return Consumer<BookDetailProvider>(
         builder: (context, bookDetailProvider, child) => Scaffold(
               body: Column(
                 children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        
+                        isReverse == false ? isReverse = true : isReverse = false;
+                        print(isReverse.toString());
+                      });
+                    },
+                    child: Container(
+                      height: 200,
+                      color: Colors.red,
+                    ),
+                  ),
                   bookDetailProvider.bookDetailList.length == 0
                       ? CupertinoActivityIndicator()
                       : Expanded(
-                          child: ListView.builder(
-                            reverse: true,
-                              itemCount:
-                                  bookDetailProvider.bookDetailList.length,
-                              itemBuilder: (context, index) => Column(
-                                    children: [
-                                      Text(bookDetailProvider
-                                          .bookDetailList[index].chapterName!),
-                                      GestureDetector(
-                                        onTap: (){
-                                          chapterProvider
-                                              .getChapterData(
-                                                  bookDetailProvider
+                          child: isReverse
+                              ? ListView.builder(
+                                  itemCount:
+                                      bookDetailProvider.bookDetailList.length,
+                                  itemBuilder: (context, index) => Column(
+                                        children: [
+                                          Text(bookDetailProvider
+                                              .bookDetailList[bookDetailProvider
+                                                      .bookDetailList.length -
+                                                  1 -
+                                                  index]
+                                              .chapterName!),
+                                          GestureDetector(
+                                            onTap: () {
+                                              chapterProvider.removeChapterList();
+                                              chapterProvider
+                                                  .getChapterData(
+                                                      bookDetailProvider
+                                                          .bookDetailList[
+                                                              bookDetailProvider
+                                                                      .bookDetailList
+                                                                      .length -
+                                                                  1 -
+                                                                  index]
+                                                          .chapterId!,
+                                                      0)
+                                                  .then((value) => Navigator.of(context)
+                                                      .push(MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ChapterDetailScreen(
+                                                                  bookDetailList:
+                                                                      bookDetailProvider
+                                                                          .bookDetailList,
+                                                                  chapterIndex:
+                                                                     bookDetailProvider
+                                                      .bookDetailList.length -
+                                                  1 -
+                                                  index)))
+                                                      .then((value) => print(bookDetailProvider.bookDetailList[index].chapterId)));
+                                            },
+                                            child: Container(
+                                              height: 100,
+                                              child: Text(
+                                                   bookDetailProvider
                                                       .bookDetailList[index]
-                                                      .chapterId!,
-                                                  0)
-                                              .then((value) => Navigator.of(
-                                                      context)
-                                                  .push(MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ChapterDetailScreen(
-                                                              bookDetailList:
-                                                                  bookDetailProvider
-                                                                      .bookDetailList,
-                                                              chapterIndex:
-                                                                  index)))
-                                                  .then((value) => print(
+                                                      .chapterId!),
+                                            ),
+                                          ),
+                                        ],
+                                      ))
+                              : ListView.builder(
+                                  itemCount:
+                                      bookDetailProvider.bookDetailList.length,
+                                  itemBuilder: (context, index) => Column(
+                                        children: [
+                                          Text(bookDetailProvider
+                                                  .bookDetailList[index]
+                                                  .chapterName!),
+                                          GestureDetector(
+                                            onTap: () {
+                                              chapterProvider.removeChapterList();
+                                              print(chapterProvider.chapterList.length);
+                                              chapterProvider
+                                                  .getChapterData(
                                                       bookDetailProvider
                                                           .bookDetailList[index]
-                                                          .chapterId)));
-
-                                        },
-                                        child: Container(
-                                          height: 100,
-                                          child: Text(bookDetailProvider
-                                              .bookDetailList[index]
-                                              .chapterId!),
-                                        ),
-                                      ),
-                                    ],
-                                  ))),
+                                                          .chapterId!,
+                                                      0)
+                                                  .then((value) => Navigator.of(context)
+                                                      .push(MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ChapterDetailScreen(
+                                                                  bookDetailList:
+                                                                      bookDetailProvider
+                                                                          .bookDetailList,
+                                                                  chapterIndex:
+                                                                      index))));
+                                            },
+                                            child: Container(
+                                              height: 100,
+                                              child: Text(isReverse
+                                                  ? bookDetailProvider
+                                                      .bookDetailList[
+                                                          bookDetailProvider
+                                                                  .bookDetailList
+                                                                  .length -
+                                                              1 -
+                                                              index]
+                                                      .chapterId!
+                                                  : bookDetailProvider
+                                                      .bookDetailList[index]
+                                                      .chapterId!),
+                                            ),
+                                          ),
+                                        ],
+                                      ))),
                 ],
               ),
             ));

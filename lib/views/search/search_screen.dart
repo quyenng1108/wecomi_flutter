@@ -197,7 +197,8 @@ class _SearchScreenState extends State<SearchScreen>
                                               BorderRadius.circular(16),
                                           child: Image.asset(
                                               "assets/images/Hot.png",
-                                              height: height * 0.1428),
+                                              // height: height * 0.1428,
+                                              width: width * 0.4453,),
                                         ),
                                       ),
                                       GestureDetector(
@@ -214,7 +215,8 @@ class _SearchScreenState extends State<SearchScreen>
                                               BorderRadius.circular(16),
                                           child: Image.asset(
                                               "assets/images/MaybeYouLike.png",
-                                              height: height * 0.1428),
+                                              // height: height * 0.1428,
+                                              width: width * 0.4453),
                                         ),
                                       )
                                     ],

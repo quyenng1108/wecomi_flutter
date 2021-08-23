@@ -10,6 +10,8 @@ class ChapterProvider with ChangeNotifier {
   bool isLoading = true;
   bool isVisible = true;
   int titleIndex = 0;
+  List<GlobalKey>? key;
+  bool? flag;
     showProgress() {
     if (isLoading) {
       return;
@@ -48,6 +50,10 @@ class ChapterProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  removeChapterList(){
+    chapterList = [];
+    notifyListeners();
+  }
   Future<void> getChapterData(String chapterId, int choice) async {
     showProgress();
     Map body = {
@@ -63,19 +69,23 @@ class ChapterProvider with ChangeNotifier {
         headers: {"Content-Type": "application/json"}, body: json.encode(body));
     Chapter chapterData = chapterFromJson(response.body);
     // chapterList = chapterToList(response.body);
-    if (chapterData.data!.isEmpty) {
-      print('khong co data');
-      showProgress();
+    if (chapterData.data!.length == 0 || chapterData.data!.isEmpty) {
+      
+      flag = false;
+      dismissProgress();
     } else {
       if (choice == 0) {
         chapterList.add(chapterData);
-        print(chapterList[0].data![0].bookName);
       } else if (choice == 1) {
         chapterList.insert(0, chapterData);
+        print("hi");
+        print(chapterList.length);
       } else if (choice == 2) {
         chapterList.insert(chapterList.length, chapterData);
       }
-      notifyListeners();
+      key = List.generate(chapterList.length, (index) => GlobalKey());
+      // print(chapterList.length);
+      flag = true;
       dismissProgress();
     }
   }

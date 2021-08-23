@@ -15,7 +15,6 @@ class BookDetailProvider with ChangeNotifier {
     Uri uri = Uri.http('117.103.207.22:8082', '/book/bookGetChapterInfo',parameter);
     var response = await http.get(uri);
     bookDetailList = bookDetailFromJson(response.body);
-    print(bookDetailList);
     notifyListeners();
   }
 }
