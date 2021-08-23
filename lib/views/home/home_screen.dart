@@ -411,6 +411,14 @@ class _HomeScreenState extends State<HomeScreen>
                                 itemBuilder: (context, i) => BannerItems(
                                   source:
                                       comicProvider.recommendedComic?[i].imgUrl,
+                                  press: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => BookScreen(
+                                            bookID: comicProvider
+                                                .recommendedComic![i].bookUuid
+                                                .toString()),
+                                      )),
                                 ),
                                 scrollDirection: Axis.horizontal,
                               ),
@@ -489,6 +497,14 @@ class _HomeScreenState extends State<HomeScreen>
                                 ),
                                 itemBuilder: (context, i) => HotItems(
                                   source: comicProvider.hotComic?[i].imgUrl,
+                                  press: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => BookScreen(
+                                            bookID: comicProvider
+                                                .hotComic![i].bookUuid
+                                                .toString()),
+                                      )),
                                 ),
                                 scrollDirection: Axis.horizontal,
                               ),
@@ -561,6 +577,14 @@ class _HomeScreenState extends State<HomeScreen>
                                     category: comicProvider
                                         .likedComic?[index].categoryName,
                                     secondCategory: "Tình cảm",
+                                    press: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => BookScreen(
+                                              bookID: comicProvider
+                                                  .likedComic![index].bookUuid
+                                                  .toString()),
+                                        )),
                                   ),
                                   staggeredTileBuilder: (index) =>
                                       StaggeredTile.extent(
@@ -591,6 +615,7 @@ class _HomeScreenState extends State<HomeScreen>
                                   secondCategory: "Lãng mạn",
                                   source: _novel[index],
                                   title: "Ngày mai sẽ đến",
+                                  press: () {},
                                 ),
                                 separatorBuilder: (context, index) => Divider(),
                                 itemCount: _novel.length,
@@ -616,7 +641,8 @@ class _HomeScreenState extends State<HomeScreen>
 }
 
 class BannerItems extends StatelessWidget {
-  BannerItems({@required this.source});
+  BannerItems({@required this.source, required this.press});
+  final VoidCallback press;
   final String? source;
   @override
   Widget build(BuildContext context) {
@@ -633,7 +659,7 @@ class BannerItems extends StatelessWidget {
               height: height * 0.2365, width: width * 0.8373, fit: BoxFit.fill),
         ),
       ),
-      onTap: () {},
+      onTap: press,
     );
   }
 }
@@ -738,14 +764,15 @@ class RecommendedItems extends StatelessWidget {
 }
 
 class HotItems extends StatelessWidget {
-  HotItems({@required this.source});
+  HotItems({@required this.source, required this.press});
+  final VoidCallback press;
   final String? source;
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return GestureDetector(
-      onTap: () {},
+      onTap: press,
       child: Container(
         width: width * 0.2906,
         height: height * 0.2870,
@@ -770,7 +797,9 @@ class LikedItems extends StatelessWidget {
     @required this.title,
     @required this.height,
     @required this.width,
+    required this.press,
   });
+  final VoidCallback press;
   final String? title;
   final String? category;
   final String? secondCategory;
@@ -811,13 +840,19 @@ class LikedItems extends StatelessWidget {
           ),
         ],
       ),
-      onTap: () {},
+      onTap: press,
     );
   }
 }
 
 class NovelItems extends StatelessWidget {
-  NovelItems({this.source, this.title, this.category, this.secondCategory});
+  NovelItems(
+      {this.source,
+      this.title,
+      this.category,
+      this.secondCategory,
+      required this.press});
+  final VoidCallback press;
   final String? source;
   final String? title;
   final String? category;
@@ -868,7 +903,7 @@ class NovelItems extends StatelessWidget {
           ],
         ),
       ),
-      onTap: () {},
+      onTap: press,
     );
   }
 }

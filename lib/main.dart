@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/book_provider.dart';
-import 'package:wecomi_flutter/models/getchapter_by_bookuuid.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/getchapter_byBookuuid_provider.dart';
 import 'package:flutter/rendering.dart';
 import 'package:wecomi_flutter/components/signup_textfield.dart';
 import 'package:wecomi_flutter/constants/theme.dart';

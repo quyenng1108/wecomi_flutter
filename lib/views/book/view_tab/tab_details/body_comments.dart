@@ -59,18 +59,18 @@ class Comments extends StatelessWidget {
                 numberComment: "11",
               ),
               BuildComments(
-                avatar: "assets/images/avt.png",
+                avatar: "assets/images/bxhno2.png",
                 nameComment: "Vũ Thị Linh",
                 chapter: "Chap 5",
                 comments:
                     "Đợi từng giờ từng phút để hóng chap mới. Yêu anh hoàng tử <3 <3 <3",
                 timeComment: "2 giờ trước",
-                levelAcccount: "7",
+                levelAcccount: "Lv.7",
                 heartLike: "10",
                 numberComment: "6",
               ),
               BuildComments(
-                avatar: "assets/images/avt.png",
+                avatar: "assets/images/bxhno1.png",
                 nameComment: "Phúc Trần",
                 chapter: "Chap 20",
                 comments: "Đợi từng giờ từng phút để hóng chap mới.",

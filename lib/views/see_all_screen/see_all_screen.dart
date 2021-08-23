@@ -6,6 +6,7 @@ import 'package:wecomi_flutter/components/list_item_book.dart';
 import 'package:wecomi_flutter/constants/color_const.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/genre_provider.dart';
+import 'package:wecomi_flutter/views/book/book_screen.dart';
 import 'package:wecomi_flutter/views/genre/genre_screen.dart';
 
 class SeeAllScreen extends StatefulWidget {
@@ -28,8 +29,9 @@ class _SeeAllScreenState extends State<SeeAllScreen> {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       GenreProvider genreProvider =
           Provider.of<GenreProvider>(context, listen: false);
-      genreProvider.getBooksByCategory(widget.parentCategoryId!, widget.id!).then((value) => print(genreProvider.booksByCategory));
-      
+      genreProvider
+          .getBooksByCategory(widget.parentCategoryId!, widget.id!)
+          .then((value) => print(genreProvider.booksByCategory));
     });
   }
 
@@ -98,9 +100,7 @@ class _SeeAllScreenState extends State<SeeAllScreen> {
                               var category;
                               var secondCategory;
                               var categoryList;
-                              if (genreProvider
-                                      .isLoading ==
-                                  false) {
+                              if (genreProvider.isLoading == false) {
                                 categoryList = genreProvider
                                     .booksByCategory[index].categoryList!
                                     .split(";");
@@ -149,6 +149,15 @@ class _SeeAllScreenState extends State<SeeAllScreen> {
                                               "${genreProvider.booksByCategory[index].categoryList}",
                                               style: smallRegularBodyTextStyle
                                                   .copyWith(color: lightBlack)),
+                                      press: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => BookScreen(
+                                                bookID: genreProvider
+                                                    .booksByCategory[index]
+                                                    .bookUuid
+                                                    .toString()),
+                                          )),
                                     );
                             }),
                   )),

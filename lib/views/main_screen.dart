@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:wecomi_flutter/common/app_session.dart';
 import 'package:wecomi_flutter/components/bottom_nav_bar_icon.dart';

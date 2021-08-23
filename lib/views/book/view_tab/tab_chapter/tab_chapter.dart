@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
-import 'package:wecomi_flutter/models/getchapter_by_bookuuid.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/getchapter_byBookuuid_provider.dart';
 
 class TabChapter extends StatefulWidget {
   String bookID;
@@ -81,7 +81,26 @@ class _TabChapterState extends State<TabChapter> {
             builder: (context, chapterByBook, child) {
           return chapterByBook.chapterByBookId.length == 0 &&
                   !chapterByBook.isLoading
-              ? CircularProgressIndicator()
+              ? Center(
+                  child: Column(
+                  children: [
+                    Text("Vào làm gì ???",
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500)),
+                    Text("Có chap nào đâu",
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500)),
+                    Text("Tìm truyện khác đi :v",
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500))
+                  ],
+                ))
               : chapterByBook.isLoading
                   ? Shimmer.fromColors(
                       child: Center(),

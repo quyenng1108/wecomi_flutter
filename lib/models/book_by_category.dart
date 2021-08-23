@@ -4,36 +4,40 @@
 
 import 'dart:convert';
 
-List<BooksByCategory> booksByCategoryFromJson(String str) => List<BooksByCategory>.from(json.decode(str).map((x) => BooksByCategory.fromJson(x)));
+List<BooksByCategory> booksByCategoryFromJson(String str) =>
+    List<BooksByCategory>.from(
+        json.decode(str).map((x) => BooksByCategory.fromJson(x)));
 
-String booksByCategoryToJson(List<BooksByCategory> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String booksByCategoryToJson(List<BooksByCategory> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class BooksByCategory {
-    BooksByCategory({
-        this.bookUuid,
-        this.bookName,
-        this.rating,
-        this.authorAccountId,
-        this.authorNick,
-        this.bookSexId,
-        this.imgUrl,
-        this.lastUpdateTime,
-        this.categoryList,
-        this.numberOfChapter,
-    });
+  BooksByCategory({
+    this.bookUuid,
+    this.bookName,
+    this.rating,
+    this.authorAccountId,
+    this.authorNick,
+    this.bookSexId,
+    this.imgUrl,
+    this.lastUpdateTime,
+    this.categoryList,
+    this.numberOfChapter,
+  });
 
-    String? bookUuid;
-    String? bookName;
-    String? rating;
-    int? authorAccountId;
-    String? authorNick;
-    int? bookSexId;
-    String? imgUrl;
-    String? lastUpdateTime;
-    String? categoryList;
-    int? numberOfChapter;
+  String? bookUuid;
+  String? bookName;
+  String? rating;
+  int? authorAccountId;
+  String? authorNick;
+  int? bookSexId;
+  String? imgUrl;
+  String? lastUpdateTime;
+  String? categoryList;
+  int? numberOfChapter;
 
-    factory BooksByCategory.fromJson(Map<String, dynamic> json) => BooksByCategory(
+  factory BooksByCategory.fromJson(Map<String, dynamic> json) =>
+      BooksByCategory(
         bookUuid: json["BookUUID"],
         bookName: json["BookName"],
         rating: json["Rating"],
@@ -44,9 +48,9 @@ class BooksByCategory {
         lastUpdateTime: json["lastUpdateTime"],
         categoryList: json["CategoryList"],
         numberOfChapter: json["NumberOfChapter"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "BookUUID": bookUuid,
         "BookName": bookName,
         "Rating": rating,
@@ -57,5 +61,5 @@ class BooksByCategory {
         "lastUpdateTime": lastUpdateTime,
         "CategoryList": categoryList,
         "NumberOfChapter": numberOfChapter,
-    };
+      };
 }
