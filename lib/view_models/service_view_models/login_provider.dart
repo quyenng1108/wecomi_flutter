@@ -42,8 +42,8 @@ class LoginProvider with ChangeNotifier {
       var jsonResponse = json.decode(res.body);
       print(res.body.toString());
       if (jsonResponse["responseStatus"] == 1) {
-        _loggedInAccount = AccountModel(
-            jsonResponse["accessToken"], jsonResponse["accountId"], null, null);
+        // _loggedInAccount = AccountModel(
+        //     jsonResponse["accessToken"], jsonResponse["accountId"], null, null);
         prefs.setString("token", jsonResponse["accessToken"]);
         prefs.setStringList("userData", [
           jsonResponse["accountId"].toString(),

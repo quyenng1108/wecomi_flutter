@@ -50,6 +50,7 @@ class _ContentState extends State<Content> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 TextButton(
                                   onPressed: () {},
@@ -290,6 +291,7 @@ class Counter extends StatelessWidget {
     return TextButton(
       onPressed: () {},
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
             children: [
@@ -336,6 +338,7 @@ class BuildContent extends StatelessWidget {
         child: TextButton(
           onPressed: onClicked,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
                 image,

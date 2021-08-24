@@ -33,9 +33,6 @@ class _ReCommendState extends State<ReCommend> {
           ),
         ),
         Consumer<ComicProvider>(builder: (context, comicProvider, child) {
-          // final detailComic = comicProvider.comic
-          //     .where((element) => element.bookId == widget.bookID);
-
           return comicProvider.comic.length == 0 && !comicProvider.isLoading
               ? LinearProgressIndicator()
               : comicProvider.isLoading
@@ -52,28 +49,92 @@ class _ReCommendState extends State<ReCommend> {
                       child: ListView.builder(
                         primary: false,
                         shrinkWrap: true,
-                        itemCount: comicProvider.recommendedComic!.length,
+                        itemCount: comicProvider.hotComic!.length,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
-                          return _recommed(
-                              press: () =>
-                                  Navigator.push(context, MaterialPageRoute(
-                                    builder: (context) {
-                                      return BookScreen(
-                                        bookID: comicProvider
-                                            .recommendedComic![index].bookUuid
-                                            .toString(),
-                                      );
-                                    },
-                                  )),
-                              img: comicProvider.recommendedComic![index].imgUrl
-                                  .toString(),
-                              bookName: comicProvider
-                                  .recommendedComic![index].bookname
-                                  .toString(),
-                              catogoryName: comicProvider
-                                  .recommendedComic![index].categoryName
-                                  .toString());
+                          if (comicProvider.comic[index].groupId ==
+                              '1111111111') {
+                            return _recommed(
+                                press: () =>
+                                    Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) {
+                                        return BookScreen(
+                                          bookID: comicProvider
+                                              .hotComic![index].bookUuid
+                                              .toString(),
+                                        );
+                                      },
+                                    )),
+                                img: comicProvider.hotComic![index].imgUrl
+                                    .toString(),
+                                bookName: comicProvider
+                                    .hotComic![index].bookname
+                                    .toString(),
+                                catogoryName: comicProvider
+                                    .hotComic![index].categoryName
+                                    .toString());
+                          } else if (comicProvider.comic[index].groupId ==
+                              '2222222222') {
+                            return _recommed(
+                                press: () =>
+                                    Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) {
+                                        return BookScreen(
+                                          bookID: comicProvider
+                                              .recommendedComic![index].bookUuid
+                                              .toString(),
+                                        );
+                                      },
+                                    )),
+                                img: comicProvider
+                                    .recommendedComic![index].imgUrl
+                                    .toString(),
+                                bookName: comicProvider
+                                    .recommendedComic![index].bookname
+                                    .toString(),
+                                catogoryName: comicProvider
+                                    .recommendedComic![index].categoryName
+                                    .toString());
+                          } else if (comicProvider.comic[index].groupId ==
+                              '3333333333') {
+                            return _recommed(
+                                press: () =>
+                                    Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) {
+                                        return BookScreen(
+                                          bookID: comicProvider
+                                              .likedComic![index].bookUuid
+                                              .toString(),
+                                        );
+                                      },
+                                    )),
+                                img: comicProvider.likedComic![index].imgUrl
+                                    .toString(),
+                                bookName: comicProvider
+                                    .likedComic![index].bookname
+                                    .toString(),
+                                catogoryName: comicProvider
+                                    .likedComic![index].categoryName
+                                    .toString());
+                          } else
+                            return _recommed(
+                                press: () =>
+                                    Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) {
+                                        return BookScreen(
+                                          bookID: comicProvider
+                                              .comic[index].bookUuid
+                                              .toString(),
+                                        );
+                                      },
+                                    )),
+                                img: comicProvider.comic[index].imgUrl
+                                    .toString(),
+                                bookName: comicProvider.comic[index].bookname
+                                    .toString(),
+                                catogoryName: comicProvider
+                                    .comic[index].categoryName
+                                    .toString());
                         },
                       ),
                     );

@@ -81,7 +81,6 @@ class _GenreScreenState extends State<GenreScreen>
                     Container(
                         width: width * 0.5786,
                         decoration: BoxDecoration(
-                          
                             color: Color(0xffDA7395),
                             borderRadius: BorderRadius.circular(8)),
                         child: Consumer<GenreProvider>(
@@ -297,42 +296,49 @@ class _GenreScreenState extends State<GenreScreen>
                                                 ),
                                               ),
                                             )
-                                          : InkWell(
-                                            onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) =>BookScreen(bookID: genreProvider
-                                                    .booksByCategory[index].bookUuid!))),
-                                            child: ListItemBook(
-                                                source: genreProvider
-                                                    .booksByCategory[index]
-                                                    .imgUrl,
-                                                title: genreProvider
-                                                    .booksByCategory[index]
-                                                    .bookName,
-                                                author: genreProvider
-                                                    .booksByCategory[index]
-                                                    .authorNick,
-                                                rating: genreProvider
-                                                    .booksByCategory[index]
-                                                    .rating,
-                                                chapterNum: genreProvider
-                                                    .booksByCategory[index]
-                                                    .numberOfChapter,
-                                                category: categoryList.length > 1
-                                                    ? Text(
-                                                        "$category • $secondCategory",
-                                                        style:
-                                                            smallRegularBodyTextStyle
-                                                                .copyWith(
-                                                                    color:
-                                                                        lightBlack),
-                                                      )
-                                                    : Text(
-                                                        "${genreProvider.booksByCategory[index].categoryList}",
-                                                        style: smallRegularBodyTextStyle
-                                                            .copyWith(
-                                                                color:
-                                                                    lightBlack)),
-                                              ),
-                                          );
+                                          : ListItemBook(
+                                              source: genreProvider
+                                                  .booksByCategory[index]
+                                                  .imgUrl,
+                                              title: genreProvider
+                                                  .booksByCategory[index]
+                                                  .bookName,
+                                              author: genreProvider
+                                                  .booksByCategory[index]
+                                                  .authorNick,
+                                              rating: genreProvider
+                                                  .booksByCategory[index]
+                                                  .rating,
+                                              chapterNum: genreProvider
+                                                  .booksByCategory[index]
+                                                  .numberOfChapter,
+                                              category: categoryList.length > 1
+                                                  ? Text(
+                                                      "$category • $secondCategory",
+                                                      style:
+                                                          smallRegularBodyTextStyle
+                                                              .copyWith(
+                                                                  color:
+                                                                      lightBlack),
+                                                    )
+                                                  : Text(
+                                                      "${genreProvider.booksByCategory[index].categoryList}",
+                                                      style: smallRegularBodyTextStyle
+                                                          .copyWith(
+                                                              color:
+                                                                  lightBlack)),
+                                              press: () => Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        BookScreen(
+                                                            bookID: genreProvider
+                                                                .booksByCategory[
+                                                                    index]
+                                                                .bookUuid
+                                                                .toString()),
+                                                  )),
+                                            );
                                     },
                                     separatorBuilder: (context, index) =>
                                         Divider(
@@ -404,16 +410,17 @@ class _GenreScreenState extends State<GenreScreen>
                                                   setState(() {
                                                     _index = index;
                                                     scrollToIndex(_index);
-                                                    genreProvider.showProgress();
-                                                  Future.delayed(Duration(
-                                                          milliseconds: 700))
-                                                      .then((value) => genreProvider
-                                                          .getBooksByCategory(
-                                                              _index + 1,
-                                                              genreProvider
-                                                                  .subCategory[
-                                                                      index]
-                                                                  .categoryId!));
+                                                    genreProvider
+                                                        .showProgress();
+                                                    Future.delayed(Duration(
+                                                            milliseconds: 700))
+                                                        .then((value) => genreProvider
+                                                            .getBooksByCategory(
+                                                                _index + 1,
+                                                                genreProvider
+                                                                    .subCategory[
+                                                                        index]
+                                                                    .categoryId!));
                                                   });
                                                 },
                                                 child: Container(
@@ -516,6 +523,17 @@ class _GenreScreenState extends State<GenreScreen>
                                                           .copyWith(
                                                               color:
                                                                   lightBlack)),
+                                              press: () => Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        BookScreen(
+                                                            bookID: genreProvider
+                                                                .booksByCategory[
+                                                                    index]
+                                                                .bookUuid
+                                                                .toString()),
+                                                  )),
                                             );
                                     },
                                     separatorBuilder: (context, index) =>

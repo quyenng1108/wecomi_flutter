@@ -1,3 +1,4 @@
+import 'dart:math' show Random;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -132,12 +133,14 @@ class _BookScreenState extends State<BookScreen> with TickerProviderStateMixin {
                                 ? LinearProgressIndicator()
                                 : bookProvider.isLoading
                                     ? Shimmer.fromColors(
-                                        child: Container(),
+                                        child: Container(
+                                          height: 251 * ratioH,
+                                        ),
                                         baseColor: Colors.grey[300]!,
                                         highlightColor: Colors.grey[100]!)
                                     : Container(
                                         child: Image.network(
-                                            '${bookProvider.book[0].bookCoverImg![1].imgUrl}',
+                                            '${bookProvider.book[0].bookCoverImg![0].imgUrl}',
                                             fit: BoxFit.cover),
                                       );
                           },
@@ -172,7 +175,8 @@ class _BookScreenState extends State<BookScreen> with TickerProviderStateMixin {
                                               '${bookProvider.book[0].bookName}',
                                               style: TextStyle(
                                                   color: Colors.white,
-                                                  fontSize: 12),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w700),
                                             );
                                 },
                               ),
@@ -242,27 +246,24 @@ class _BookScreenState extends State<BookScreen> with TickerProviderStateMixin {
                   bottom: PreferredSize(
                     preferredSize: Size.fromHeight(40),
                     child: Container(
-                      child: Container(
-                        color: Colors.white,
-                        height: 51 * ratioH,
-                        child: TabBar(
-                          tabs: [
-                            Tab(
-                              text: 'Chi Tiết',
-                            ),
-                            Tab(
-                              text: 'Chapter',
-                            ),
-                          ],
-                          labelColor: Color(0xffF05A77),
-                          unselectedLabelColor: Color(0xff7F7F7F),
-                          indicatorSize: TabBarIndicatorSize.label,
-                          indicatorColor: Color(0xffF05A77),
-                          indicatorWeight: 3,
-                          indicatorPadding:
-                              EdgeInsets.symmetric(horizontal: 20),
-                          controller: _tabController,
-                        ),
+                      color: Colors.white,
+                      height: 51 * ratioH,
+                      child: TabBar(
+                        tabs: [
+                          Tab(
+                            text: 'Chi Tiết',
+                          ),
+                          Tab(
+                            text: 'Chapter',
+                          ),
+                        ],
+                        labelColor: Color(0xffF05A77),
+                        unselectedLabelColor: Color(0xff7F7F7F),
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        indicatorColor: Color(0xffF05A77),
+                        indicatorWeight: 3,
+                        indicatorPadding: EdgeInsets.symmetric(horizontal: 50),
+                        controller: _tabController,
                       ),
                     ),
                   ),
@@ -322,14 +323,13 @@ class _BottomNavTabDetails extends State<BottomNavTabDetails> {
     final ratioW = MediaQuery.of(context).size.width / 375;
     final ratioH = MediaQuery.of(context).size.height / 812;
     return Padding(
-      padding: EdgeInsets.fromLTRB(8, 0, 16 * ratioH, 0),
+      padding: EdgeInsets.fromLTRB(8, 0, 16 * ratioH, 5 * ratioH),
       child: Container(
         height: 71 * ratioH,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Container(
-              //padding: const EdgeInsets.only(left: 26, top: 6),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

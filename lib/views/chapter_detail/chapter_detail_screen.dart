@@ -9,6 +9,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 import 'package:wecomi_flutter/common/app_session.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/models/book_detail.dart';
+import 'package:wecomi_flutter/models/getchapter_byBookuuid.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/chapter_provider.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/comic_provider.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/login_provider.dart';
@@ -20,7 +21,7 @@ import 'package:wecomi_flutter/views/main_screen.dart';
 class ChapterDetailScreen extends StatefulWidget {
   ChapterDetailScreen(
       {required this.bookDetailList, required this.chapterIndex});
-  final List<BookDetail> bookDetailList;
+  final List<ChapterByBookUuid> bookDetailList;
   final int chapterIndex;
   @override
   _ChapterDetailScreenState createState() => _ChapterDetailScreenState();
@@ -30,7 +31,17 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
   @override
   void initState() {
     super.initState();
-
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      ChapterProvider chapterProvider = Provider.of<ChapterProvider>(context,listen: false);
+      chapterProvider.removeChapterList();
+                                              chapterProvider
+                                                  .getChapterData(
+                                                      widget
+                                                          .bookDetailList[
+                                                              widget.chapterIndex]
+                                                          .chapterId!,
+                                                      0);
+    });
     // ChapterProvider chapterProvider =
     //     Provider.of<ChapterProvider>(context, listen: false);
     // print(chapterProvider.chapterList.length);
@@ -117,9 +128,14 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                       .chapterList.length ==
                   0
               ? Center(
-                  child: CupertinoActivityIndicator(
-                  radius: 25,
-                ))
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Khong co data"),
+                      ElevatedButton(onPressed: () => Navigator.of(context).pop(), child: Text("Get back"))
+                    ],
+                  ),
+                )
               : Scrollbar(
                   child: SmartRefresher(
                     onRefresh: () {

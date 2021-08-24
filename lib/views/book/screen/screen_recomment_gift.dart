@@ -474,7 +474,7 @@ class BuildRecomment extends StatelessWidget {
           children: [
             Container(
               padding: EdgeInsets.only(top: 11.5 * ratioH),
-              child: Image.asset("assets/images/recomment_start.png"),
+              child: Image.asset("assets/icons/recomment_start.png"),
             ),
             Container(
               padding: EdgeInsets.fromLTRB(0, 13.5 * ratioH, 0, 12 * ratioH),

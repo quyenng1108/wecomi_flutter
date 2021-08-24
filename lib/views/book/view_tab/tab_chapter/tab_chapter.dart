@@ -4,7 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
-import 'package:wecomi_flutter/models/getchapter_by_bookuuid.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/getchapter_byBookuuid_provider.dart';
+import 'package:wecomi_flutter/views/chapter_detail/chapter_detail_screen.dart';
+import 'package:wecomi_flutter/views/test.dart';
 
 class TabChapter extends StatefulWidget {
   String bookID;
@@ -28,7 +30,7 @@ class _TabChapterState extends State<TabChapter> {
   }
 
   var buttonText = 'Mới nhất';
-
+  bool isReverse = false;
   @override
   Widget build(BuildContext context) {
     final ratioW = MediaQuery.of(context).size.width / 375;
@@ -59,14 +61,14 @@ class _TabChapterState extends State<TabChapter> {
                       child: TextButton(
                         onPressed: () {
                           setState(() {
-                            buttonText = 'Cũ nhất';
+                            isReverse ? isReverse = false: isReverse = true;
                           });
                         },
                         style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.all<Color>(Colors.white)),
                         child: Text(
-                          buttonText,
+                          isReverse ? "Cũ nhất" : "Mới nhất",
                           style: text,
                         ),
                       ),
@@ -79,9 +81,27 @@ class _TabChapterState extends State<TabChapter> {
         ),
         Consumer<ChapterByBookIDProvider>(
             builder: (context, chapterByBook, child) {
-          return chapterByBook.chapterByBookId.length == 0 &&
-                  !chapterByBook.isLoading
-              ? CircularProgressIndicator()
+          return chapterByBook.chapterByBookId.length == 0
+              ? Center(
+                  child: Column(
+                  children: [
+                    Text("Vào làm gì ???",
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500)),
+                    Text("Có chap nào đâu",
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500)),
+                    Text("Tìm truyện khác đi :v",
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500))
+                  ],
+                ))
               : chapterByBook.isLoading
                   ? Shimmer.fromColors(
                       child: Center(),
@@ -93,7 +113,40 @@ class _TabChapterState extends State<TabChapter> {
                       child: ListView.builder(
                         itemCount: chapterByBook.chapterByBookId.length,
                         itemBuilder: (context, index) {
-                          return BuildChapterList(
+                          return isReverse ? BuildChapterList(
+                            ratioH: ratioH,
+                            ratioW: ratioW,
+                            chapterName: chapterByBook
+                                .chapterByBookId[chapterByBook
+                                .chapterByBookId.length - index -1].chapterName
+                                .toString(),
+                            adultLimit: chapterByBook
+                                .chapterByBookId[chapterByBook
+                                .chapterByBookId.length - index -1].adultLimit!
+                                .toInt(),
+                            commentNo: chapterByBook
+                                .chapterByBookId[chapterByBook
+                                .chapterByBookId.length - index -1].commentNo!
+                                .toInt(),
+                            likeNo: chapterByBook.chapterByBookId[chapterByBook
+                                .chapterByBookId.length - index -1].likeNo!
+                                .toInt(),
+                            publishDate: chapterByBook
+                                .chapterByBookId[chapterByBook
+                                .chapterByBookId.length - index -1].publishDate!,
+                            press: () {
+                              Navigator.of(context)
+                                                      .push(MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ChapterDetailScreen(
+                                                                  bookDetailList:
+                                                                      chapterByBook
+                                .chapterByBookId,
+                                                                  chapterIndex:
+                                                                     chapterByBook
+                                .chapterByBookId.length - index -1)));
+                            },
+                          ):BuildChapterList(
                             ratioH: ratioH,
                             ratioW: ratioW,
                             chapterName: chapterByBook
@@ -110,7 +163,15 @@ class _TabChapterState extends State<TabChapter> {
                             publishDate: chapterByBook
                                 .chapterByBookId[index].publishDate!,
                             press: () {
-                              print("object");
+                              Navigator.of(context)
+                                                      .push(MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ChapterDetailScreen(
+                                                                  bookDetailList:
+                                                                      chapterByBook
+                                .chapterByBookId,
+                                                                  chapterIndex:
+                                                                     index)));
                             },
                           );
                         },

@@ -51,6 +51,7 @@ class ChapterProvider with ChangeNotifier {
   }
 
   removeChapterList(){
+    showProgress();
     chapterList = [];
     notifyListeners();
   }

@@ -27,9 +27,6 @@ class BookProvider with ChangeNotifier {
         "http://117.103.207.22:8082/book/bookGetInfoGeneral?bookuuid=$bookUuid";
     showProgress();
     Response res = await Dio().get(url,
-        queryParameters: {
-          "BookUUID": bookUuid,
-        },
         options: Options(headers: {"Content-Type": "application/json"}));
     book = (res.data as List).map((x) => Book.fromJson(x)).toList();
     // book = List<Book>.from(res.data.map((i) => Book.fromJson(i)));
