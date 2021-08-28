@@ -37,6 +37,7 @@ class ListItemBook extends StatelessWidget {
             ),
           ]),
       child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
         child: Row(
           children: [
             Container(

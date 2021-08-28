@@ -88,76 +88,77 @@ class _HomeScreenState extends State<HomeScreen>
                         //     width: 1
                         //   )
                         // ),
-                        child: Stack(
-                          children: [
-                            Center(
-                              child: Container(
-                                height: 24,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                    color: Color(0xffE4E8EF),
-                                    borderRadius: BorderRadius.circular(14),
-                                    border: Border.all(
-                                        color: Color(0xffD6DDE8), width: 1)),
-                              ),
-                            ),
-                            AnimatedPositioned(
-                              curve: Curves.easeIn,
-                              // top: 3.0,
-                              left: AppSession().sex == 1 ? 20 : 0,
-                              right: AppSession().sex == 1 ? 0 : 20,
-                              duration: Duration(milliseconds: 700),
-
-                              child: GestureDetector(
-                                // splashColor: null,
-                                onTap: () {
-                                  setState(() {
-                                    AppSession().sex == 1
-                                        ? AppSession().changeSexGroup(2)
-                                        : AppSession().changeSexGroup(1);
-                                  });
-                                  comicProvider.isLoading = true;
-                                  Future.delayed(Duration(milliseconds: 1000))
-                                      .then((value) => comicProvider
-                                          .getComicBySex(AppSession().sex));
-                                },
-                                child: AnimatedSwitcher(
-                                    // switchInCurve: Curves.easeOut,
-                                    // switchOutCurve: Curves.easeOut,
-                                    duration: Duration(milliseconds: 700),
-                                    transitionBuilder: (Widget child,
-                                        Animation<double> animation) {
-                                      return RotationTransition(
-                                        turns: animation,
-                                        child: child,
-                                      );
-                                    },
-                                    child: AppSession().sex == 1
-                                        ? ClipRRect(
-                                            key: Key("1"),
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(14.0),
-                                              topRight: Radius.circular(14.0),
-                                            ),
-                                            child: Image.asset(
-                                                'assets/icons/Group-Male.png',
-                                                width: 24,
-                                                height: 24,
-                                                fit: BoxFit.cover))
-                                        : ClipRRect(
-                                            key: Key("2"),
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(0),
-                                              topRight: Radius.circular(0),
-                                            ),
-                                            child: Image.asset(
-                                                'assets/icons/Group-Female.png',
-                                                width: 24,
-                                                height: 24,
-                                                fit: BoxFit.cover))),
-                              ),
-                            )
-                          ],
+                        child: Center(
+                          child: Stack(
+                            children: [
+                                Container(
+                                  height: 24,
+                                  width: 44,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffE4E8EF),
+                                      borderRadius: BorderRadius.circular(14),
+                                      border: Border.all(
+                                          color: Color(0xffD6DDE8), width: 1)),
+                                ),
+                            
+                              AnimatedPositioned(
+                                curve: Curves.easeIn,
+                                // top: 3.0,
+                                left: AppSession().sex == 1 ? 20 : 0,
+                                right: AppSession().sex == 1 ? 0 : 20,
+                                duration: Duration(milliseconds: 700),
+                        
+                                child: GestureDetector(
+                                  // splashColor: null,
+                                  onTap: () {
+                                    setState(() {
+                                      AppSession().sex == 1
+                                          ? AppSession().changeSexGroup(2)
+                                          : AppSession().changeSexGroup(1);
+                                    });
+                                    comicProvider.isLoading = true;
+                                    Future.delayed(Duration(milliseconds: 1000))
+                                        .then((value) => comicProvider
+                                            .getComicBySex(AppSession().sex));
+                                  },
+                                  child: AnimatedSwitcher(
+                                      // switchInCurve: Curves.easeOut,
+                                      // switchOutCurve: Curves.easeOut,
+                                      duration: Duration(milliseconds: 700),
+                                      transitionBuilder: (Widget child,
+                                          Animation<double> animation) {
+                                        return RotationTransition(
+                                          turns: animation,
+                                          child: child,
+                                        );
+                                      },
+                                      child: AppSession().sex == 1
+                                          ? ClipRRect(
+                                              key: Key("1"),
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(14.0),
+                                                topRight: Radius.circular(14.0),
+                                              ),
+                                              child: Image.asset(
+                                                  'assets/icons/Group-Male.png',
+                                                  width: 24,
+                                                  height: 24,
+                                                  fit: BoxFit.cover))
+                                          : ClipRRect(
+                                              key: Key("2"),
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(0),
+                                                topRight: Radius.circular(0),
+                                              ),
+                                              child: Image.asset(
+                                                  'assets/icons/Group-Female.png',
+                                                  width: 24,
+                                                  height: 24,
+                                                  fit: BoxFit.cover))),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),

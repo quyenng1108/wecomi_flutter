@@ -12,7 +12,7 @@ class ChapterProvider with ChangeNotifier {
   int titleIndex = 0;
   List<GlobalKey>? key;
   bool? flag;
-    showProgress() {
+  showProgress() {
     if (isLoading) {
       return;
     }
@@ -45,16 +45,18 @@ class ChapterProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  setTitleIndex(int index){
+  setTitleIndex(int index) {
     titleIndex = index;
     notifyListeners();
   }
 
-  removeChapterList(){
+  removeChapterList() {
     showProgress();
-    chapterList = [];
+    chapterList.clear();
+    titleIndex = 0;
     notifyListeners();
   }
+
   Future<void> getChapterData(String chapterId, int choice) async {
     showProgress();
     Map body = {
@@ -71,7 +73,6 @@ class ChapterProvider with ChangeNotifier {
     Chapter chapterData = chapterFromJson(response.body);
     // chapterList = chapterToList(response.body);
     if (chapterData.data!.length == 0 || chapterData.data!.isEmpty) {
-      
       flag = false;
       dismissProgress();
     } else {

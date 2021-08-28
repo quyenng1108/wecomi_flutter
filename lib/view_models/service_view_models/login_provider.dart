@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_ip_address/get_ip_address.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -51,15 +51,17 @@ class LoginProvider with ChangeNotifier {
         ]);
         Navigator.pop(context);
         Navigator.pop(context);
+        Navigator.pop(context);
       } else if (jsonResponse["responseStatus"] == -50) {
         _invalidUsernameAccount =
             AccountModel(null, null, "Tài khoản không tồn tại", null);
-
+        Navigator.pop(context);
         print(_invalidUsernameAccount.invalidUsernameMessage);
         // print(invalidUsername);
       } else {
         _invalidPasswordAccount =
             AccountModel(null, null, null, "Mật khẩu không đúng");
+            Navigator.pop(context);
         // print(invalidPassword);
       }
     } on IpAddressException catch (exception) {
@@ -91,28 +93,28 @@ class LoginProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loginWithFacebook() async {
-    final LoginResult result = await FacebookAuth.instance.login();
-    switch (result.status) {
-      case LoginStatus.success:
-        AccessToken accessToken = result.accessToken!;
-        final graphResponse = await http.get(Uri.parse(
-            'https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=${accessToken.token}'));
-        final userData = jsonDecode(graphResponse.body);
-        print(accessToken.token);
-        print(userData);
-        break;
-      case LoginStatus.cancelled:
-        print("login cancelled");
-        break;
-      case LoginStatus.failed:
-        print("login failed");
-        break;
-      case LoginStatus.operationInProgress:
-        print("login in progress");
-    }
-    notifyListeners();
-  }
+  // Future<void> loginWithFacebook() async {
+  //   final LoginResult result = await FacebookAuth.instance.login();
+  //   switch (result.status) {
+  //     case LoginStatus.success:
+  //       AccessToken accessToken = result.accessToken!;
+  //       final graphResponse = await http.get(Uri.parse(
+  //           'https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=${accessToken.token}'));
+  //       final userData = jsonDecode(graphResponse.body);
+  //       print(accessToken.token);
+  //       print(userData);
+  //       break;
+  //     case LoginStatus.cancelled:
+  //       print("login cancelled");
+  //       break;
+  //     case LoginStatus.failed:
+  //       print("login failed");
+  //       break;
+  //     case LoginStatus.operationInProgress:
+  //       print("login in progress");
+  //   }
+  //   notifyListeners();
+  // }
 
   checkLoginState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

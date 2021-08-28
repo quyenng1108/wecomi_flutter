@@ -16,7 +16,6 @@ import 'package:wecomi_flutter/view_models/service_view_models/login_provider.da
 import 'package:wecomi_flutter/views/account/account_screen.dart';
 import 'package:wecomi_flutter/views/login/login_screen.dart';
 import 'package:wecomi_flutter/views/main_screen.dart';
-  
 
 class ChapterDetailScreen extends StatefulWidget {
   ChapterDetailScreen(
@@ -32,15 +31,13 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      ChapterProvider chapterProvider = Provider.of<ChapterProvider>(context,listen: false);
+      ChapterProvider chapterProvider =
+          Provider.of<ChapterProvider>(context, listen: false);
+          print(chapterProvider.chapterList.isEmpty);
       chapterProvider.removeChapterList();
-                                              chapterProvider
-                                                  .getChapterData(
-                                                      widget
-                                                          .bookDetailList[
-                                                              widget.chapterIndex]
-                                                          .chapterId!,
-                                                      0);
+      chapterProvider.getChapterData(
+          widget.bookDetailList[widget.chapterIndex].chapterId!, 0);
+
     });
     // ChapterProvider chapterProvider =
     //     Provider.of<ChapterProvider>(context, listen: false);
@@ -58,6 +55,7 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
     //   }
     // });
   }
+
   int _index = 0;
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -68,7 +66,7 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
     chapterProvider.showProgress();
     chapterProvider.getChapterData(chapterId, choice);
   }
-  
+
   @override
   void dispose() {
     _refreshController.dispose();
@@ -91,7 +89,7 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
           child: Consumer<ChapterProvider>(
             builder: (context, chapterProvider, child) =>
                 chapterProvider.isLoading ||
-                        chapterProvider.chapterList.length == 0
+                        chapterProvider.chapterList.isEmpty
                     ? Container()
                     : AnimatedContainer(
                         height: chapterProvider.isVisible ? height * 0.1428 : 0,
@@ -112,6 +110,7 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                           leading: IconButton(
                             onPressed: () {
                               Navigator.of(context).pop();
+                              // chapterProvider.removeChapterList();
                             },
                             icon: Icon(
                               Icons.arrow_back,
@@ -127,15 +126,23 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
           builder: (context, chapterProvider, child) => chapterProvider
                       .chapterList.length ==
                   0
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Khong co data"),
-                      ElevatedButton(onPressed: () => Navigator.of(context).pop(), child: Text("Get back"))
-                    ],
-                  ),
-                )
+              ? chapterProvider.isLoading
+                  ? Center(
+                      child: CupertinoActivityIndicator(),
+                    )
+                  : Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Khong co data"),
+                          ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text("Get back"))
+                        ],
+                      ),
+                    )
               : Scrollbar(
                   child: SmartRefresher(
                     onRefresh: () {
@@ -186,27 +193,33 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                             return VisibilityDetector(
                               key: Key(index.toString()),
                               onVisibilityChanged: (VisibilityInfo info) {
-                                if(_scrollController.hasClients){
-                                  if (_scrollController.position.pixels <= height * 0.1428) {
-                                  chapterProvider.showAppBar();
-                                }
+                                if (_scrollController.hasClients) {
+                                  if (_scrollController.position.pixels <=
+                                      height * 0.1428) {
+                                    chapterProvider.showAppBar();
+                                  }
                                   if (_scrollController
-                                        .position.userScrollDirection ==
-                                    ScrollDirection.reverse) {
-                                  if(chapterProvider.isVisible == true)chapterProvider.dismissAppBar();
-                                  if(info.visibleBounds.top == 0 && info.visibleBounds.bottom >= height * 0.5) chapterProvider.setTitleIndex(index);
-                                  // if(info.visibleBounds.bottom > height * 0.5) print(index);
-                                 }
-                                 else if (_scrollController
-                                        .position.userScrollDirection ==
-                                    ScrollDirection.forward) {
-                                  // chapterProvider.dismissAppBar();
-                                  if(info.visibleBounds.top == 0 && info.visibleBounds.bottom < height * 0.5) chapterProvider.setTitleIndex(index-1);
-                                  // if(info.visibleBounds.bottom > height * 0.5) print(index);
-                                 }
-                                
+                                          .position.userScrollDirection ==
+                                      ScrollDirection.reverse) {
+                                    if (chapterProvider.isVisible == true)
+                                      chapterProvider.dismissAppBar();
+                                    if (info.visibleBounds.top == 0 &&
+                                        info.visibleBounds.bottom >=
+                                            height * 0.5)
+                                      chapterProvider.setTitleIndex(index);
+                                    // if(info.visibleBounds.bottom > height * 0.5) print(index);
+                                  } else if (_scrollController
+                                          .position.userScrollDirection ==
+                                      ScrollDirection.forward) {
+                                    // chapterProvider.dismissAppBar();
+                                    if (info.visibleBounds.top == 0 &&
+                                        info.visibleBounds.bottom <
+                                            height * 0.5)
+                                      chapterProvider.setTitleIndex(index - 1);
+                                    // if(info.visibleBounds.bottom > height * 0.5) print(index);
+                                  }
                                 }
-                                
+
                                 // print(info.visibleBounds.top);
                                 // if (info.visibleBounds.top > 0) {
                                 //   chapterProvider.setTitleIndex(index);
@@ -231,7 +244,6 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                                       physics: NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, i) {
                                         return GestureDetector(
-                                          
                                             onTap: () => chapterProvider
                                                         .isVisible &&
                                                     _scrollController
@@ -286,7 +298,7 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
         bottomNavigationBar: Consumer<ChapterProvider>(
             builder: (context, chapterProvider, child) => (chapterProvider
                         .isLoading ||
-                    chapterProvider.chapterList.length == 0
+                    chapterProvider.chapterList.isEmpty
                 ? Container()
                 : AnimatedContainer(
                     duration: Duration(milliseconds: 200),
@@ -384,7 +396,7 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                                               chapterProvider
                                                           .chapterList[
                                                               chapterProvider
-                                                                  .titleIndex]
+                                                                  .titleIndex.compareTo(0)]
                                                           .data![0]
                                                           .chapterId ==
                                                       widget
