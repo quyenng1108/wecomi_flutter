@@ -70,7 +70,7 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
   @override
   void dispose() {
     _refreshController.dispose();
-    // _scrollController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 

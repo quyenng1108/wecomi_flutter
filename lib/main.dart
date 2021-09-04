@@ -17,7 +17,6 @@ import 'package:wecomi_flutter/view_models/service_view_models/signup_provider.d
 import 'package:wecomi_flutter/view_models/ui_view_models/app_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:wecomi_flutter/views/account/account_screen.dart';
-import 'package:wecomi_flutter/views/chan.dart';
 import 'package:wecomi_flutter/views/chapter_detail/chapter_detail_screen.dart';
 import 'package:wecomi_flutter/views/forgot_password.dart/email_sent_screen.dart';
 import 'package:wecomi_flutter/views/forgot_password.dart/forgot_password_screen.dart';
