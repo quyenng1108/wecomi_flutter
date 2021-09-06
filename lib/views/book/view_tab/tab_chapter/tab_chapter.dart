@@ -61,7 +61,7 @@ class _TabChapterState extends State<TabChapter> {
                       child: TextButton(
                         onPressed: () {
                           setState(() {
-                            isReverse ? isReverse = false: isReverse = true;
+                            isReverse ? isReverse = false : isReverse = true;
                           });
                         },
                         style: ButtonStyle(
@@ -113,67 +113,87 @@ class _TabChapterState extends State<TabChapter> {
                       child: ListView.builder(
                         itemCount: chapterByBook.chapterByBookId.length,
                         itemBuilder: (context, index) {
-                          return isReverse ? BuildChapterList(
-                            ratioH: ratioH,
-                            ratioW: ratioW,
-                            chapterName: chapterByBook
-                                .chapterByBookId[chapterByBook
-                                .chapterByBookId.length - index -1].chapterName
-                                .toString(),
-                            adultLimit: chapterByBook
-                                .chapterByBookId[chapterByBook
-                                .chapterByBookId.length - index -1].adultLimit!
-                                .toInt(),
-                            commentNo: chapterByBook
-                                .chapterByBookId[chapterByBook
-                                .chapterByBookId.length - index -1].commentNo!
-                                .toInt(),
-                            likeNo: chapterByBook.chapterByBookId[chapterByBook
-                                .chapterByBookId.length - index -1].likeNo!
-                                .toInt(),
-                            publishDate: chapterByBook
-                                .chapterByBookId[chapterByBook
-                                .chapterByBookId.length - index -1].publishDate!,
-                            press: () {
-                              Navigator.of(context)
-                                                      .push(MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              ChapterDetailScreen(
-                                                                  bookDetailList:
-                                                                      chapterByBook
-                                .chapterByBookId,
-                                                                  chapterIndex:
-                                                                     chapterByBook
-                                .chapterByBookId.length - index -1)));
-                            },
-                          ):BuildChapterList(
-                            ratioH: ratioH,
-                            ratioW: ratioW,
-                            chapterName: chapterByBook
-                                .chapterByBookId[index].chapterName
-                                .toString(),
-                            adultLimit: chapterByBook
-                                .chapterByBookId[index].adultLimit!
-                                .toInt(),
-                            commentNo: chapterByBook
-                                .chapterByBookId[index].commentNo!
-                                .toInt(),
-                            likeNo: chapterByBook.chapterByBookId[index].likeNo!
-                                .toInt(),
-                            publishDate: chapterByBook
-                                .chapterByBookId[index].publishDate!,
-                            press: () {
-                              Navigator.of(context)
-                                                      .push(MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              ChapterDetailScreen(
-                                                                  bookDetailList:
-                                                                      chapterByBook
-                                .chapterByBookId,
-                                                                  chapterIndex:
-                                                                     index)));
-                            },
-                          );
+                          return isReverse
+                              ? BuildChapterList(
+                                  ratioH: ratioH,
+                                  ratioW: ratioW,
+                                  chapterName: chapterByBook
+                                      .chapterByBookId[
+                                          chapterByBook.chapterByBookId.length -
+                                              index -
+                                              1]
+                                      .chapterName
+                                      .toString(),
+                                  adultLimit: chapterByBook
+                                      .chapterByBookId[
+                                          chapterByBook.chapterByBookId.length -
+                                              index -
+                                              1]
+                                      .adultLimit!
+                                      .toInt(),
+                                  commentNo: chapterByBook
+                                      .chapterByBookId[
+                                          chapterByBook.chapterByBookId.length -
+                                              index -
+                                              1]
+                                      .commentNo!
+                                      .toInt(),
+                                  likeNo: chapterByBook
+                                      .chapterByBookId[
+                                          chapterByBook.chapterByBookId.length -
+                                              index -
+                                              1]
+                                      .likeNo!
+                                      .toInt(),
+                                  publishDate: chapterByBook
+                                      .chapterByBookId[
+                                          chapterByBook.chapterByBookId.length -
+                                              index -
+                                              1]
+                                      .publishDate!,
+                                  press: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ChapterDetailScreen(
+                                                    bookDetailList:
+                                                        chapterByBook
+                                                            .chapterByBookId,
+                                                    chapterIndex: chapterByBook
+                                                            .chapterByBookId
+                                                            .length -
+                                                        index -
+                                                        1)));
+                                  },
+                                )
+                              : BuildChapterList(
+                                  ratioH: ratioH,
+                                  ratioW: ratioW,
+                                  chapterName: chapterByBook
+                                      .chapterByBookId[index].chapterName
+                                      .toString(),
+                                  adultLimit: chapterByBook
+                                      .chapterByBookId[index].adultLimit!
+                                      .toInt(),
+                                  commentNo: chapterByBook
+                                      .chapterByBookId[index].commentNo!
+                                      .toInt(),
+                                  likeNo: chapterByBook
+                                      .chapterByBookId[index].likeNo!
+                                      .toInt(),
+                                  publishDate: chapterByBook
+                                      .chapterByBookId[index].publishDate!,
+                                  press: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ChapterDetailScreen(
+                                                    bookDetailList:
+                                                        chapterByBook
+                                                            .chapterByBookId,
+                                                    chapterIndex: index)));
+                                  },
+                                );
                         },
                       ),
                     ));
