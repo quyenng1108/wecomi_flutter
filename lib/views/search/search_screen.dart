@@ -7,6 +7,7 @@ import 'package:wecomi_flutter/components/list_item_book.dart';
 import 'package:wecomi_flutter/constants/color_const.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/search_provider.dart';
+import 'package:wecomi_flutter/views/book/book_screen.dart';
 import 'package:wecomi_flutter/views/see_all_screen/see_all_screen.dart';
 
 List history = [
@@ -196,8 +197,10 @@ class _SearchScreenState extends State<SearchScreen>
                                           borderRadius:
                                               BorderRadius.circular(16),
                                           child: Image.asset(
-                                              "assets/images/Hot.png",
-                                              height: height * 0.1428),
+                                            "assets/images/Hot.png",
+                                            // height: height * 0.1428,
+                                            width: width * 0.4453,
+                                          ),
                                         ),
                                       ),
                                       GestureDetector(
@@ -214,7 +217,8 @@ class _SearchScreenState extends State<SearchScreen>
                                               BorderRadius.circular(16),
                                           child: Image.asset(
                                               "assets/images/MaybeYouLike.png",
-                                              height: height * 0.1428),
+                                              // height: height * 0.1428,
+                                              width: width * 0.4453),
                                         ),
                                       )
                                     ],
@@ -475,41 +479,53 @@ class _SearchScreenState extends State<SearchScreen>
                                                             categoryList[1];
                                                       }
                                                     }
-                                                    return SearchItems(
-                                                      searchKeyword:
-                                                          searchProvider
-                                                              .matchingWords,
-                                                      source: searchProvider
-                                                          .searchResult[index]
-                                                          .imgUrl,
-                                                      title: searchProvider
-                                                          .searchResult[index]
-                                                          .bookName,
-                                                      author: searchProvider
-                                                          .searchResult[index]
-                                                          .authorNick,
-                                                      rating: searchProvider
-                                                          .searchResult[index]
-                                                          .rating,
-                                                      chapterNum: searchProvider
-                                                          .searchResult[index]
-                                                          .numberOfChapter,
-                                                      category: categoryList
-                                                                  .length >
-                                                              1
-                                                          ? Text(
-                                                              "$category • $secondCategory",
-                                                              style: smallRegularBodyTextStyle
-                                                                  .copyWith(
-                                                                      color:
-                                                                          lightBlack),
-                                                            )
-                                                          : Text(
-                                                              "${searchProvider.searchResult[index].categoryList}",
-                                                              style: smallRegularBodyTextStyle
-                                                                  .copyWith(
-                                                                      color:
-                                                                          lightBlack)),
+                                                    return GestureDetector(
+                                                      onTap: () => Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) => BookScreen(
+                                                                  bookID: searchProvider
+                                                                      .searchResult[
+                                                                          index]
+                                                                      .bookUuid
+                                                                      .toString()),
+                                                            )),
+                                                      child: SearchItems(
+                                                        searchKeyword:
+                                                            searchProvider
+                                                                .matchingWords,
+                                                        source: searchProvider
+                                                            .searchResult[index]
+                                                            .imgUrl,
+                                                        title: searchProvider
+                                                            .searchResult[index]
+                                                            .bookName,
+                                                        author: searchProvider
+                                                            .searchResult[index]
+                                                            .authorNick,
+                                                        rating: searchProvider
+                                                            .searchResult[index]
+                                                            .rating,
+                                                        chapterNum: searchProvider
+                                                            .searchResult[index]
+                                                            .numberOfChapter,
+                                                        category: categoryList
+                                                                    .length >
+                                                                1
+                                                            ? Text(
+                                                                "$category • $secondCategory",
+                                                                style: smallRegularBodyTextStyle
+                                                                    .copyWith(
+                                                                        color:
+                                                                            lightBlack),
+                                                              )
+                                                            : Text(
+                                                                "${searchProvider.searchResult[index].categoryList}",
+                                                                style: smallRegularBodyTextStyle
+                                                                    .copyWith(
+                                                                        color:
+                                                                            lightBlack)),
+                                                      ),
                                                     );
                                                   }),
                                               ListView.builder(
@@ -543,41 +559,53 @@ class _SearchScreenState extends State<SearchScreen>
                                                             categoryList[1];
                                                       }
                                                     }
-                                                    return SearchItems(
-                                                      searchKeyword:
-                                                          searchProvider
-                                                              .matchingWords,
-                                                      source: searchProvider
-                                                          .searchResult[index]
-                                                          .imgUrl,
-                                                      title: searchProvider
-                                                          .searchResult[index]
-                                                          .bookName,
-                                                      author: searchProvider
-                                                          .searchResult[index]
-                                                          .authorNick,
-                                                      rating: searchProvider
-                                                          .searchResult[index]
-                                                          .rating,
-                                                      chapterNum: searchProvider
-                                                          .searchResult[index]
-                                                          .numberOfChapter,
-                                                      category: categoryList
-                                                                  .length >
-                                                              1
-                                                          ? Text(
-                                                              "$category • $secondCategory",
-                                                              style: smallRegularBodyTextStyle
-                                                                  .copyWith(
-                                                                      color:
-                                                                          lightBlack),
-                                                            )
-                                                          : Text(
-                                                              "${searchProvider.searchResult[index].categoryList}",
-                                                              style: smallRegularBodyTextStyle
-                                                                  .copyWith(
-                                                                      color:
-                                                                          lightBlack)),
+                                                    return GestureDetector(
+                                                      onTap: () =>  Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder: (context) => BookScreen(
+                                                                    bookID: searchProvider
+                                                                        .searchResult[
+                                                                            index]
+                                                                        .bookUuid
+                                                                        .toString()),
+                                                              )),
+                                                      child: SearchItems(
+                                                        searchKeyword:
+                                                            searchProvider
+                                                                .matchingWords,
+                                                        source: searchProvider
+                                                            .searchResult[index]
+                                                            .imgUrl,
+                                                        title: searchProvider
+                                                            .searchResult[index]
+                                                            .bookName,
+                                                        author: searchProvider
+                                                            .searchResult[index]
+                                                            .authorNick,
+                                                        rating: searchProvider
+                                                            .searchResult[index]
+                                                            .rating,
+                                                        chapterNum: searchProvider
+                                                            .searchResult[index]
+                                                            .numberOfChapter,
+                                                        category: categoryList
+                                                                    .length >
+                                                                1
+                                                            ? Text(
+                                                                "$category • $secondCategory",
+                                                                style: smallRegularBodyTextStyle
+                                                                    .copyWith(
+                                                                        color:
+                                                                            lightBlack),
+                                                              )
+                                                            : Text(
+                                                                "${searchProvider.searchResult[index].categoryList}",
+                                                                style: smallRegularBodyTextStyle
+                                                                    .copyWith(
+                                                                        color:
+                                                                            lightBlack)),
+                                                      ),
                                                     );
                                                   }),
                                             ],
@@ -660,7 +688,7 @@ class SearchItems extends StatelessWidget {
       this.author,
       this.rating,
       this.searchKeyword,
-      this.chapterNum});
+      this.chapterNum,});
   final String? source;
   final String? title;
   final Widget? category;
@@ -674,113 +702,114 @@ class SearchItems extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Container(
-      margin: EdgeInsets.only(bottom: height * 0.0147),
-      height: height * 0.1675,
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: Color(0xff08252B).withOpacity(.1),
-              blurRadius: 3,
-              offset: const Offset(0, 1),
-            ),
-          ]),
+        margin: EdgeInsets.only(bottom: height * 0.0147),
+        height: height * 0.1675,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                color: Color(0xff08252B).withOpacity(.1),
+                blurRadius: 3,
+                offset: const Offset(0, 1),
+              ),
+            ]),
+
       child: Row(
-        children: [
-          Container(
-            width: width * 0.2906,
-            // decoration: BoxDecoration(
-            //   borderRadius: BorderRadius.circular(8),
-            // ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                source!,
-                fit: BoxFit.cover,
+          children: [
+            Container(
+              width: width * 0.2906,
+              // decoration: BoxDecoration(
+              //   borderRadius: BorderRadius.circular(8),
+              // ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(
+                  source!,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          Expanded(
-              child: Container(
-            margin: EdgeInsets.symmetric(
-                horizontal: width * 0.032, vertical: height * 0.0099),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                        // margin: EdgeInsets.only(top: height * 0.0098),
-                        height: 24,
-                        child: SubstringHighlight(
-                          terms: searchKeyword,
-                          text: title!,
-                          textStyle: largeMediumBodyTextStyle,
-                          overflow: TextOverflow.ellipsis,
-                          textStyleHighlight: largeMediumBodyTextStyle.copyWith(
-                              color: majorPink),
-                        )),
-                    SizedBox(
-                      height: height * 0.0049,
-                    ),
-                    Container(
-                      height: 18,
-                      child: category,
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: 18,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.asset("assets/icons/Author.png", height: 16),
-                          SizedBox(width: width * 0.0106),
-                          Text(
-                            author!,
-                            style: smallRegularBodyTextStyle,
-                          )
-                        ],
+            Expanded(
+                child: Container(
+              margin: EdgeInsets.symmetric(
+                  horizontal: width * 0.032, vertical: height * 0.0099),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                          // margin: EdgeInsets.only(top: height * 0.0098),
+                          height: 24,
+                          child: SubstringHighlight(
+                            terms: searchKeyword,
+                            text: title!,
+                            textStyle: largeMediumBodyTextStyle,
+                            overflow: TextOverflow.ellipsis,
+                            textStyleHighlight: largeMediumBodyTextStyle
+                                .copyWith(color: majorPink),
+                          )),
+                      SizedBox(
+                        height: height * 0.0049,
                       ),
-                    ),
-                    SizedBox(
-                      height: height * 0.0049,
-                    ),
-                    Container(
-                      height: 18,
-                      child: Row(
-                        children: [
-                          Image.asset("assets/icons/Star.png", height: 16),
-                          SizedBox(width: width * 0.0106),
-                          Text(rating!,
-                              style: smallRegularBodyTextStyle.copyWith(
-                                  color: majorPink)),
-                          Text(" Sao",
-                              style: smallRegularLightBlackBodyTextStyle),
-                          SizedBox(width: width * 0.0424),
-                          Image.asset("assets/icons/Page.png", height: 16),
-                          SizedBox(width: width * 0.0106),
-                          Text(chapterNum!.toString(),
-                              style: smallRegularBodyTextStyle.copyWith(
-                                  color: majorPink)),
-                          Text(" Chương",
-                              style: smallRegularLightBlackBodyTextStyle),
-                        ],
+                      Container(
+                        height: 18,
+                        child: category,
                       ),
-                    )
-                  ],
-                )
-              ],
-            ),
-          ))
-        ],
-      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 18,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Image.asset("assets/icons/Author.png", height: 16),
+                            SizedBox(width: width * 0.0106),
+                            Text(
+                              author!,
+                              style: smallRegularBodyTextStyle,
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: height * 0.0049,
+                      ),
+                      Container(
+                        height: 18,
+                        child: Row(
+                          children: [
+                            Image.asset("assets/icons/Star.png", height: 16),
+                            SizedBox(width: width * 0.0106),
+                            Text(rating!,
+                                style: smallRegularBodyTextStyle.copyWith(
+                                    color: majorPink)),
+                            Text(" Sao",
+                                style: smallRegularLightBlackBodyTextStyle),
+                            SizedBox(width: width * 0.0424),
+                            Image.asset("assets/icons/Page.png", height: 16),
+                            SizedBox(width: width * 0.0106),
+                            Text(chapterNum!.toString(),
+                                style: smallRegularBodyTextStyle.copyWith(
+                                    color: majorPink)),
+                            Text(" Chương",
+                                style: smallRegularLightBlackBodyTextStyle),
+                          ],
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ))
+          ],
+        ),
     );
   }
 }

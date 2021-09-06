@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:wecomi_flutter/constants/theme.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/book_provider.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/getchapter_byBookuuid_provider.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 import 'package:wecomi_flutter/components/signup_textfield.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/book_detail_provider.dart';
@@ -27,12 +30,16 @@ import 'package:wecomi_flutter/views/see_all_screen/see_all_screen.dart';
 import 'package:wecomi_flutter/views/signup/signup_screen.dart';
 import 'package:wecomi_flutter/views/splash_screen.dart';
 import 'package:wecomi_flutter/views/test.dart';
-import 'detail_manga/detail_screen_manga.dart';
 
 void main() {
+      VisibilityDetectorController.instance.updateInterval = Duration.zero;
+
   // debugPaintSizeEnabled=true;
   runApp(MultiProvider(
     providers: [
+      ChangeNotifierProvider(create: (_) => AppProvider()),
+      ChangeNotifierProvider(create: (_) => BookProvider()),
+      ChangeNotifierProvider(create: (_) => ChapterByBookIDProvider()),
       ChangeNotifierProvider(create: (_) => AppProvider()),
       ChangeNotifierProvider(create: (_) => SignupProvider()),
       ChangeNotifierProvider(create: (_) => ForgotPasswordProvider()),
@@ -58,7 +65,7 @@ class MyApp extends StatelessWidget {
         title: "Wecomi",
         theme: appProvider.theme,
         darkTheme: ThemeConfig.darkTheme,
-        home: Test(),
+        home: SplashScreen(),
       );
     });
   }

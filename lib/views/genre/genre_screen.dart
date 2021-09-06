@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -11,6 +10,7 @@ import 'package:wecomi_flutter/models/book_by_category.dart';
 import 'package:wecomi_flutter/models/comic.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/comic_provider.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/genre_provider.dart';
+import 'package:wecomi_flutter/views/book/book_screen.dart';
 import 'package:wecomi_flutter/views/search/search_screen.dart';
 
 class GenreScreen extends StatefulWidget {
@@ -81,7 +81,6 @@ class _GenreScreenState extends State<GenreScreen>
                     Container(
                         width: width * 0.5786,
                         decoration: BoxDecoration(
-                          
                             color: Color(0xffDA7395),
                             borderRadius: BorderRadius.circular(8)),
                         child: Consumer<GenreProvider>(
@@ -328,6 +327,17 @@ class _GenreScreenState extends State<GenreScreen>
                                                           .copyWith(
                                                               color:
                                                                   lightBlack)),
+                                              press: () => Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        BookScreen(
+                                                            bookID: genreProvider
+                                                                .booksByCategory[
+                                                                    index]
+                                                                .bookUuid
+                                                                .toString()),
+                                                  )),
                                             );
                                     },
                                     separatorBuilder: (context, index) =>
@@ -400,16 +410,17 @@ class _GenreScreenState extends State<GenreScreen>
                                                   setState(() {
                                                     _index = index;
                                                     scrollToIndex(_index);
-                                                    genreProvider.showProgress();
-                                                  Future.delayed(Duration(
-                                                          milliseconds: 700))
-                                                      .then((value) => genreProvider
-                                                          .getBooksByCategory(
-                                                              _index + 1,
-                                                              genreProvider
-                                                                  .subCategory[
-                                                                      index]
-                                                                  .categoryId!));
+                                                    genreProvider
+                                                        .showProgress();
+                                                    Future.delayed(Duration(
+                                                            milliseconds: 700))
+                                                        .then((value) => genreProvider
+                                                            .getBooksByCategory(
+                                                                _index + 1,
+                                                                genreProvider
+                                                                    .subCategory[
+                                                                        index]
+                                                                    .categoryId!));
                                                   });
                                                 },
                                                 child: Container(
@@ -512,6 +523,17 @@ class _GenreScreenState extends State<GenreScreen>
                                                           .copyWith(
                                                               color:
                                                                   lightBlack)),
+                                              press: () => Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        BookScreen(
+                                                            bookID: genreProvider
+                                                                .booksByCategory[
+                                                                    index]
+                                                                .bookUuid
+                                                                .toString()),
+                                                  )),
                                             );
                                     },
                                     separatorBuilder: (context, index) =>

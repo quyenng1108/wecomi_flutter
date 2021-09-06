@@ -33,6 +33,7 @@ class ComicProvider with ChangeNotifier {
   }
 
   Future<void> getComicBySex(int sex) async {
+    // sex = 1 => Male, sex = 2 => Female
     String url = "http://117.103.207.22:8082/book/getMainPage";
     showProgress();
     Response res = await Dio().get(url,

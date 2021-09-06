@@ -10,6 +10,7 @@ import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/models/comic.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/comic_provider.dart';
 import 'package:wecomi_flutter/views/account/account_screen.dart';
+import 'package:wecomi_flutter/views/book/book_screen.dart';
 import 'package:wecomi_flutter/views/search/search_screen.dart';
 import 'package:wecomi_flutter/views/see_all_screen/see_all_screen.dart';
 
@@ -66,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen>
         child: Column(
           children: [
             Container(
+              padding: EdgeInsets.only(top: 8),
               margin: standardSpacing,
               height: height * 0.0394,
               width: width,
@@ -87,75 +89,77 @@ class _HomeScreenState extends State<HomeScreen>
                         //     width: 1
                         //   )
                         // ),
-                        child: Stack(
-                          children: [
-                            Center(
-                              child: Container(
-                                height: width * 0.064,
-                                width: width * 0.117,
-                                decoration: BoxDecoration(
-                                    color: Color(0xffE4E8EF),
-                                    borderRadius: BorderRadius.circular(14),
-                                    border: Border.all(
-                                        color: Color(0xffD6DDE8), width: 1)),
-                              ),
-                            ),
-                            AnimatedPositioned(
-                              curve: Curves.easeIn,
-                              // top: 3.0,
-                              left: AppSession().sex == 1 ? 20 : 0,
-                              right: AppSession().sex == 1 ? 0 : 20,
-                              duration: Duration(milliseconds: 700),
-
-                              child: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    AppSession().sex == 1
-                                        ? AppSession().changeSexGroup(2)
-                                        : AppSession().changeSexGroup(1);
-                                  });
-                                  comicProvider.isLoading = true;
-                                  Future.delayed(Duration(milliseconds: 1000))
-                                      .then((value) => comicProvider
-                                          .getComicBySex(AppSession().sex));
-                                },
-                                child: AnimatedSwitcher(
-                                    // switchInCurve: Curves.easeOut,
-                                    // switchOutCurve: Curves.easeOut,
-                                    duration: Duration(milliseconds: 700),
-                                    transitionBuilder: (Widget child,
-                                        Animation<double> animation) {
-                                      return RotationTransition(
-                                        turns: animation,
-                                        child: child,
-                                      );
-                                    },
-                                    child: AppSession().sex == 1
-                                        ? ClipRRect(
-                                            key: Key("1"),
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(14.0),
-                                              topRight: Radius.circular(14.0),
-                                            ),
-                                            child: Image.asset(
-                                                'assets/icons/Group-Male.png',
-                                                width: width * 0.064,
-                                                height: width * 0.064,
-                                                fit: BoxFit.fill))
-                                        : ClipRRect(
-                                            key: Key("2"),
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(0),
-                                              topRight: Radius.circular(0),
-                                            ),
-                                            child: Image.asset(
-                                                'assets/icons/Group-Female.png',
-                                                width: width * 0.064,
-                                                height: width * 0.064,
-                                                fit: BoxFit.fill))),
-                              ),
-                            )
-                          ],
+                        child: Center(
+                          child: Stack(
+                            children: [
+                                Container(
+                                  height: 24,
+                                  width: 44,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffE4E8EF),
+                                      borderRadius: BorderRadius.circular(14),
+                                      border: Border.all(
+                                          color: Color(0xffD6DDE8), width: 1)),
+                                ),
+                            
+                              AnimatedPositioned(
+                                curve: Curves.easeIn,
+                                // top: 3.0,
+                                left: AppSession().sex == 1 ? 20 : 0,
+                                right: AppSession().sex == 1 ? 0 : 20,
+                                duration: Duration(milliseconds: 700),
+                        
+                                child: GestureDetector(
+                                  // splashColor: null,
+                                  onTap: () {
+                                    setState(() {
+                                      AppSession().sex == 1
+                                          ? AppSession().changeSexGroup(2)
+                                          : AppSession().changeSexGroup(1);
+                                    });
+                                    comicProvider.isLoading = true;
+                                    Future.delayed(Duration(milliseconds: 1000))
+                                        .then((value) => comicProvider
+                                            .getComicBySex(AppSession().sex));
+                                  },
+                                  child: AnimatedSwitcher(
+                                      // switchInCurve: Curves.easeOut,
+                                      // switchOutCurve: Curves.easeOut,
+                                      duration: Duration(milliseconds: 700),
+                                      transitionBuilder: (Widget child,
+                                          Animation<double> animation) {
+                                        return RotationTransition(
+                                          turns: animation,
+                                          child: child,
+                                        );
+                                      },
+                                      child: AppSession().sex == 1
+                                          ? ClipRRect(
+                                              key: Key("1"),
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(14.0),
+                                                topRight: Radius.circular(14.0),
+                                              ),
+                                              child: Image.asset(
+                                                  'assets/icons/Group-Male.png',
+                                                  width: 24,
+                                                  height: 24,
+                                                  fit: BoxFit.cover))
+                                          : ClipRRect(
+                                              key: Key("2"),
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(0),
+                                                topRight: Radius.circular(0),
+                                              ),
+                                              child: Image.asset(
+                                                  'assets/icons/Group-Female.png',
+                                                  width: 24,
+                                                  height: 24,
+                                                  fit: BoxFit.cover))),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -410,6 +414,14 @@ class _HomeScreenState extends State<HomeScreen>
                                 itemBuilder: (context, i) => BannerItems(
                                   source:
                                       comicProvider.recommendedComic?[i].imgUrl,
+                                  press: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => BookScreen(
+                                            bookID: comicProvider
+                                                .recommendedComic![i].bookUuid
+                                                .toString()),
+                                      )),
                                 ),
                                 scrollDirection: Axis.horizontal,
                               ),
@@ -448,6 +460,15 @@ class _HomeScreenState extends State<HomeScreen>
                                       category: comicProvider
                                           .recommendedComic?[i].categoryName,
                                       secondCategory: 'Tổng tài',
+                                      press: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => BookScreen(
+                                                bookID: comicProvider
+                                                    .recommendedComic![i]
+                                                    .bookUuid
+                                                    .toString()),
+                                          )),
                                     ),
                                 ],
                               ),
@@ -479,6 +500,14 @@ class _HomeScreenState extends State<HomeScreen>
                                 ),
                                 itemBuilder: (context, i) => HotItems(
                                   source: comicProvider.hotComic?[i].imgUrl,
+                                  press: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => BookScreen(
+                                            bookID: comicProvider
+                                                .hotComic![i].bookUuid
+                                                .toString()),
+                                      )),
                                 ),
                                 scrollDirection: Axis.horizontal,
                               ),
@@ -551,6 +580,14 @@ class _HomeScreenState extends State<HomeScreen>
                                     category: comicProvider
                                         .likedComic?[index].categoryName,
                                     secondCategory: "Tình cảm",
+                                    press: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => BookScreen(
+                                              bookID: comicProvider
+                                                  .likedComic![index].bookUuid
+                                                  .toString()),
+                                        )),
                                   ),
                                   staggeredTileBuilder: (index) =>
                                       StaggeredTile.extent(
@@ -581,6 +618,7 @@ class _HomeScreenState extends State<HomeScreen>
                                   secondCategory: "Lãng mạn",
                                   source: _novel[index],
                                   title: "Ngày mai sẽ đến",
+                                  press: () {},
                                 ),
                                 separatorBuilder: (context, index) => Divider(),
                                 itemCount: _novel.length,
@@ -606,7 +644,8 @@ class _HomeScreenState extends State<HomeScreen>
 }
 
 class BannerItems extends StatelessWidget {
-  BannerItems({@required this.source});
+  BannerItems({@required this.source, required this.press});
+  final VoidCallback press;
   final String? source;
   @override
   Widget build(BuildContext context) {
@@ -623,7 +662,7 @@ class BannerItems extends StatelessWidget {
               height: height * 0.2365, width: width * 0.8373, fit: BoxFit.fill),
         ),
       ),
-      onTap: () {},
+      onTap: press,
     );
   }
 }
@@ -639,7 +678,7 @@ class HomeCategoryTitles extends StatelessWidget {
     var standardSpacing = EdgeInsets.symmetric(horizontal: width * 0.0427);
     return Container(
       margin: standardSpacing,
-      height: height * 0.0283,
+      height: 24,
       width: width,
       child: Row(
         children: [
@@ -668,7 +707,9 @@ class RecommendedItems extends StatelessWidget {
     @required this.title,
     @required this.category,
     @required this.secondCategory,
+    required this.press,
   });
+  final VoidCallback press;
   final String? source;
   final String? title;
   final String? category;
@@ -720,20 +761,21 @@ class RecommendedItems extends StatelessWidget {
           ],
         ),
       ),
-      onTap: () {},
+      onTap: press,
     );
   }
 }
 
 class HotItems extends StatelessWidget {
-  HotItems({@required this.source});
+  HotItems({@required this.source, required this.press});
+  final VoidCallback press;
   final String? source;
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return GestureDetector(
-      onTap: () {},
+      onTap: press,
       child: Container(
         width: width * 0.2906,
         height: height * 0.2870,
@@ -758,7 +800,9 @@ class LikedItems extends StatelessWidget {
     @required this.title,
     @required this.height,
     @required this.width,
+    required this.press,
   });
+  final VoidCallback press;
   final String? title;
   final String? category;
   final String? secondCategory;
@@ -799,13 +843,19 @@ class LikedItems extends StatelessWidget {
           ),
         ],
       ),
-      onTap: () {},
+      onTap: press,
     );
   }
 }
 
 class NovelItems extends StatelessWidget {
-  NovelItems({this.source, this.title, this.category, this.secondCategory});
+  NovelItems(
+      {this.source,
+      this.title,
+      this.category,
+      this.secondCategory,
+      required this.press});
+  final VoidCallback press;
   final String? source;
   final String? title;
   final String? category;
@@ -856,7 +906,7 @@ class NovelItems extends StatelessWidget {
           ],
         ),
       ),
-      onTap: () {},
+      onTap: press,
     );
   }
 }

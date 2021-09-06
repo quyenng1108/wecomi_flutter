@@ -8,6 +8,7 @@ import 'package:wecomi_flutter/components/signup_textfield.dart';
 import 'package:wecomi_flutter/components/standard_textfield.dart';
 import 'package:wecomi_flutter/constants/color_const.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
+import 'package:wecomi_flutter/utils/loading_dialog.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/login_provider.dart';
 import 'package:wecomi_flutter/views/forgot_password.dart/forgot_password_screen.dart';
 import 'package:wecomi_flutter/views/signup/signup_screen.dart';
@@ -188,6 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     LoginRelatedButton(
                         label: "Đăng nhập",
                         onPressed: () {
+                          LoadingDialog().buildShowDialog(context);
                           loginProvider.loginWithEmail(
                               _usernameTextController.text,
                               _passwordTextController.text,
@@ -239,7 +241,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           SocialLogin(
                             image: "assets/icons/Facebook.png",
                             onPressed: () {
-                              loginProvider.loginWithFacebook();
+                              // loginProvider.loginWithFacebook();
                             },
                           ),
                           if (Platform.isIOS)
