@@ -441,7 +441,7 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                                     child: Column(
                                       children: [
                                         Image.asset(
-                                          "assets/icons/Comment.png",
+                                          "assets/icons/comment.png",
                                           height: 24,
                                           width: 24,
                                         ),
