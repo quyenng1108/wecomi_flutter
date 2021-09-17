@@ -27,7 +27,7 @@ class Comic {
     String? categoryName;
     int? audltLimit;
     int? updateStatus;
-    String? imgUrl;
+    dynamic imgUrl;
 
     factory Comic.fromJson(Map<String, dynamic> json) => Comic(
         groupId: json["groupId"],

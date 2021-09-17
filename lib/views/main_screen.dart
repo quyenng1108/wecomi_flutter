@@ -25,20 +25,20 @@ List<Widget> _pages = [
   LibraryScreen()
 ];
 
-
-
 class _MainScreenState extends State<MainScreen> {
   @override
-void initState(){
-  super.initState();
-     ComicProvider comicProvider =
-          Provider.of<ComicProvider>(context, listen: false);
-     GenreProvider genreProvider =
-          Provider.of<GenreProvider>(context, listen: false);
-      comicProvider.getComicBySex(AppSession().sex).then((value) => genreProvider
-          .getCategory(1)
-          .then((value) => genreProvider.getBooksByCategory(_index + 1, 9998)));
-}
+  void initState() {
+    super.initState();
+    ComicProvider comicProvider =
+        Provider.of<ComicProvider>(context, listen: false);
+    GenreProvider genreProvider =
+        Provider.of<GenreProvider>(context, listen: false);
+    print(AppSession().sex);
+    comicProvider.getComicBySex(AppSession().sex).then((value) => genreProvider
+        .getCategory(1)
+        .then((value) => genreProvider.getBooksByCategory(_index + 1, 9998)));
+  }
+
   int _index = 0;
   @override
   Widget build(BuildContext context) {

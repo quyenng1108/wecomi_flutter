@@ -92,23 +92,22 @@ class _HomeScreenState extends State<HomeScreen>
                         child: Center(
                           child: Stack(
                             children: [
-                                Container(
-                                  height: 24,
-                                  width: 44,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xffE4E8EF),
-                                      borderRadius: BorderRadius.circular(14),
-                                      border: Border.all(
-                                          color: Color(0xffD6DDE8), width: 1)),
-                                ),
-                            
+                              Container(
+                                height: 24,
+                                width: 44,
+                                decoration: BoxDecoration(
+                                    color: Color(0xffE4E8EF),
+                                    borderRadius: BorderRadius.circular(14),
+                                    border: Border.all(
+                                        color: Color(0xffD6DDE8), width: 1)),
+                              ),
                               AnimatedPositioned(
                                 curve: Curves.easeIn,
                                 // top: 3.0,
                                 left: AppSession().sex == 1 ? 20 : 0,
                                 right: AppSession().sex == 1 ? 0 : 20,
                                 duration: Duration(milliseconds: 700),
-                        
+
                                 child: GestureDetector(
                                   // splashColor: null,
                                   onTap: () {

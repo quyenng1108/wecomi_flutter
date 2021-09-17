@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AppSession{
+class AppSession {
   String? token;
   String? name;
   String? avatar;
@@ -14,20 +14,20 @@ class AppSession{
   }
   AppSession._internal();
 
-    Future<void> saveSession() async{
+  Future<void> saveSession() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     token = prefs.getString("token");
     List<String>? userData = prefs.getStringList("userData");
-    if(token != null && userData != null){
-    userId = int.parse(userData[0]);
-    accountStatus = int.parse(userData[1]);
-    if(prefs.getInt("sex") != null){
-      sex = prefs.getInt("sex")!; 
+    if (prefs.getInt("sex") != null) {
+      sex = prefs.getInt("sex")!;
     }
+    if (token != null && userData != null) {
+      userId = int.parse(userData[0]);
+      accountStatus = int.parse(userData[1]);
     }
   }
 
-  Future<void> logout() async{
+  Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     token = null;
     userId = null;
@@ -36,7 +36,7 @@ class AppSession{
     await prefs.remove("userData");
   }
 
-  Future<void> changeSexGroup(int sexGroup) async{
+  Future<void> changeSexGroup(int sexGroup) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt("sex", sexGroup);
     sex = sexGroup;
