@@ -6,7 +6,6 @@ import 'package:wecomi_flutter/components/signup_textfield.dart';
 import 'package:wecomi_flutter/constants/color_const.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/signup_provider.dart';
-import 'package:wecomi_flutter/views/login/login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   @override
@@ -17,12 +16,27 @@ bool _showPassword = false;
 bool _showPasswordConfirmation = false;
 
 class _SignupScreenState extends State<SignupScreen> {
+  var signupProvider = SignupProvider();
+
+  @override
+  void dispose() {
+    // signupProvider.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    signupProvider = Provider.of<SignupProvider>(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var standardSpacing = EdgeInsets.symmetric(horizontal: width * 0.0427);
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: BackButton(
+          color: darkGrey,
+        ),
+      ),
       body: SafeArea(
           child: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -33,15 +47,12 @@ class _SignupScreenState extends State<SignupScreen> {
               builder: (context, signupProvider, child) {
             return Column(
               children: [
-                CustomBackButton(
-                  color: darkGrey,
-                ),
-                SizedBox(height: height * 0.0344),
-                Image.asset("assets/icons/Logo.png", height: height * 0.0344),
+                // SizedBox(height: height * 0.0344),
+                Image.asset("assets/images/Signup_logo.png", height: 180),
                 SizedBox(height: height * 0.0591),
                 SignupTextField(
                   inputAction: TextInputAction.next,
-                  hintText: "Họ tên",
+                  hintText: "Tên tài khoản",
                   nextFocus: () => FocusScope.of(context).nextFocus(),
                   onChanged: (String value) =>
                       signupProvider.validateName(value),
@@ -79,7 +90,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                 ),
                 SizedBox(
-                  height: height * 0.0197,
+                  height: 12,
                 ),
                 SignupTextField(
                   inputAction: TextInputAction.next,
@@ -121,7 +132,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                 ),
                 SizedBox(
-                  height: height * 0.0197,
+                  height: 12,
                 ),
                 SignupTextField(
                   inputAction: TextInputAction.next,
@@ -181,7 +192,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                 ),
                 SizedBox(
-                  height: height * 0.0197,
+                  height: 12,
                 ),
                 SignupTextField(
                   inputAction: TextInputAction.done,
@@ -243,15 +254,15 @@ class _SignupScreenState extends State<SignupScreen> {
                             ),
                 ),
                 SizedBox(
-                  height: height * 0.0591,
+                  height: 40,
                 ),
                 LoginRelatedButton(
                     label: "Đăng ký",
                     onPressed: () {
-                      signupProvider.submitData();
+                      signupProvider.submitData(context);
                     }),
                 SizedBox(
-                  height: height * 0.1859,
+                  height: 40,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

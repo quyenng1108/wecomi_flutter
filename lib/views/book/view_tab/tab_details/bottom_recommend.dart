@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:wecomi_flutter/constants/color_const.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/comic_provider.dart';
 import '../../book_screen.dart';
@@ -34,7 +35,9 @@ class _ReCommendState extends State<ReCommend> {
         ),
         Consumer<ComicProvider>(builder: (context, comicProvider, child) {
           return comicProvider.comic.length == 0 && !comicProvider.isLoading
-              ? LinearProgressIndicator()
+              ? LinearProgressIndicator(
+                color: majorPink
+              )
               : comicProvider.isLoading
                   ? Shimmer.fromColors(
                       child: Container(
@@ -55,16 +58,16 @@ class _ReCommendState extends State<ReCommend> {
                           if (comicProvider.comic[index].groupId ==
                               '1111111111') {
                             return _recommed(
-                                press: () =>
-                                    Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) {
-                                        return BookScreen(
-                                          bookID: comicProvider
-                                              .hotComic![index].bookUuid
-                                              .toString(),
-                                        );
-                                      },
-                                    )),
+                                press: () => {},
+                                    // Navigator.push(context, MaterialPageRoute(
+                                    //   builder: (context) {
+                                    //     return BookScreen(
+                                    //       bookID: comicProvider
+                                    //           .hotComic![index].bookUuid
+                                    //           .toString(),
+                                    //     );
+                                    //   },
+                                    // )),
                                 img: comicProvider.hotComic![index].imgUrl
                                     .toString(),
                                 bookName: comicProvider
@@ -76,16 +79,16 @@ class _ReCommendState extends State<ReCommend> {
                           } else if (comicProvider.comic[index].groupId ==
                               '2222222222') {
                             return _recommed(
-                                press: () =>
-                                    Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) {
-                                        return BookScreen(
-                                          bookID: comicProvider
-                                              .recommendedComic![index].bookUuid
-                                              .toString(),
-                                        );
-                                      },
-                                    )),
+                                press: () => {},
+                                    // Navigator.push(context, MaterialPageRoute(
+                                    //   builder: (context) {
+                                    //     return BookScreen(
+                                    //       bookID: comicProvider
+                                    //           .recommendedComic![index].bookUuid
+                                    //           .toString(),
+                                    //     );
+                                    //   },
+                                    // )),
                                 img: comicProvider
                                     .recommendedComic![index].imgUrl
                                     .toString(),
@@ -98,16 +101,16 @@ class _ReCommendState extends State<ReCommend> {
                           } else if (comicProvider.comic[index].groupId ==
                               '3333333333') {
                             return _recommed(
-                                press: () =>
-                                    Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) {
-                                        return BookScreen(
-                                          bookID: comicProvider
-                                              .likedComic![index].bookUuid
-                                              .toString(),
-                                        );
-                                      },
-                                    )),
+                                press: () => {},
+                                    // Navigator.push(context, MaterialPageRoute(
+                                    //   builder: (context) {
+                                    //     return BookScreen(
+                                    //       bookID: comicProvider
+                                    //           .likedComic![index].bookUuid
+                                    //           .toString(),
+                                    //     );
+                                    //   },
+                                    // )),
                                 img: comicProvider.likedComic![index].imgUrl
                                     .toString(),
                                 bookName: comicProvider
@@ -118,16 +121,16 @@ class _ReCommendState extends State<ReCommend> {
                                     .toString());
                           } else
                             return _recommed(
-                                press: () =>
-                                    Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) {
-                                        return BookScreen(
-                                          bookID: comicProvider
-                                              .comic[index].bookUuid
-                                              .toString(),
-                                        );
-                                      },
-                                    )),
+                                press: () => {},
+                                    // Navigator.push(context, MaterialPageRoute(
+                                    //   builder: (context) {
+                                    //     return BookScreen(
+                                    //       bookID: comicProvider
+                                    //           .comic[index].bookUuid
+                                    //           .toString(),
+                                    //     );
+                                    //   },
+                                    // )),
                                 img: comicProvider.comic[index].imgUrl
                                     .toString(),
                                 bookName: comicProvider.comic[index].bookname

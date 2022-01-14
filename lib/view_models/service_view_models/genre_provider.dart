@@ -1,13 +1,18 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:wecomi_flutter/constants/api.dart';
 import 'package:wecomi_flutter/models/book_by_category.dart';
 import 'package:wecomi_flutter/models/category_model.dart';
+import 'package:http/http.dart' as http;
+import 'package:wecomi_flutter/models/comics.dart';
 
-class GenreProvider with ChangeNotifier{
-  List<Category> category = [];
-  List<Category> subCategory = [];
-  List<BooksByCategory> booksByCategory = [];
+class GenreProvider with ChangeNotifier {
+  Category category = Category();
+  // List<BooksByCategory> booksByCategory = [];
   bool isLoading = true;
+  bool isFetchingComicList = true;
   showProgress() {
     if (isLoading) {
       return;
@@ -23,42 +28,59 @@ class GenreProvider with ChangeNotifier{
     isLoading = false;
     notifyListeners();
   }
-    Future<List<Category>> getCategory(int id) async {
+
+  showComicProgress() {
+    if (isFetchingComicList) {
+      return;
+    }
+    isFetchingComicList = true;
+    notifyListeners();
+  }
+
+  dismissComicProgress() {
+    if (!isFetchingComicList) {
+      return;
+    }
+    isFetchingComicList = false;
+    notifyListeners();
+  }
+
+  Future<Category> getCategory() async {
     // category.clear();
     // subCategory.clear();
-    String url = "http://117.103.207.22:8082/book/bookCategoryHierarchy";
+    String url = "${apiUrl}v1/public/tags/";
     showProgress();
-    Response res = await Dio().get(
-      url, queryParameters: {
-      "categoryId" : id,
-    },
-    options: Options(
-      headers: {
-        "Content-Type" : "application/json"
-      }
-    ));
-    // print(res);
-    category = List<Category>.from(res.data.map((i) => Category.fromJson(i)));
-    subCategory = category.where((i) => i.level == 2).toList();
-    notifyListeners();
-    // print(subCategory);
+    var res = await http.get(Uri.parse(url));
+    if (res.statusCode == 200) {
+      final response = Utf8Decoder().convert(res.bodyBytes);
+      category = categoryFromJson(response);
+      notifyListeners();
+    }
     dismissProgress();
     return category;
   }
-  Future<List<BooksByCategory>> getBooksByCategory(int parentCategoryId, int categoryId) async{
-    String url = "http://117.103.207.22:8082/book/getBookByCate";
-  showProgress();
-  Response res = await Dio().get(url, queryParameters: {
-    "parentCategoryId" : parentCategoryId,
-    "categoryId" : categoryId
-  },
-   options: Options(
-      headers: {
-        "Content-Type" : "application/json"
-      }));
-  booksByCategory = List<BooksByCategory>.from(res.data.map((i) => BooksByCategory.fromJson(i)));
-  notifyListeners();
-  dismissProgress();
-  return booksByCategory;
+
+  Future<ComicByCategory> getComicByCategory(int id) async {
+    dynamic parameter = {"type_book": category};
+    ComicByCategory comic = ComicByCategory();
+    String url = "${apiUrl}v1/public/tags/$id/book/";
+    showComicProgress();
+    Uri uri = Uri.parse(url);
+    // dynamic res = await http.get(url,
+    //     queryParameters: {"type_book": category},
+    //     options: Options(headers: {"Content-Type": "application/json"}));
+    dynamic res = await http.get(
+      uri,
+    );
+    if (res.statusCode == 200) {
+      String response = Utf8Decoder().convert(res.bodyBytes);
+      comic = comicByCategoryFromJson(response);
+      print(comic.results);
+      notifyListeners();
+    } else {
+      comic = ComicByCategory();
+    }
+    dismissComicProgress();
+    return comic;
   }
 }

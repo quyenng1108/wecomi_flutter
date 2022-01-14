@@ -1,11 +1,14 @@
+import 'dart:convert';
 import 'dart:math';
+import 'package:http/http.dart' as http;
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:wecomi_flutter/constants/api.dart';
 import 'package:wecomi_flutter/models/getchapter_byBookuuid.dart';
 
 class ChapterByBookIDProvider extends ChangeNotifier {
-  List<ChapterByBookUuid> chapterByBookId = [];
+  ChapterByBookUuid chapterByBookId = ChapterByBookUuid();
   bool isLoading = true;
   showProgress() {
     if (isLoading) {
@@ -23,24 +26,21 @@ class ChapterByBookIDProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<ChapterByBookUuid>> getChapterByBookId(String bookUuid) async {
-    String url =
-        "http://117.103.207.22:8082/book/bookGetChapterInfo?bookuuid=$bookUuid";
+  Future<void> getChapterByBookId(int id) async {
+    String url = "${apiUrl}v1/public/books/$id";
+    print(url);
     showProgress();
-    Response res = await Dio().get(url,
-        options: Options(headers: {"Content-Type": "application/json"}),queryParameters: {
-      "bookuuid": bookUuid,
-      "sortBy" : "0"
-    }
-        );
+    final res = await http.get(Uri.parse(url));
+
     if (res.statusCode == 200) {
-      chapterByBookId =
-          (res.data as List).map((x) => ChapterByBookUuid.fromJson(x)).toList();
+      String response = Utf8Decoder().convert(res.bodyBytes);
+
+      chapterByBookId = chapterByBookUuidFromJson(response);
+      print(res.body);
       notifyListeners();
     } else {
       throw Exception(e);
     }
     dismissProgress();
-    return chapterByBookId;
   }
 }

@@ -9,6 +9,8 @@ import 'package:wecomi_flutter/components/login_related_button.dart';
 import 'package:wecomi_flutter/constants/color_const.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/follow_book_provider.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/local_auth_provider.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/login_provider.dart';
 import 'package:wecomi_flutter/view_models/ui_view_models/app_provider.dart';
 import 'package:wecomi_flutter/views/login/login_screen.dart';
@@ -22,6 +24,7 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen>
     with AfterLayoutMixin<AccountScreen> {
   bool? _value;
+  // bool isUsingLocalAuth = false;
   LoginProvider loginProvider = LoginProvider();
   @override
   void afterFirstLayout(BuildContext context) {
@@ -30,41 +33,47 @@ class _AccountScreenState extends State<AccountScreen>
 
   @override
   Widget build(BuildContext context) {
+    bool isUsingLocalAuth =
+        context.select((LocalAuthProvider p) => p.isUsingLocalAuth);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     loginProvider = Provider.of<LoginProvider>(context);
     var standardSpacing = EdgeInsets.symmetric(horizontal: width * 0.0427);
     return Scaffold(
+        appBar: AppBar(
+          title: Text("Tài khoản", style: giganticMediumBodyTextStyle),
+          backgroundColor: Colors.transparent,
+        ),
         backgroundColor: Theme.of(context).backgroundColor,
         body: SafeArea(
             child: Container(
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Stack(
-                children: [
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: CustomBackButton(
-                        color: darkGrey,
-                      )),
-                  Padding(
-                    padding: EdgeInsets.only(top: height * 0.0098),
-                    child: Center(
-                      child: Container(
-                          height: 28,
-                          child: Text(
-                            "Tài khoản",
-                            style: giganticMediumBodyTextStyle,
-                            textAlign: TextAlign.center,
-                          )),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: height * 0.0295,
-              ),
+              // Stack(
+              //   children: [
+              //     Align(
+              //         alignment: Alignment.centerLeft,
+              //         child: CustomBackButton(
+              //           color: darkGrey,
+              //         )),
+              //     Padding(
+              //       padding: EdgeInsets.only(top: height * 0.0098),
+              //       child: Center(
+              //         child: Container(
+              //             height: 28,
+              //             child: Text(
+              //               "Tài khoản",
+              //               style: giganticMediumBodyTextStyle,
+              //               textAlign: TextAlign.center,
+              //             )),
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              // SizedBox(
+              //   height: height * 0.0295,
+              // ),
               Container(
                 height: 2,
                 color: lightGrey,
@@ -72,7 +81,7 @@ class _AccountScreenState extends State<AccountScreen>
               SizedBox(
                 height: height * 0.0246,
               ),
-              loginProvider.accessToken != null
+              loginProvider.isLogged == true
                   ? LoggedInLayout()
                   : NotLoggedInLayout(),
               SizedBox(
@@ -113,23 +122,23 @@ class _AccountScreenState extends State<AccountScreen>
                           "assets/icons/Arrow-Right.png",
                           height: width * 0.064,
                         )),
-                    SizedBox(
-                      height: height * 0.0172,
-                    ),
-                    Container(
-                      height: 2,
-                      color: Color(0xffF4F6F9),
-                    ),
-                    SizedBox(
-                      height: height * 0.0147,
-                    ),
-                    RowItem(
-                        image: "assets/icons/Faq.png",
-                        title: "Câu hỏi thường gặp",
-                        widget: Image.asset(
-                          "assets/icons/Arrow-Right.png",
-                          height: width * 0.064,
-                        )),
+                    // SizedBox(
+                    //   height: height * 0.0172,
+                    // ),
+                    // Container(
+                    //   height: 2,
+                    //   color: Color(0xffF4F6F9),
+                    // ),
+                    // SizedBox(
+                    //   height: height * 0.0147,
+                    // ),
+                    // RowItem(
+                    //     image: "assets/icons/Faq.png",
+                    //     title: "Câu hỏi thường gặp",
+                    //     widget: Image.asset(
+                    //       "assets/icons/Arrow-Right.png",
+                    //       height: width * 0.064,
+                    //     )),
                     SizedBox(
                       height: height * 0.0172,
                     ),
@@ -163,14 +172,44 @@ class _AccountScreenState extends State<AccountScreen>
                               activeColor: Color(0xffDE5A7C),
                             ),
                           ),
-                        ))
+                        )),
+                    SizedBox(
+                      height: height * 0.0172,
+                    ),
+                    Container(
+                      height: 2,
+                      color: Color(0xffF4F6F9),
+                    ),
+                    SizedBox(
+                      height: height * 0.0147,
+                    ),
+                    loginProvider.isLogged
+                        ? RowItem(
+                            image: "assets/icons/faceid.png",
+                            title: "Xác thực khuôn mặt",
+                            widget: Consumer<AppProvider>(
+                              builder: (context, appProvider, child) =>
+                                  Transform.scale(
+                                scale: 0.9,
+                                child: CupertinoSwitch(
+                                  value: isUsingLocalAuth,
+                                  onChanged: (v) {
+                                    context
+                                        .read<LocalAuthProvider>()
+                                        .authenticate();
+                                  },
+                                  activeColor: Color(0xffDE5A7C),
+                                ),
+                              ),
+                            ))
+                        : SizedBox()
                   ],
                 ),
               ),
               SizedBox(
                 height: height * 0.022,
               ),
-              loginProvider.accessToken != null
+              loginProvider.isLogged
                   ? Container(
                       margin: standardSpacing,
                       height: height * 0.0665,
@@ -207,6 +246,12 @@ class _AccountScreenState extends State<AccountScreen>
                                         onPressed: () {
                                           Navigator.pop(context);
                                           loginProvider.logout();
+                                          // context
+                                          //     .read<LocalAuthProvider>()
+                                          //     .onLogout();
+                                          // Provider.of<FollowBookProvider>(
+                                          //         context)
+                                          //     .followedBook = null;
                                         }),
                                   ],
                                 )),
@@ -342,7 +387,7 @@ class LoggedInLayout extends StatelessWidget {
           SizedBox(
             height: height * 0.0147,
           ),
-          Text("Honghanh242267@gmail.com",
+          Text(AppSession().name ?? "Ten",
               style: extraLargeDarkGreyMediumBodyTextStyle),
           SizedBox(
             height: height * 0.0147,

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:wecomi_flutter/constants/api.dart';
 import 'package:wecomi_flutter/models/signup_validation_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,7 +12,7 @@ class SignupProvider with ChangeNotifier {
   SignupValidationModel _passwordConfirmation =
       SignupValidationModel(null, null);
   SignupValidationModel _matchedPassword = SignupValidationModel(null, null);
-    SignupValidationModel _test = SignupValidationModel(null, null);
+  SignupValidationModel _test = SignupValidationModel(null, null);
 
   String? tmp;
   String? _log;
@@ -95,23 +96,24 @@ class SignupProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> submitData() async {
-    String url = "http://117.103.207.22:8082/account/accountRegister";
+  Future<void> submitData(BuildContext context) async {
+    String url = "${apiUrl}v1/auth/register/";
     Map body = {
-      "accountName": _email.value,
-      "accountPassword": _password.value,
-      "nickName": _name.value
+      "username": _name.value,
+      "email": _email.value,
+      "password": _password.value,
     };
     final uri = Uri.parse(url);
     if (isValid) {
       final res = await http.post(uri,
           headers: {'Content-Type': 'application/json'},
           body: json.encode(body));
-          print(res.body);
-          _test = SignupValidationModel("hehehe", "hehehe");
+      print(res.body);
+      _test = SignupValidationModel("hehehe", "hehehe");
+      Navigator.of(context).pop();
     } else {
       print("hok dc dau");
     }
-   notifyListeners(); 
+    notifyListeners();
   }
 }

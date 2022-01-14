@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wecomi_flutter/common/app_session.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/comic_provider.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/local_auth_provider.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/login_provider.dart';
 import 'package:wecomi_flutter/views/account/account_screen.dart';
 import 'package:wecomi_flutter/views/login/login_screen.dart';
@@ -18,11 +19,15 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     AppSession().saveSession();
+    AppSession().getLoginData();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      Provider.of<LocalAuthProvider>(context, listen: false)
+          .checkLocalAuthStat();
+    });
     Future.delayed(Duration(milliseconds: 1500)).then((value) {
       Navigator.pop(context);
       Navigator.push(
-        context, MaterialPageRoute(builder: (context) => MainScreen()));
-      
+          context, MaterialPageRoute(builder: (context) => MainScreen()));
     });
   }
 
@@ -47,7 +52,7 @@ class _SplashScreenState extends State<SplashScreen> {
               height: height * 0.0394,
             ),
             Center(
-                child: Image.asset("assets/images/App-Name.png",
+                child: Image.asset("assets/icons/Logo.png",
                     width: width * 0.5733)),
           ],
         ),

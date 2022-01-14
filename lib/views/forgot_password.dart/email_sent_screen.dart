@@ -16,8 +16,11 @@ class EmailSentScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            CustomBackButton(
-              color: darkGrey,
+            Align(
+              alignment: Alignment.centerLeft,
+              child: BackButton(
+                color: darkGrey,
+              ),
             ),
             SizedBox(
               height: height * 0.1626,

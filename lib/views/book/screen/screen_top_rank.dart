@@ -6,10 +6,12 @@ import 'package:tuple/tuple.dart';
 import 'package:wecomi_flutter/components/bottom_nav_bar_icon.dart';
 import 'package:wecomi_flutter/components/linked_offset_widget.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
+import 'package:wecomi_flutter/models/comics.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/book_provider.dart';
 
 class TopRank extends StatefulWidget {
-  const TopRank({Key? key}) : super(key: key);
+  const TopRank({@required this.comicDetail});
+  final ComicDetail? comicDetail;
 
   @override
   _TopRankState createState() => _TopRankState();
@@ -41,7 +43,11 @@ class _TopRankState extends State<TopRank> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final ratioW = MediaQuery.of(context).size.width / 375;
     final ratioH = MediaQuery.of(context).size.height / 812;
-
+    final List<Tuple3> _page = [
+      Tuple3(widget.comicDetail!.title,
+          '${widget.comicDetail!.dateModified}', ''),
+      Tuple3(widget.comicDetail!.title, '', '')
+    ];
     return Scaffold(
       backgroundColor: Colors.white,
       body: DefaultTabController(
@@ -84,22 +90,24 @@ class _TopRankState extends State<TopRank> with TickerProviderStateMixin {
                     child: FlexibleSpaceBar(
                       collapseMode: CollapseMode.pin,
                       background: Container(
-                        child: Consumer<BookProvider>(
-                          builder: (context, bookProvider, child) {
-                            return bookProvider.book.length == 0 &&
-                                    !bookProvider.isLoading
-                                ? LinearProgressIndicator()
-                                : bookProvider.isLoading
-                                    ? Shimmer.fromColors(
-                                        child: Container(),
-                                        baseColor: Colors.grey[300]!,
-                                        highlightColor: Colors.grey[100]!)
-                                    : Container(
-                                        child: Image.network(
-                                            '${bookProvider.book[0].bookCoverImg![1].imgUrl}',
-                                            fit: BoxFit.cover),
-                                      );
-                          },
+                        child:
+                            // Consumer<BookProvider>(
+                            //   builder: (context, bookProvider, child) {
+                            //     return bookProvider.book.length == 0 &&
+                            //             !bookProvider.isLoading
+                            //         ? LinearProgressIndicator()
+                            //         : bookProvider.isLoading
+                            //             ? Shimmer.fromColors(
+                            //                 child: Container(),
+                            //                 baseColor: Colors.grey[300]!,
+                            //                 highlightColor: Colors.grey[100]!)
+                            //             :
+                            Container(
+                          child: Image.network(
+                              '${widget.comicDetail!.thumbnail}',
+                              fit: BoxFit.cover),
+                          //             );
+                          // },
                         ),
                       ),
                       stretchModes: <StretchMode>[
@@ -112,24 +120,19 @@ class _TopRankState extends State<TopRank> with TickerProviderStateMixin {
                             finalTransitionOffsetY: -60 * ratioH,
                             onOffsetChanged: (double offset) {},
                             scrollController: _scrollController,
-                            child: Consumer<BookProvider>(
-                                builder: (context, bookProvider, child) {
-                              final List<Tuple3> _page = [
-                                Tuple3(
-                                    bookProvider.book[0].bookName,
-                                    '${bookProvider.book[0].lastUpdateTime}',
-                                    ''),
-                                Tuple3(bookProvider.book[0].bookName, '', '')
-                              ];
-                              return bookProvider.book.length == 0 &&
-                                      !bookProvider.isLoading
-                                  ? LinearProgressIndicator()
-                                  : bookProvider.isLoading
-                                      ? Shimmer.fromColors(
-                                          child: Container(),
-                                          baseColor: Colors.grey[300]!,
-                                          highlightColor: Colors.grey[100]!)
-                                      : Column(
+                            child: 
+                            // Consumer<BookProvider>(
+                            //     builder: (context, bookProvider, child) {
+                            //   return bookProvider.book.length == 0 &&
+                            //           !bookProvider.isLoading
+                            //       ? LinearProgressIndicator()
+                            //       : bookProvider.isLoading
+                            //           ? Shimmer.fromColors(
+                            //               child: Container(),
+                            //               baseColor: Colors.grey[300]!,
+                            //               highlightColor: Colors.grey[100]!)
+                            //           : 
+                                      Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.end,
                                           crossAxisAlignment:
@@ -164,8 +167,10 @@ class _TopRankState extends State<TopRank> with TickerProviderStateMixin {
                                               ),
                                             )
                                           ],
-                                        );
-                            })),
+                            //             );
+                            // }
+                            )
+                            ),
                       ),
                       titlePadding: EdgeInsets.zero,
                     ),

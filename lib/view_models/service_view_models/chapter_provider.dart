@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:wecomi_flutter/constants/api.dart';
 import 'package:wecomi_flutter/models/chapter_model.dart';
 
 class ChapterProvider with ChangeNotifier {
@@ -57,22 +58,19 @@ class ChapterProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getChapterData(String chapterId, int choice) async {
+  Future<void> getChapterData(int chapterId, int choice) async {
     showProgress();
-    Map body = {
-      "chapterId": chapterId,
-      "accountId": 10008,
-      "accessToken": "637639682306900000.d6301b8d58ba9278a7bf36172e31944d",
-      "pageNo": 1,
-      "rowsOfPage": 1000
-    };
-    String url = "http://117.103.207.22:8082/book/bookGetdataBychapterId";
+
+    String url = "${apiUrl}v1/public/chapters/$chapterId";
     Uri uri = Uri.parse(url);
-    var response = await http.post(uri,
-        headers: {"Content-Type": "application/json"}, body: json.encode(body));
-    Chapter chapterData = chapterFromJson(response.body);
+    var response = await http.get(
+      uri,
+    );
+    print(uri);
+    var res = Utf8Decoder().convert(response.bodyBytes);
+    Chapter chapterData = chapterFromJson(res);
     // chapterList = chapterToList(response.body);
-    if (chapterData.data!.length == 0 || chapterData.data!.isEmpty) {
+    if (chapterData.images!.length == 0 || chapterData.images!.isEmpty) {
       flag = false;
       dismissProgress();
     } else {

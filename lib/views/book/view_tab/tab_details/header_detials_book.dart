@@ -6,14 +6,15 @@ import 'package:sliding_sheet/sliding_sheet.dart';
 import 'package:wecomi_flutter/constants/color_const.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
+import 'package:wecomi_flutter/models/book_detail.dart';
+import 'package:wecomi_flutter/models/comics.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/book_provider.dart';
 import 'package:wecomi_flutter/views/book/screen/screen_recomment_gift.dart';
 import 'package:wecomi_flutter/views/book/screen/screen_top_rank.dart';
 
 class Content extends StatefulWidget {
-  const Content({
-    Key? key,
-  }) : super(key: key);
+  Content({@required this.comicDetail});
+  final ComicDetail? comicDetail;
   @override
   _ContentState createState() => _ContentState();
 }
@@ -25,19 +26,20 @@ class _ContentState extends State<Content> {
     final ratioH = MediaQuery.of(context).size.height / 812;
     return Column(
       children: <Widget>[
-        Consumer<BookProvider>(
-          builder: (context, bookProvider, child) {
-            return bookProvider.book.length == 0 && !bookProvider.isLoading
-                ? LinearProgressIndicator()
-                : bookProvider.isLoading
-                    ? Shimmer.fromColors(
-                        child: Container(
-                          height: 71 * ratioH,
-                          width: 343 * ratioW,
-                        ),
-                        baseColor: Colors.grey[300]!,
-                        highlightColor: Colors.grey[100]!)
-                    : Container(
+        // Consumer<BookProvider>(
+        //   builder: (context, bookProvider, child) {
+        //     return bookProvider.book.length == 0 && !bookProvider.isLoading
+        //         ? LinearProgressIndicator()
+        //         : bookProvider.isLoading
+        //             ? Shimmer.fromColors(
+        //                 child: Container(
+        //                   height: 71 * ratioH,
+        //                   width: 343 * ratioW,
+        //                 ),
+        //                 baseColor: Colors.grey[300]!,
+        //                 highlightColor: Colors.grey[100]!)
+        //             : 
+                    Container(
                         height: 71 * ratioH,
                         width: 343 * ratioW,
                         padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
@@ -59,7 +61,7 @@ class _ContentState extends State<Content> {
                                       Row(
                                         children: [
                                           Text(
-                                            '${bookProvider.book[0].rating}',
+                                            widget.comicDetail!.star.toString() == "null" ? "5" : widget.comicDetail!.star.toString(),
                                             style: TextStyle(
                                                 color: ThemeConfig.colorText),
                                           ),
@@ -76,40 +78,31 @@ class _ContentState extends State<Content> {
                               ],
                             ),
                             Counter(
-                              action: bookProvider.book[0].likeNo!.toString(),
+                              action: widget.comicDetail!.likeCount.toString(),
                               title: "Lượt thích",
                             ),
                             Counter(
-                              action: bookProvider.book[0].followNo!.toString(),
+                              action: widget.comicDetail!.countComment.toString(),
                               title: "Bình luận",
                             ),
                             Counter(
                               action:
-                                  bookProvider.book[0].adultLimit.toString(),
+                                  widget.comicDetail!.likeCount.toString(),
                               title: "Độ tuổi",
                             ),
                           ],
                         ),
-                      );
-          },
-        ),
-        Consumer<BookProvider>(
-          builder: (context, bookProvider, child) {
-            return bookProvider.book.length == 0 && !bookProvider.isLoading
-                ? LinearProgressIndicator()
-                : bookProvider.isLoading
-                    ? Shimmer.fromColors(
-                        child: Container(),
-                        baseColor: Colors.grey[300]!,
-                        highlightColor: Colors.grey[100]!)
-                    : Container(
+
+                      ),
+        
+        Container(
                         padding: EdgeInsets.only(top: 10, bottom: 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             SizedBox(height: 10.0 * ratioH),
                             ExpandableText(
-                              bookProvider.book[0].bookDescription.toString(),
+                              widget.comicDetail!.description!,
                               expandText: '\nshow more',
                               collapseText: 'show less',
                               maxLines: 3,
@@ -119,98 +112,84 @@ class _ContentState extends State<Content> {
                             ),
                           ],
                         ),
-                      );
-          },
-        ),
-        Consumer<BookProvider>(
-          builder: (context, bookProvider, child) {
-            return bookProvider.book.length == 0 && !bookProvider.isLoading
-                ? LinearProgressIndicator()
-                : bookProvider.isLoading
-                    ? Shimmer.fromColors(
-                        child: Container(
-                          height: 55 * ratioH,
-                        ),
-                        baseColor: Colors.grey[300]!,
-                        highlightColor: Colors.grey[100]!)
-                    : Container(
+                      ),
+        
+        
+     Container(
                         height: 55 * ratioH,
                         child: ListView(
                           scrollDirection: Axis.horizontal,
                           children: [
                             ListCategory(
-                              bookCategory: bookProvider.book[0].authorNickName
-                                  .toString(),
+                              bookCategory: widget.comicDetail!.author!,
                               ratioW: ratioW,
                               ratioH: ratioH,
                               backgroundColor: majorPink,
                               textColor: Colors.white,
                             ),
-                            for (int i = 0;
-                                i < bookProvider.book[0].category!.length;
-                                i++)
-                              ListCategory(
-                                  ratioW: ratioW,
-                                  ratioH: ratioH,
-                                  bookCategory: bookProvider
-                                      .book[0].category![i].categoryName
-                                      .toString(),
-                                  backgroundColor: Color(0xffF4F6F9),
-                                  textColor: ThemeConfig.bgTextComment),
+                            // for (int i = 0;
+                            //     i < bookProvider.book[0].category!.length;
+                            //     i++)
+                            //   ListCategory(
+                            //       ratioW: ratioW,
+                            //       ratioH: ratioH,
+                            //       bookCategory: bookProvider
+                            //           .book[0].category![i].categoryName
+                            //           .toString(),
+                            //       backgroundColor: Color(0xffF4F6F9),
+                            //       textColor: ThemeConfig.bgTextComment),
                           ],
                         ),
-                      );
-          },
-        ),
+                      ),
         const Divider(),
-        Container(
-          padding: EdgeInsets.only(top: 10 * ratioH),
-          child: Row(
-            children: <Widget>[
-              CircleAvatar(
-                backgroundImage: AssetImage("assets/images/bxhno1.png"),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 15.0),
-                child: Text(
-                  "Những kẻ mộng mer",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              BuildContent(
-                image: "assets/icons/gift.png",
-                title: 'Đề xuất',
-                onClicked: showSheet,
-              ),
-              BuildContent(
-                image: "assets/icons/award.png",
-                title: 'Quà tặng',
-                onClicked: showSheet,
-              ),
-              BuildContent(
-                image: "assets/icons/cup.png",
-                title: 'BXH Fan',
-                onClicked: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => TopRank(),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        // Container(
+        //   padding: EdgeInsets.only(top: 10 * ratioH),
+        //   child: Row(
+        //     children: <Widget>[
+        //       CircleAvatar(
+        //         backgroundImage: AssetImage("assets/images/bxhno1.png"),
+        //       ),
+        //       Padding(
+        //         padding: const EdgeInsets.only(left: 15.0),
+        //         child: Text(
+        //           "Những kẻ mộng mer",
+        //           style: TextStyle(
+        //             fontWeight: FontWeight.bold,
+        //             fontSize: 15,
+        //           ),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        // Padding(
+        //   padding: const EdgeInsets.only(top: 10.0),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //     children: <Widget>[
+        //       BuildContent(
+        //         image: "assets/icons/gift.png",
+        //         title: 'Đề xuất',
+        //         onClicked: showSheet,
+        //       ),
+        //       BuildContent(
+        //         image: "assets/icons/award.png",
+        //         title: 'Quà tặng',
+        //         onClicked: showSheet,
+        //       ),
+        //       BuildContent(
+        //         image: "assets/icons/cup.png",
+        //         title: 'BXH Fan',
+        //         onClicked: () => Navigator.push(
+        //           context,
+        //           MaterialPageRoute(
+        //             builder: (context) => TopRank(comicDetail: widget.comicDetail,),
+        //           ),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
         const Divider(),
       ],
     );

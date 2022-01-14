@@ -5,6 +5,7 @@ import 'package:wecomi_flutter/components/bottom_nav_bar_icon.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/comic_provider.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/genre_provider.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/read_history_provider.dart';
 import 'package:wecomi_flutter/views/account/account_screen.dart';
 import 'package:wecomi_flutter/views/discover/discover_screen.dart';
 import 'package:wecomi_flutter/views/genre/genre_screen.dart';
@@ -21,24 +22,24 @@ ScrollController genreScrollController = ScrollController();
 List<Widget> _pages = [
   HomeScreen(scrollController: homeScrollController),
   DiscoverScreen(),
-  GenreScreen(scrollController: genreScrollController),
-  LibraryScreen()
+  // GenreScreen(),
+  LibraryScreen(),
+  AccountScreen()
 ];
-
-
 
 class _MainScreenState extends State<MainScreen> {
   @override
-void initState(){
-  super.initState();
-     ComicProvider comicProvider =
-          Provider.of<ComicProvider>(context, listen: false);
-     GenreProvider genreProvider =
-          Provider.of<GenreProvider>(context, listen: false);
-      comicProvider.getComicBySex(AppSession().sex).then((value) => genreProvider
-          .getCategory(1)
-          .then((value) => genreProvider.getBooksByCategory(_index + 1, 9998)));
-}
+  void initState() {
+    super.initState();
+    //  ComicProvider comicProvider =
+    //       Provider.of<ComicProvider>(context, listen: false);
+    //  GenreProvider genreProvider =
+    //       Provider.of<GenreProvider>(context, listen: false);
+    //   comicProvider.getComicBySex(AppSession().sex).then((value) => genreProvider
+    //       .getCategory(1)
+    //       .then((value) => genreProvider.getBooksByCategory(_index + 1, 9998)));
+  }
+
   int _index = 0;
   @override
   Widget build(BuildContext context) {
@@ -83,8 +84,6 @@ void initState(){
                 onTap: (index) {
                   if (index == _index && index == 0) {
                     _onTap(index, homeScrollController);
-                  } else if (index == _index && index == 2) {
-                    _onTap(index, genreScrollController);
                   } else {
                     _onPageChanged(index);
                   }
@@ -105,19 +104,26 @@ void initState(){
                               ? "assets/icons/Discover-Selected.png"
                               : "assets/icons/Discover.png",
                           size: 24)),
-                  BottomNavigationBarItem(
-                      label: "Thế loại",
-                      icon: CustomizedBottomNavBarIcon(
-                          source: _index == 2
-                              ? "assets/icons/Genre-Selected.png"
-                              : "assets/icons/Genre.png",
-                          size: 24)),
+                  // BottomNavigationBarItem(
+                  //     label: "Thế loại",
+                  //     icon: CustomizedBottomNavBarIcon(
+                  //         source: _index == 2
+                  //             ? "assets/icons/Genre-Selected.png"
+                  //             : "assets/icons/Genre.png",
+                  //         size: 24)),
                   BottomNavigationBarItem(
                       label: "Tủ sách",
                       icon: CustomizedBottomNavBarIcon(
-                          source: _index == 3
+                          source: _index == 2
                               ? "assets/icons/Library-Selected.png"
                               : "assets/icons/Library.png",
+                          size: 24)),
+                  BottomNavigationBarItem(
+                      label: "Tài khoản",
+                      icon: CustomizedBottomNavBarIcon(
+                          source: _index == 3
+                              ? "assets/icons/User-Selected.png"
+                              : "assets/icons/User.png",
                           size: 24)),
                 ],
               ),

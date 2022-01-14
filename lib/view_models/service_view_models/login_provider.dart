@@ -4,8 +4,13 @@ import 'package:google_sign_in/google_sign_in.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_ip_address/get_ip_address.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wecomi_flutter/common/app_session.dart';
+import 'package:wecomi_flutter/constants/api.dart';
 import 'package:wecomi_flutter/models/account_model.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/follow_book_provider.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/local_auth_provider.dart';
 
 class LoginProvider with ChangeNotifier {
   AccountModel _loggedInAccount = AccountModel(null, null, null, null);
@@ -17,6 +22,8 @@ class LoginProvider with ChangeNotifier {
   String? accessToken;
   int? userId;
   int? accountStatus;
+  String? accountName;
+  bool isLogged = false;
 
   Future<void> loginWithEmail(
       String username, String password, BuildContext context) async {
@@ -24,15 +31,13 @@ class LoginProvider with ChangeNotifier {
     _loggedInAccount = AccountModel(null, null, null, null);
     _invalidUsernameAccount = AccountModel(null, null, null, null);
     _invalidPasswordAccount = AccountModel(null, null, null, null);
-    String url =
-        "http://117.103.207.22:8082/account/accountAuthenticate_localAccount";
+    String url = "${apiUrl}login";
     try {
       var ipAddress = IpAddress(type: RequestType.text);
-      dynamic ipData = await ipAddress.getIpAddress();
+      // dynamic ipData = await ipAddress.getIpAddress();
       Map body = {
-        "accountName": username,
-        "accountPass": password,
-        "clientIp": ipData
+        "username": username,
+        "password": password,
       };
       print(body);
       final uri = Uri.parse(url);
@@ -41,27 +46,31 @@ class LoginProvider with ChangeNotifier {
           body: json.encode(body));
       var jsonResponse = json.decode(res.body);
       print(res.body.toString());
-      if (jsonResponse["responseStatus"] == 1) {
+      if (res.statusCode == 200) {
         // _loggedInAccount = AccountModel(
         //     jsonResponse["accessToken"], jsonResponse["accountId"], null, null);
-        prefs.setString("token", jsonResponse["accessToken"]);
-        prefs.setStringList("userData", [
-          jsonResponse["accountId"].toString(),
-          jsonResponse["accountStatus"].toString()
-        ]);
+        prefs.setString("token", jsonResponse["access_token"]);
+        prefs.setStringList("userData", [username]);
+        checkLoginState();
+        // Provider.of<FollowBookProvider>(context, listen: false)
+        //     .getFollowedBookList(jsonResponse["access_token"]);
+        if (username != AppSession().username) {
+          Provider.of<LocalAuthProvider>(context).onLogout(false);
+        }
+        AppSession().saveLoginData(username, password);
         Navigator.pop(context);
         Navigator.pop(context);
-        Navigator.pop(context);
-      } else if (jsonResponse["responseStatus"] == -50) {
+      } else if (res.statusCode == 400) {
         _invalidUsernameAccount =
             AccountModel(null, null, "Tài khoản không tồn tại", null);
-        Navigator.pop(context);
         print(_invalidUsernameAccount.invalidUsernameMessage);
+        Navigator.pop(context);
+
         // print(invalidUsername);
       } else {
         _invalidPasswordAccount =
             AccountModel(null, null, null, "Mật khẩu không đúng");
-            Navigator.pop(context);
+        Navigator.pop(context);
         // print(invalidPassword);
       }
     } on IpAddressException catch (exception) {
@@ -117,15 +126,21 @@ class LoginProvider with ChangeNotifier {
   // }
 
   checkLoginState() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    accessToken = prefs.getString("token");
+    AppSession().saveSession().then((value) {
+      if (AppSession().token == null) {
+        isLogged = false;
+      } else {
+        isLogged = true;
+      }
+    });
+
     notifyListeners();
   }
 
   logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    accessToken = null;
-    await prefs.remove("token");
+    AppSession().logout();
+    isLogged = false;
     notifyListeners();
   }
 }

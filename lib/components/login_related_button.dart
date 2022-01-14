@@ -9,7 +9,7 @@ class LoginRelatedButton extends StatelessWidget {
   });
   final String? label;
   final Function()? onPressed;
-
+  
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;

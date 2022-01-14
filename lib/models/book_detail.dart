@@ -32,7 +32,7 @@ class BookDetail {
         chapterName: json["ChapterName"],
         adultLimit: json["adultLimit"],
         likeNo: json["LikeNo"],
-        commentNo: json["CommentNo"],
+        commentNo: json["CommentNo"] ?? 0,
         publishDate: DateTime.parse(json["PublishDate"]),
         isPremium: json["isPremium"],
     );

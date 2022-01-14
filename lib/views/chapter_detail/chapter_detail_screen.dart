@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,18 +12,25 @@ import 'package:wecomi_flutter/common/app_session.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/models/book_detail.dart';
 import 'package:wecomi_flutter/models/getchapter_byBookuuid.dart';
+import 'package:wecomi_flutter/models/read_history.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/chapter_provider.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/comic_provider.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/login_provider.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/read_history_provider.dart';
 import 'package:wecomi_flutter/views/account/account_screen.dart';
 import 'package:wecomi_flutter/views/login/login_screen.dart';
 import 'package:wecomi_flutter/views/main_screen.dart';
 
 class ChapterDetailScreen extends StatefulWidget {
   ChapterDetailScreen(
-      {required this.bookDetailList, required this.chapterIndex});
-  final List<ChapterByBookUuid> bookDetailList;
+      {required this.bookDetailList,
+      required this.chapterIndex,
+      required this.readHistory,
+      this.offset = 0});
+  final List<Chapter> bookDetailList;
   final int chapterIndex;
+  final ReadHistory readHistory;
+  double offset;
   @override
   _ChapterDetailScreenState createState() => _ChapterDetailScreenState();
 }
@@ -33,11 +42,17 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       ChapterProvider chapterProvider =
           Provider.of<ChapterProvider>(context, listen: false);
-          print(chapterProvider.chapterList.isEmpty);
       chapterProvider.removeChapterList();
-      chapterProvider.getChapterData(
-          widget.bookDetailList[widget.chapterIndex].chapterId!, 0);
-
+      chapterProvider
+          .getChapterData(widget.bookDetailList[widget.chapterIndex].id!, 0)
+          .then((value) {
+        Future.delayed(Duration(
+          milliseconds: 500,
+        )).then((value) {
+        
+            _scrollController.jumpTo(widget.offset);
+        });
+      });
     });
     // ChapterProvider chapterProvider =
     //     Provider.of<ChapterProvider>(context, listen: false);
@@ -59,8 +74,8 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
   int _index = 0;
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  ScrollController _scrollController = ScrollController();
-  Future<void> _getMoreData(String chapterId, int choice) async {
+  ScrollController _scrollController = ScrollController(initialScrollOffset: 0);
+  Future<void> _getMoreData(int chapterId, int choice) async {
     ChapterProvider chapterProvider =
         Provider.of<ChapterProvider>(context, listen: false);
     chapterProvider.showProgress();
@@ -78,9 +93,9 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
   Widget build(BuildContext context) {
     int _refreshIndex = widget.chapterIndex;
     int _loadIndex = widget.chapterIndex;
-    print(_refreshIndex);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
         extendBody: true,
         extendBodyBehindAppBar: true,
@@ -88,8 +103,7 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
           preferredSize: Size.fromHeight(height * 0.1428),
           child: Consumer<ChapterProvider>(
             builder: (context, chapterProvider, child) =>
-                chapterProvider.isLoading ||
-                        chapterProvider.chapterList.isEmpty
+                chapterProvider.isLoading || chapterProvider.chapterList.isEmpty
                     ? Container()
                     : AnimatedContainer(
                         height: chapterProvider.isVisible ? height * 0.1428 : 0,
@@ -101,9 +115,7 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                           centerTitle: true,
                           title: Text(
                             chapterProvider
-                                .chapterList[chapterProvider.titleIndex]
-                                .data![0]
-                                .chapterName!,
+                                .chapterList[chapterProvider.titleIndex].title!,
                             style: extraLargeMediumBodyTextStyle.copyWith(
                                 color: Colors.white),
                           ),
@@ -147,35 +159,59 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                   child: SmartRefresher(
                     onRefresh: () {
                       _refreshIndex++;
-                      _getMoreData(
-                              widget.bookDetailList[_refreshIndex].chapterId!,
-                              1)
+                      _getMoreData(widget.bookDetailList[_refreshIndex].id!, 1)
                           .then((value) => chapterProvider.flag == true
                               ? _refreshController.refreshCompleted()
                               : _refreshController.refreshFailed());
+                      var chapterNum = widget
+                          .bookDetailList[_refreshIndex].title!
+                          .split(' ')[1];
+                      if (widget.readHistory.chapterNum !=
+                          int.parse(chapterNum)) {
+                        ReadHistory readHistory = ReadHistory(
+                            bookId: widget.readHistory.bookId,
+                            chapterNum: int.parse(chapterNum),
+                            thumbnail: widget.readHistory.thumbnail,
+                            bookName: widget.readHistory.bookName,
+                            detail: widget.readHistory.detail);
+                        context
+                            .read<ReadHistoryProvider>()
+                            .saveReadHistory(readHistory);
+                      }
                     },
                     onLoading: () {
                       _loadIndex--;
-                      _getMoreData(
-                              widget.bookDetailList[_loadIndex].chapterId!, 2)
+                      _getMoreData(widget.bookDetailList[_loadIndex].id!, 2)
                           .then((value) => chapterProvider.flag == true
                               ? _refreshController.loadComplete()
                               : _refreshController.loadNoData());
+                      var chapterNum = widget.bookDetailList[_loadIndex].title!
+                          .split(' ')[1];
+                      if (widget.readHistory.chapterNum !=
+                          int.parse(chapterNum)) {
+                        ReadHistory readHistory = ReadHistory(
+                            bookId: widget.readHistory.bookId,
+                            chapterNum: int.parse(chapterNum),
+                            thumbnail: widget.readHistory.thumbnail,
+                            bookName: widget.readHistory.bookName,
+                            detail: widget.readHistory.detail);
+                        context
+                            .read<ReadHistoryProvider>()
+                            .saveReadHistory(readHistory);
+                      }
                     },
-                    enablePullDown:
-                        chapterProvider.chapterList[0].data![0].chapterId ==
-                                widget
-                                    .bookDetailList[
-                                        widget.bookDetailList.length - 1]
-                                    .chapterId
-                            ? false
-                            : true,
+                    enablePullDown: chapterProvider.chapterList[0].id ==
+                            widget
+                                .bookDetailList[
+                                    widget.bookDetailList.length - 1]
+                                .id
+                        ? false
+                        : true,
                     enablePullUp: chapterProvider
                                 .chapterList[
                                     chapterProvider.chapterList.length - 1]
-                                .data![0]
-                                .chapterId ==
-                            widget.bookDetailList[0].chapterId
+                                .id ==
+                            widget.bookDetailList[0].id
                         ? false
                         : true,
                     controller: _refreshController,
@@ -218,6 +254,22 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                                       chapterProvider.setTitleIndex(index - 1);
                                     // if(info.visibleBounds.bottom > height * 0.5) print(index);
                                   }
+                                  var chapterNum = chapterProvider
+                                      .chapterList[chapterProvider.titleIndex]
+                                      .title!
+                                      .split(' ')[1];
+                                  print(info.visibleBounds.top.toInt());
+                                  ReadHistory readHistory = ReadHistory(
+                                      readOffset:
+                                          info.visibleBounds.top.toInt(),
+                                      bookId: widget.readHistory.bookId,
+                                      chapterNum: int.parse(chapterNum),
+                                      thumbnail: widget.readHistory.thumbnail,
+                                      bookName: widget.readHistory.bookName,
+                                      detail: widget.readHistory.detail);
+                                  context
+                                      .read<ReadHistoryProvider>()
+                                      .saveReadHistory(readHistory);
                                 }
 
                                 // print(info.visibleBounds.top);
@@ -239,7 +291,7 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                                   ListView.builder(
                                       padding: EdgeInsets.zero,
                                       itemCount: chapterProvider
-                                          .chapterList[index].data!.length,
+                                          .chapterList[index].images!.length,
                                       shrinkWrap: true,
                                       physics: NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, i) {
@@ -256,8 +308,8 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                                               fit: BoxFit.fill,
                                               imageUrl: chapterProvider
                                                   .chapterList[index]
-                                                  .data![i]
-                                                  .pageImgUrl!,
+                                                  .images![i]
+                                                  .image!,
                                               placeholder: (context, url) =>
                                                   Container(
                                                 height: 500,
@@ -354,14 +406,13 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                                           if (chapterProvider
                                                   .chapterList[chapterProvider
                                                       .titleIndex]
-                                                  .data![0]
-                                                  .chapterId ==
+                                                  .id ==
                                               widget
                                                   .bookDetailList[widget
                                                           .bookDetailList
                                                           .length -
                                                       1]
-                                                  .chapterId) {
+                                                  .id) {
                                           } else {
                                             if (chapterProvider.titleIndex !=
                                                 0) {
@@ -385,7 +436,7 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                                                   widget
                                                       .bookDetailList[
                                                           _refreshIndex]
-                                                      .chapterId!,
+                                                      .id!,
                                                   0);
                                             }
                                           }
@@ -396,15 +447,15 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                                               chapterProvider
                                                           .chapterList[
                                                               chapterProvider
-                                                                  .titleIndex.compareTo(0)]
-                                                          .data![0]
-                                                          .chapterId ==
+                                                                  .titleIndex
+                                                                  .compareTo(0)]
+                                                          .id ==
                                                       widget
                                                           .bookDetailList[widget
                                                                   .bookDetailList
                                                                   .length -
                                                               1]
-                                                          .chapterId
+                                                          .id
                                                   ? "assets/icons/Last-Chapter-Unavailable.png"
                                                   : "assets/icons/Last-Chapter.png",
                                               height: 24,
@@ -420,14 +471,13 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                                                               .chapterList[
                                                                   chapterProvider
                                                                       .titleIndex]
-                                                              .data![0]
-                                                              .chapterId ==
+                                                              .id ==
                                                           widget
                                                               .bookDetailList[widget
                                                                       .bookDetailList
                                                                       .length -
                                                                   1]
-                                                              .chapterId
+                                                              .id
                                                       ? Color(0xff5A5A5A)
                                                       : Color(0xffADADAD)),
                                             )
@@ -441,7 +491,7 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                                     child: Column(
                                       children: [
                                         Image.asset(
-                                          "assets/icons/comment.png",
+                                          "assets/icons/Comment-Icon.png",
                                           height: 24,
                                           width: 24,
                                         ),
@@ -485,10 +535,8 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                                         if (chapterProvider
                                                 .chapterList[
                                                     chapterProvider.titleIndex]
-                                                .data![0]
-                                                .chapterId ==
-                                            widget
-                                                .bookDetailList[0].chapterId) {
+                                                .id ==
+                                            widget.bookDetailList[0].id) {
                                         } else {
                                           if (chapterProvider.titleIndex !=
                                               chapterProvider
@@ -511,7 +559,7 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                                             chapterProvider.getChapterData(
                                                 widget
                                                     .bookDetailList[_loadIndex]
-                                                    .chapterId!,
+                                                    .id!,
                                                 0);
                                           }
                                         }
@@ -523,10 +571,8 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                                                         .chapterList[
                                                             chapterProvider
                                                                 .titleIndex]
-                                                        .data![0]
-                                                        .chapterId ==
-                                                    widget.bookDetailList[0]
-                                                        .chapterId
+                                                        .id ==
+                                                    widget.bookDetailList[0].id
                                                 ? "assets/icons/Next-Chapter-Unavailable.png"
                                                 : "assets/icons/Next-Chapter.png",
                                             height: 24,
@@ -542,10 +588,9 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                                                             .chapterList[
                                                                 chapterProvider
                                                                     .titleIndex]
-                                                            .data![0]
-                                                            .chapterId ==
+                                                            .id ==
                                                         widget.bookDetailList[0]
-                                                            .chapterId
+                                                            .id
                                                     ? Color(0xff5A5A5A)
                                                     : Color(0xffADADAD)),
                                           )

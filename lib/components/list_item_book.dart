@@ -24,7 +24,7 @@ class ListItemBook extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Container(
-      margin: EdgeInsets.only(bottom: height * 0.0147),
+      // margin: EdgeInsets.only(bottom: height * 0.0147),
       height: height * 0.1675,
       decoration: BoxDecoration(
           color: Colors.white,

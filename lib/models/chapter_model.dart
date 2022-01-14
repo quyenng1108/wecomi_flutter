@@ -4,71 +4,76 @@
 
 import 'dart:convert';
 
+import 'package:wecomi_flutter/constants/api.dart';
+
 Chapter chapterFromJson(String str) => Chapter.fromJson(json.decode(str));
-List<Chapter> chapterToList(String str) => List<Chapter>.from(json.decode(str).map((x) => Chapter.fromJson(x)));
 
 String chapterToJson(Chapter data) => json.encode(data.toJson());
 
 class Chapter {
-    Chapter({
-        this.totalRows,
-        this.pageNo,
-        this.rowsOfPage,
-        this.data,
-    });
+  Chapter({
+    this.id,
+    this.book,
+    this.number,
+    this.title,
+    this.images,
+  });
 
-    int? totalRows;
-    int? pageNo;
-    int? rowsOfPage;
-    List<ChapterData>? data;
+  int? id;
+  int? book;
+  int? number;
+  String? title;
+  List<Image>? images;
 
-    factory Chapter.fromJson(Map<String, dynamic> json) => Chapter(
-        totalRows: json["totalRows"],
-        pageNo: json["pageNo"],
-        rowsOfPage: json["rowsOfPage"],
-        data: json["data"] != null ? List<ChapterData>.from(json["data"].map((x) => ChapterData.fromJson(x))) : <ChapterData>[],
-    );
+  factory Chapter.fromJson(Map<String, dynamic> json) => Chapter(
+        id: json["id"],
+        book: json["book"],
+        number: json["number"],
+        title: json["title"],
+        images: List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
+      );
 
-    Map<String, dynamic> toJson() => {
-        "totalRows": totalRows,
-        "pageNo": pageNo,
-        "rowsOfPage": rowsOfPage,
-        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
-    };
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "book": book,
+        "number": number,
+        "title": title,
+        "images": List<dynamic>.from(images!.map((x) => x.toJson())),
+      };
 }
 
-class ChapterData {
-    ChapterData({
-        this.chapterId,
-        this.chapterName,
-        this.page,
-        this.pageImgUrl,
-        this.bookId,
-        this.bookName,
-    });
+class Image {
+  Image({
+    this.id,
+    this.chapter,
+    this.image,
+    this.dateModified,
+    this.dateAdded,
+    this.isDeleted,
+  });
 
-    String? chapterId;
-    String? chapterName;
-    int? page;
-    String? pageImgUrl;
-    int? bookId;
-    String? bookName;
+  int? id;
+  int? chapter;
+  String? image;
+  DateTime? dateModified;
+  DateTime? dateAdded;
+  bool? isDeleted;
 
-    factory ChapterData.fromJson(Map<String, dynamic> json) => ChapterData(
-        chapterId: json["ChapterId"],
-        chapterName: json["ChapterName"],
-        page: json["Page"],
-        pageImgUrl: json["PageImgUrl"],
-        bookId: json["BookId"],
-        bookName: json["BookName"],
-    );
+  factory Image.fromJson(Map<String, dynamic> json) => Image(
+        id: json["id"],
+        chapter: json["chapter"],
+        image: "$apiUrlNoSlash${json["image"]}",
+        dateModified: DateTime.parse(json["date_modified"]),
+        dateAdded: DateTime.parse(json["date_added"]),
+        isDeleted: json["is_deleted"],
+      );
 
-    Map<String, dynamic> toJson() => {
-        "ChapterId": chapterId,
-        "ChapterName": chapterName,
-        "Page": page,
-        "PageImgUrl": pageImgUrl,
-        "BookId": bookId,
-        "BookName": bookName,
-    };
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "chapter": chapter,
+        "image": image,
+        "date_modified": dateModified!.toIso8601String(),
+        "date_added": dateAdded!.toIso8601String(),
+        "is_deleted": isDeleted,
+      };
 }

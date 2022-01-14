@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:wecomi_flutter/constants/api.dart';
 import 'package:wecomi_flutter/models/book_by_category.dart';
 import 'package:wecomi_flutter/models/category_model.dart';
 import 'package:wecomi_flutter/models/comic.dart';
+import 'package:wecomi_flutter/models/comics.dart';
 
 class ComicProvider with ChangeNotifier {
   List<Comic> comic = [];
@@ -14,6 +17,7 @@ class ComicProvider with ChangeNotifier {
   List<Category> category = [];
   List<Category> subCategory = [];
   List<BooksByCategory> booksByCategory = [];
+
   bool isLoading = true;
   List categoryList = [];
   showProgress() {
@@ -32,23 +36,47 @@ class ComicProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getComicBySex(int sex) async {
-    // sex = 1 => Male, sex = 2 => Female
-    String url = "http://117.103.207.22:8082/book/getMainPage";
+  // Future<void> getComicBySex(int sex) async {
+  //   // sex = 1 => Male, sex = 2 => Female
+  //   String url = "http://117.103.207.22:8082/book/getMainPage";
+  //   showProgress();
+  //   Response res = await Dio().get(url,
+  //       queryParameters: {"sex": sex},
+  //       options: Options(headers: {"Content-Type": "application/json"}));
+  //   if (res.statusCode == 200) {
+  //     comic = (res.data as List).map((x) => Comic.fromJson(x)).toList();
+  //     recommendedComic = comic.where((i) => i.groupId == "1111111111").toList();
+  //     hotComic = comic.where((i) => i.groupId == "2222222222").toList();
+  //     likedComic = comic.where((i) => i.groupId == "3333333333").toList();
+  //     notifyListeners();
+  //   } else {
+  //     throw Exception("failed");
+  //   }
+  //   dismissProgress();
+  // }
+
+  Future<ComicByCategory> getComicByCategory(String category) async {
+    dynamic parameter = {"type_book": category};
+    ComicByCategory comic = ComicByCategory();
     showProgress();
-    Response res = await Dio().get(url,
-        queryParameters: {"sex": sex},
-        options: Options(headers: {"Content-Type": "application/json"}));
+    Uri uri = Uri.http(apiNoHttp,
+        "/v1/public/books/page_book", parameter);
+    // dynamic res = await http.get(url,
+    //     queryParameters: {"type_book": category},
+    //     options: Options(headers: {"Content-Type": "application/json"}));
+    dynamic res = await http.get(
+      uri,
+    );
     if (res.statusCode == 200) {
-      comic = (res.data as List).map((x) => Comic.fromJson(x)).toList();
-      recommendedComic = comic.where((i) => i.groupId == "1111111111").toList();
-      hotComic = comic.where((i) => i.groupId == "2222222222").toList();
-      likedComic = comic.where((i) => i.groupId == "3333333333").toList();
+      String response = Utf8Decoder().convert(res.bodyBytes);
+      comic = comicByCategoryFromJson(response);
+      print(comic.results);
       notifyListeners();
     } else {
-      throw Exception("failed");
+      comic = ComicByCategory();
     }
     dismissProgress();
+    return comic;
   }
 
   //   Future<void> getCategory(int id) async {

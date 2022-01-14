@@ -25,7 +25,7 @@ class ForgotPasswordScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomBackButton(
+                BackButton(
                   color: darkGrey,
                 ),
                 SizedBox(

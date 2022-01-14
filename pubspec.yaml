@@ -34,7 +34,7 @@ dependencies:
   animated_toggle_switch: ^0.2.0
   flutter_staggered_grid_view: ^0.4.0
   google_sign_in: ^5.1.1
-  # flutter_facebook_auth: ^3.5.0
+  # flutter_facebook_auth: any
   get_ip_address: ^0.0.5
   after_layout: ^1.1.0
   dio: ^4.0.0
@@ -48,8 +48,13 @@ dependencies:
   cached_network_image: ^3.1.0
   intl: ^0.17.0
   tuple: ^2.0.0
+  hive: ^2.0.5
+  hive_flutter: ^1.1.0
+  local_auth: ^1.1.9
 
 dev_dependencies:
+  hive_generator: ^1.1.1
+  build_runner:
   flutter_test:
     sdk: flutter
 
@@ -98,13 +103,13 @@ flutter:
   fonts:
      - family: Helvetica Neue
        fonts:
-         - asset: assets/fonts/helvetica-neue-regular.ttf
+         - asset: assets/fonts/BeVietnamPro-Regular.ttf
            weight: 400
-         - asset: assets/fonts/helvetica-neue-medium.ttf
+         - asset: assets/fonts/BeVietnamPro-Medium.ttf
            weight: 500
-         - asset: assets/fonts/helvetica-neue-light.ttf
+         - asset: assets/fonts/BeVietnamPro-Light.ttf
            weight: 300
-         - asset: assets/fonts/helvetica-neue-bold.ttf
+         - asset: assets/fonts/BeVietnamPro-Bold.ttf
            weight: 700
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

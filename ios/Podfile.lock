@@ -19,6 +19,8 @@ PODS:
     - AppAuth/Core (~> 1.4)
     - GTMSessionFetcher/Core (~> 1.5)
   - GTMSessionFetcher/Core (1.7.0)
+  - local_auth (0.0.1):
+    - Flutter
   - path_provider (0.0.1):
     - Flutter
   - shared_preferences (0.0.1):
@@ -30,6 +32,7 @@ PODS:
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
+  - local_auth (from `.symlinks/plugins/local_auth/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
@@ -47,6 +50,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   google_sign_in:
     :path: ".symlinks/plugins/google_sign_in/ios"
+  local_auth:
+    :path: ".symlinks/plugins/local_auth/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
   shared_preferences:
@@ -62,6 +67,7 @@ SPEC CHECKSUMS:
   GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
   GTMAppAuth: ad5c2b70b9a8689e1a04033c9369c4915bfcbe89
   GTMSessionFetcher: 43748f93435c2aa068b1cbe39655aaf600652e91
+  local_auth: ef62030a2731330b95df7ef1331bd15f6a64b8a6
   path_provider: d1e9807085df1f9cc9318206cd649dc0b76be3de
   shared_preferences: 5033afbb22d372e15aff8ff766df9021b845f273
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904

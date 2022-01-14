@@ -1,132 +1,109 @@
-// To parse this JSON data, do
-//
-//     final welcome = welcomeFromJson(jsonString);
+// // To parse this JSON data, do
+// //
+// //     final bookInfo = bookInfoFromJson(jsonString);
 
-import 'dart:convert';
+// import 'dart:convert';
 
-List<Book> bookFromJson(String str) =>
-    List<Book>.from(json.decode(str).map((x) => Book.fromJson(x)));
+// BookInfo bookInfoFromJson(String str) => BookInfo.fromJson(json.decode(str));
 
-String bookToJson(List<Book> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+// String bookInfoToJson(BookInfo data) => json.encode(data.toJson());
 
-class Book {
-  Book({
-    this.bookUuid,
-    this.bookName,
-    this.bookDescription,
-    this.adultLimit,
-    this.bookSexId,
-    this.rating,
-    this.likeNo,
-    this.followNo,
-    this.isEnable,
-    this.commentAllowed,
-    this.authorAccountId,
-    this.authorNickName,
-    this.category,
-    this.lastUpdateTime,
-    this.updateStatus,
-    this.bookCoverImg,
-  });
+// class BookInfo {
+//     BookInfo({
+//         this.id,
+//         this.title,
+//         this.isEnable,
+//         this.thumbnail,
+//         this.description,
+//         this.author,
+//         this.dateModified,
+//         this.dateAdded,
+//         this.sex,
+//         this.status,
+//         this.type,
+//         this.likeCount,
+//         this.viewCount,
+//         this.star,
+//         this.isVip,
+//         this.isFull,
+//         this.chapter,
+//         this.countChapterDownload,
+//         this.tag,
+//         this.countChapter,
+//         this.countComment,
+//         this.countFollow,
+//     });
 
-  String? bookUuid;
-  String? bookName;
-  String? bookDescription;
-  int? adultLimit;
-  int? bookSexId;
-  double? rating;
-  int? likeNo;
-  int? followNo;
-  bool? isEnable;
-  bool? commentAllowed;
-  int? authorAccountId;
-  String? authorNickName;
-  List<Category>? category;
-  DateTime? lastUpdateTime;
-  int? updateStatus;
-  List<BookCoverImg>? bookCoverImg;
+//     int? id;
+//     String? title;
+//     bool? isEnable;
+//     String? thumbnail;
+//     String? description;
+//     String? author;
+//     DateTime? dateModified;
+//     DateTime? dateAdded;
+//     String? sex;
+//     String? status;
+//     String? type;
+//     int? likeCount;
+//     int? viewCount;
+//     int? star;
+//     bool? isVip;
+//     bool? isFull;
+//     List<dynamic>? chapter;
+//     int? countChapterDownload;
+//     String? tag;
+//     int? countChapter;
+//     int? countComment;
+//     int? countFollow;
 
-  factory Book.fromJson(Map<String, dynamic> json) => Book(
-        bookUuid: json["BookUUID"],
-        bookName: json["BookName"],
-        bookDescription: json["BookDescription"],
-        adultLimit: json["adultLimit"],
-        bookSexId: json["bookSexId"],
-        rating: json["Rating"].toDouble(),
-        likeNo: json["LikeNo"],
-        followNo: json["FollowNo"],
-        isEnable: json["isEnable"],
-        commentAllowed: json["commentAllowed"],
-        authorAccountId: json["authorAccountId"],
-        authorNickName: json["authorNickName"],
-        category: List<Category>.from(
-            json["Category"].map((x) => Category.fromJson(x))),
-        lastUpdateTime: DateTime.parse(json["lastUpdateTime"]),
-        updateStatus: json["updateStatus"],
-        bookCoverImg: json["BookCover_Img"] != null
-            ? List<BookCoverImg>.from(
-                json["BookCover_Img"].map((x) => BookCoverImg.fromJson(x)))
-            : <BookCoverImg>[],
-      );
+//     factory BookInfo.fromJson(Map<String, dynamic> json) => BookInfo(
+//         id: json["id"],
+//         title: json["title"],
+//         isEnable: json["is_enable"],
+//         thumbnail: json["thumbnail"],
+//         description: json["description"],
+//         author: json["author"],
+//         dateModified: DateTime.parse(json["date_modified"]),
+//         dateAdded: DateTime.parse(json["date_added"]),
+//         sex: json["sex"],
+//         status: json["status"],
+//         type: json["type"],
+//         likeCount: json["like_count"],
+//         viewCount: json["view_count"],
+//         star: json["star"],
+//         isVip: json["is_vip"],
+//         isFull: json["is_full"],
+//         chapter: List<dynamic>.from(json["chapter"].map((x) => x)),
+//         countChapterDownload: json["count__chapter_download"],
+//         tag: json["tag"],
+//         countChapter: json["count_chapter"],
+//         countComment: json["count_comment"],
+//         countFollow: json["count_follow"],
+//     );
 
-  Map<String, dynamic> toJson() => {
-        "BookUUID": bookUuid,
-        "BookName": bookName,
-        "BookDescription": bookDescription,
-        "adultLimit": adultLimit,
-        "bookSexId": bookSexId,
-        "Rating": rating,
-        "LikeNo": likeNo,
-        "FollowNo": followNo,
-        "isEnable": isEnable,
-        "commentAllowed": commentAllowed,
-        "authorAccountId": authorAccountId,
-        "authorNickName": authorNickName,
-        "Category": List<dynamic>.from(category!.map((x) => x.toJson())),
-        "lastUpdateTime": lastUpdateTime!.toIso8601String(),
-        "updateStatus": updateStatus,
-        "BookCover_Img":
-            List<dynamic>.from(bookCoverImg!.map((x) => x.toJson())),
-      };
-}
-
-class BookCoverImg {
-  BookCoverImg({
-    this.imgId,
-    this.imgUrl,
-  });
-
-  int? imgId;
-  String? imgUrl;
-
-  factory BookCoverImg.fromJson(Map<String, dynamic> json) => BookCoverImg(
-        imgId: json["imgId"],
-        imgUrl: json["imgUrl"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "imgId": imgId,
-        "imgUrl": imgUrl,
-      };
-}
-
-class Category {
-  Category({
-    this.categoryId,
-    this.categoryName,
-  });
-
-  int? categoryId;
-  String? categoryName;
-
-  factory Category.fromJson(Map<String, dynamic> json) => Category(
-        categoryId: json["CategoryId"],
-        categoryName: json["CategoryName"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "CategoryId": categoryId,
-        "CategoryName": categoryName,
-      };
-}
+//     Map<String, dynamic> toJson() => {
+//         "id": id,
+//         "title": title,
+//         "is_enable": isEnable,
+//         "thumbnail": thumbnail,
+//         "description": description,
+//         "author": author,
+//         "date_modified": dateModified!.toIso8601String(),
+//         "date_added": dateAdded!.toIso8601String(),
+//         "sex": sex,
+//         "status": status,
+//         "type": type,
+//         "like_count": likeCount,
+//         "view_count": viewCount,
+//         "star": star,
+//         "is_vip": isVip,
+//         "is_full": isFull,
+//         "chapter": List<dynamic>.from(chapter!.map((x) => x)),
+//         "count__chapter_download": countChapterDownload,
+//         "tag": tag,
+//         "count_chapter": countChapter,
+//         "count_comment": countComment,
+//         "count_follow": countFollow,
+//     };
+// }
