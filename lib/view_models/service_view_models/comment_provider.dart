@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:wecomi_flutter/common/app_session.dart';
 import 'package:wecomi_flutter/constants/api.dart';
 import 'package:http/http.dart' as http;
 import 'package:wecomi_flutter/models/post_comment.dart';
@@ -61,14 +62,29 @@ class CommentProvider extends ChangeNotifier {
     dismissProgress();
   }
 
-  Future<void> comment(String value) async {
-    CommentData data = CommentData(content: value, name: "Thiên Linh");
+  Future<void> comment(String value, int id) async {
+    String url = '${apiUrl}v1/comments/post_comment/';
+    var body = {"book": "", "post": id, "chapter": "", "content": value};
+    Map<String, String> header = {
+      "Content-type": "application/json",
+      "Accept": "application/json",
+      "Authorization": AppSession().token!
+    };
+    var avatar = AppSession().avatar!;
+    CommentData data = CommentData(
+        user: AppSession().userId,
+        content: value,
+        name: AppSession().name,
+        avatar: avatar);
     // Map body = {
     //     "content": value,
     //     "password": password,
     //   };
     postComment!.results!.add(data);
     notifyListeners();
+    var res = await http.post(Uri.parse(url),
+        headers: header, body: json.encode(body));
+    print(res.body);
   }
 
   Future<void> getMoreReplies(int id, int index) async {

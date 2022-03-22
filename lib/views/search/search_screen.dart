@@ -8,6 +8,7 @@ import 'package:substring_highlight/substring_highlight.dart';
 import 'package:wecomi_flutter/components/back_button.dart';
 import 'package:wecomi_flutter/components/category_bubble.dart';
 import 'package:wecomi_flutter/components/list_item_book.dart';
+import 'package:wecomi_flutter/constants/api.dart';
 import 'package:wecomi_flutter/constants/color_const.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/search_provider.dart';
@@ -243,7 +244,8 @@ class _SearchScreenState extends State<SearchScreen>
                                           children: [
                                             for (int i = 0; i < 6; i++)
                                               Padding(
-                                                padding: const EdgeInsets.all(8.0),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
                                                 child: Shimmer.fromColors(
                                                     child: Container(
                                                       height: 34,
@@ -265,7 +267,8 @@ class _SearchScreenState extends State<SearchScreen>
                                                               BorderRadius
                                                                   .circular(8)),
                                                     ),
-                                                    baseColor: Colors.grey[300]!,
+                                                    baseColor:
+                                                        Colors.grey[300]!,
                                                     highlightColor:
                                                         Colors.grey[100]!),
                                               )
@@ -279,52 +282,57 @@ class _SearchScreenState extends State<SearchScreen>
                                                     searchProvider.hotKeyword!
                                                         .results!.length;
                                                 i++)
-                                              Container(
-                                                padding: EdgeInsets.only(
-                                                    bottom: width * 0.0213,
-                                                    right: width * 0.0213),
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    CategoryBubble(
-                                                      category: searchProvider
-                                                          .hotKeyword!
-                                                          .results![i]
-                                                          .text,
-                                                      onTap: () {
-                                                        controller.text =
+                                              Material(
+                                                type: MaterialType.transparency,
+                                                child: Container(
+                                                  padding: EdgeInsets.only(
+                                                      bottom: width * 0.0213,
+                                                      right: width * 0.0213),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      CategoryBubble(
+                                                        category: searchProvider
+                                                            .hotKeyword!
+                                                            .results![i]
+                                                            .text,
+                                                        onTap: () {
+                                                          controller.text =
+                                                              searchProvider
+                                                                  .hotKeyword!
+                                                                  .results![i]
+                                                                  .text!;
+                                                          searchProvider.search(
                                                             searchProvider
                                                                 .hotKeyword!
                                                                 .results![i]
-                                                                .text!;
-                                                        searchProvider.search(
+                                                                .text!,
+                                                          );
                                                           searchProvider
-                                                              .hotKeyword!
-                                                              .results![i]
-                                                              .text!,
-                                                        );
-                                                        searchProvider
-                                                            .saveSearchHistory(
-                                                                searchProvider
-                                                                    .hotKeyword!
-                                                                    .results![i]
-                                                                    .text!);
-                                                        FocusScope.of(context)
-                                                            .requestFocus(
-                                                                FocusNode());
-                                                      },
-                                                      color: Colors.white,
-                                                      style: regularBodyTextStyle
-                                                          .copyWith(
-                                                              color:
-                                                                  lightBlack),
-                                                    ),
-                                                  ],
+                                                              .saveSearchHistory(
+                                                                  searchProvider
+                                                                      .hotKeyword!
+                                                                      .results![
+                                                                          i]
+                                                                      .text!);
+                                                          FocusScope.of(context)
+                                                              .requestFocus(
+                                                                  FocusNode());
+                                                        },
+                                                        color: Colors.white,
+                                                        style: regularBodyTextStyle
+                                                            .copyWith(
+                                                                color:
+                                                                    lightBlack),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                           ],
@@ -435,44 +443,67 @@ class _SearchScreenState extends State<SearchScreen>
                                             ),
                                           )
                                         : Expanded(
+                                            child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 16, left: 16, right: 16),
                                             child: ListView.builder(
                                                 itemCount: searchProvider
                                                     .searchResult!
                                                     .results!
                                                     .length,
                                                 itemBuilder: (context, index) {
-                                                  return SearchItems(
-                                                    source: searchProvider
-                                                        .searchResult!
-                                                        .results![index]
-                                                        .thumbnail,
-                                                    title: searchProvider
-                                                        .searchResult!
-                                                        .results![index]
-                                                        .title,
-                                                    category: Text(
-                                                        searchProvider
-                                                            .searchResult!
-                                                            .results![index]
-                                                            .tag!,
-                                                        style:
-                                                            smallRegularLightBlackBodyTextStyle),
-                                                    author: searchProvider
-                                                        .searchResult!
-                                                        .results![index]
-                                                        .author,
-                                                    rating: searchProvider
-                                                        .searchResult!
-                                                        .results![index]
-                                                        .star
-                                                        .toString(),
-                                                    searchKeyword:
-                                                        searchProvider
-                                                            .matchingWords,
-                                                    chapterNum:
-                                                        Random().nextInt(10),
+                                                  return InkWell(
+                                                    onTap: () {
+                                                      Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                              builder: (context) => BookScreen(
+                                                                  detail: searchProvider
+                                                                          .searchResult!
+                                                                          .results![
+                                                                      index])));
+                                                    },
+                                                    child: SearchItems(
+                                                      source:
+                                                          "${apiUrlNoSlash}${searchProvider
+                                                          .searchResult!
+                                                          .results![index]
+                                                          .thumbnail}",
+                                                      title: searchProvider
+                                                          .searchResult!
+                                                          .results![index]
+                                                          .title,
+                                                      category: Text(
+                                                          searchProvider
+                                                              .searchResult!
+                                                              .results![index]
+                                                              .tag!,
+                                                          style:
+                                                              smallRegularLightBlackBodyTextStyle),
+                                                      author: searchProvider
+                                                          .searchResult!
+                                                          .results![index]
+                                                          .author,
+                                                      rating: searchProvider
+                                                                  .searchResult!
+                                                                  .results![
+                                                                      index]
+                                                                  .star ==
+                                                              null
+                                                          ? "0"
+                                                          : searchProvider
+                                                              .searchResult!
+                                                              .results![index]
+                                                              .star
+                                                              .toString(),
+                                                      searchKeyword:
+                                                          searchProvider
+                                                              .matchingWords,
+                                                      chapterNum:
+                                                          Random().nextInt(10),
+                                                    ),
                                                   );
-                                                })),
+                                                }),
+                                          )),
 
                                     // Expanded(
                                     //   child: ListView.builder(

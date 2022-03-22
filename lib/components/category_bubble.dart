@@ -15,7 +15,8 @@ class CategoryBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return GestureDetector(
+    return InkWell(
+        splashColor: Color(0xffcc30d6),
         onTap: onTap,
         child: Container(
             alignment: Alignment.center,

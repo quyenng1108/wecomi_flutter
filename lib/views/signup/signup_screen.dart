@@ -17,7 +17,6 @@ bool _showPasswordConfirmation = false;
 
 class _SignupScreenState extends State<SignupScreen> {
   var signupProvider = SignupProvider();
-
   @override
   void dispose() {
     // signupProvider.dispose();
@@ -42,6 +41,7 @@ class _SignupScreenState extends State<SignupScreen> {
         behavior: HitTestBehavior.translucent,
         onTap: () => FocusScope.of(context).unfocus(),
         child: SingleChildScrollView(
+          reverse: true,
           // physics: NeverScrollableScrollPhysics(),
           child: Consumer<SignupProvider>(
               builder: (context, signupProvider, child) {

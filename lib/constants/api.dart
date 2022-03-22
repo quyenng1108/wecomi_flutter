@@ -1,4 +1,4 @@
-const apiUrl = "http://bda1-2001-ee0-47f1-b1c0-7036-9546-9f5a-fb9b.ngrok.io/";
+const apiUrl = "http://18cb-2405-4802-235-f860-c8-83c2-cc20-f622.ngrok.io/";
 const apiUrlNoSlash =
-    "http://bda1-2001-ee0-47f1-b1c0-7036-9546-9f5a-fb9b.ngrok.io";
-const apiNoHttp = 'bda1-2001-ee0-47f1-b1c0-7036-9546-9f5a-fb9b.ngrok.io';
+    "http://18cb-2405-4802-235-f860-c8-83c2-cc20-f622.ngrok.io";
+const apiNoHttp = '18cb-2405-4802-235-f860-c8-83c2-cc20-f622.ngrok.io';

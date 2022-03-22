@@ -1,58 +1,51 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/src/provider.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:wecomi_flutter/components/linked_offset_widget.dart';
-import 'package:wecomi_flutter/components/login_related_button.dart';
 import 'package:wecomi_flutter/constants/api.dart';
 import 'package:wecomi_flutter/constants/color_const.dart';
 import 'package:wecomi_flutter/constants/font.dart';
-import 'package:wecomi_flutter/models/user_profile.dart';
-import 'package:wecomi_flutter/view_models/service_view_models/login_provider.dart';
-import 'package:wecomi_flutter/view_models/service_view_models/user_profile_provider.dart';
-import 'package:wecomi_flutter/views/login/login_screen.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/group_info_provider.dart';
 
-class UserProfileScreen extends StatefulWidget {
-  UserProfileScreen({required this.userId});
-  final int userId;
-
+class GroupInfoScreen extends StatefulWidget {
+  GroupInfoScreen(
+      {required this.name,
+      required this.avatar,
+      required this.id,
+      required this.memberCount,
+      required this.hasJoined});
+  String name;
+  String avatar;
+  int id;
+  int memberCount;
+  bool hasJoined;
   @override
-  _UserProfileScreenState createState() => _UserProfileScreenState();
+  _GroupInfoScreenState createState() => _GroupInfoScreenState();
 }
 
-class _UserProfileScreenState extends State<UserProfileScreen>
+class _GroupInfoScreenState extends State<GroupInfoScreen>
     with TickerProviderStateMixin {
-  ScrollController _scrollController = ScrollController();
   late TabController _tabController;
-  var top = 0.0;
-  int userId = 0;
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      Provider.of<UserProfileProvider>(context, listen: false)
-          .getUserProfile(widget.userId);
+      context.read<GroupInfoProvider>().getGroupPost(widget.id);
     });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    bool isLoading = context.select((UserProfileProvider p) => p.isLoading);
-    UserProfile? userProfile =
-        context.select((UserProfileProvider p) => p.userProfile);
-    bool isLogged = context.select((LoginProvider p) => p.isLogged);
-    bool hasFollowed = context.select((UserProfileProvider p) => p.hasFollowed);
-    if (isLogged) {
-      userId = context.select((LoginProvider p) => p.userId!);
-    }
-    var width = MediaQuery.of(context).size.width;
-    return Builder(
-      builder: (context) => Scaffold(
-        body: DefaultTabController(
-            length: 2,
-            child: NestedScrollView(
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    bool isLoading = context.select((GroupInfoProvider p) => p.isLoading);
+    return Scaffold(
+      body: DefaultTabController(
+          length: 2,
+          child: Consumer<GroupInfoProvider>(
+            builder: (context, groupInfoProvider, child) => NestedScrollView(
               headerSliverBuilder: (context, isBodyScrolled) => [
                 SliverAppBar(
                   backgroundColor: buttonColor.withOpacity(.95),
@@ -94,7 +87,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>
                                 //     opacity: 1.0,
                                 //     child:
                                 Text(
-                              isLoading ? '---' : userProfile!.fullName ?? "",
+                              widget.name,
                               style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: top > 151 ? 14 : 20,
@@ -139,17 +132,10 @@ class _UserProfileScreenState extends State<UserProfileScreen>
                                           ),
                                       child: Padding(
                                         padding: const EdgeInsets.all(5),
-                                        child: isLoading
-                                            ? CircleAvatar(
-                                                radius: 50,
-                                                backgroundImage: AssetImage(
-                                                    'assets/images/Avatar-Placeholder.png'))
-                                            : CircleAvatar(
-                                                radius: 50,
-                                                backgroundImage: NetworkImage(
-                                                  userProfile!.avatar ??
-                                                      '${apiUrl}media/userprofile/2021/12/19/250887765_1155518048309841_8336970324770624452_n.jpg',
-                                                )),
+                                        child: CircleAvatar(
+                                            radius: 50,
+                                            backgroundImage:
+                                                NetworkImage(widget.avatar)),
                                       ),
                                     ),
                                   )),
@@ -170,8 +156,10 @@ class _UserProfileScreenState extends State<UserProfileScreen>
                                             Text(
                                                 isLoading
                                                     ? '---'
-                                                    : userProfile!
-                                                        .countFollower!
+                                                    : groupInfoProvider
+                                                        .groupPost!
+                                                        .results!
+                                                        .length
                                                         .toString(),
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.w600,
@@ -181,7 +169,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>
                                               height: 4,
                                             ),
                                             Text(
-                                              'Người theo dõi',
+                                              'Bài đăng',
                                               style:
                                                   smallRegularGreyBodyTextStyle
                                                       .copyWith(
@@ -197,8 +185,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>
                                             Text(
                                                 isLoading
                                                     ? '---'
-                                                    : userProfile!
-                                                        .countFollowing!
+                                                    : widget.memberCount
                                                         .toString(),
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.w600,
@@ -208,7 +195,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>
                                               height: 4,
                                             ),
                                             Text(
-                                              'Đang theo dõi',
+                                              'Thành viên',
                                               style:
                                                   smallRegularGreyBodyTextStyle
                                                       .copyWith(
@@ -223,69 +210,43 @@ class _UserProfileScreenState extends State<UserProfileScreen>
                               Positioned(
                                 width: width,
                                 bottom: 70,
-                                child: !isLoading && userId == userProfile!.id
-                                    ? SizedBox(
-                                        height: 40,
-                                      )
-                                    : !isLoading
-                                        ? Container(
-                                            // width: double.infinity,
-                                            child: Center(
-                                              child: SizedBox(
-                                                height: 40,
-                                                width: 226,
-                                                child: ElevatedButton(
-                                                    onPressed: () {
-                                                      if (isLogged == false) {
-                                                        showLoginDiaglog(
-                                                            context);
-                                                      } else {
-                                                        context
-                                                            .read<
-                                                                UserProfileProvider>()
-                                                            .follow();
-                                                        setState(() {
-                                                          if(hasFollowed){
-                                                            userProfile!
-                                                                  .countFollower =
-                                                              userProfile
-                                                                      .countFollower! -
-                                                                  1;
-                                                          }else{
-                                                             userProfile!
-                                                                  .countFollower =
-                                                              userProfile
-                                                                      .countFollower! +
-                                                                  1;
-                                                          }
-                                                        });
-                                                      }
-                                                    },
-                                                    style: ElevatedButton.styleFrom(
-                                                        shadowColor:
-                                                            Colors.transparent,
-                                                        elevation: 0,
-                                                        primary: buttonColor,
-                                                        onPrimary:
-                                                            Color(0xffB85985),
-                                                        shape: RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        48))),
-                                                    child: Text(
-                                                        hasFollowed
-                                                            ? 'Hủy theo dõi'
-                                                            : 'Theo dõi',
-                                                        style: smallRegularWhiteBodyTextStyle
-                                                            .copyWith(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w800))),
-                                              ),
-                                            ),
-                                          )
-                                        : SizedBox(height: 40),
+                                child: Container(
+                                  // width: double.infinity,
+                                  child: Center(
+                                    child: SizedBox(
+                                      height: 40,
+                                      width: 226,
+                                      child: ElevatedButton(
+                                          onPressed: () {
+                                            // if (isLogged == false) {
+                                            //   showLoginDiaglog(context);
+                                            // } else {
+                                            //   context
+                                            //       .read<UserProfileProvider>()
+                                            //       .follow();
+                                            // }
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              shadowColor: Colors.transparent,
+                                              elevation: 0,
+                                              primary: buttonColor,
+                                              onPrimary: Color(0xffB85985),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          48))),
+                                          child: Text(
+                                              widget.hasJoined
+                                                  ? 'Rời khỏi'
+                                                  : 'Tham gia',
+                                              style:
+                                                  smallRegularWhiteBodyTextStyle
+                                                      .copyWith(
+                                                          fontWeight: FontWeight
+                                                              .w800))),
+                                    ),
+                                  ),
+                                ),
                               )
                             ])));
                   }),
@@ -431,14 +392,15 @@ class _UserProfileScreenState extends State<UserProfileScreen>
                                   highlightColor: Color(0xffC9D1E0),
                                 );
                               })
-                          : userProfile!.post!.isEmpty
+                          : groupInfoProvider.groupPost!.results!.isEmpty
                               ? Center(
                                   child: Text(
                                       'Người dùng này không có bài viết nào'),
                                 )
                               : GridView.builder(
                                   padding: EdgeInsets.fromLTRB(12, 16, 12, 0),
-                                  itemCount: userProfile.post!.length,
+                                  itemCount: groupInfoProvider
+                                      .groupPost!.results!.length,
                                   gridDelegate:
                                       SliverGridDelegateWithFixedCrossAxisCount(
                                           // mainAxisSpacing: 8,
@@ -463,7 +425,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>
                                                       BorderRadius.circular(8),
                                                   child: CachedNetworkImage(
                                                       imageUrl:
-                                                          '$apiUrlNoSlash${userProfile.post![index].imageUrl!}',
+                                                          '$apiUrlNoSlash${groupInfoProvider.groupPost!.results![index].imageUrl!}',
                                                       progressIndicatorBuilder:
                                                           (context, url,
                                                                   progress) =>
@@ -507,8 +469,10 @@ class _UserProfileScreenState extends State<UserProfileScreen>
                                                             width: 4,
                                                           ),
                                                           Text(
-                                                              userProfile
-                                                                  .post![index]
+                                                              groupInfoProvider
+                                                                  .groupPost!
+                                                                  .results![
+                                                                      index]
                                                                   .likeCount!
                                                                   .toString(),
                                                               style:
@@ -518,10 +482,11 @@ class _UserProfileScreenState extends State<UserProfileScreen>
                                                           ),
                                                           Expanded(
                                                               child: Text(
-                                                                  userProfile
-                                                                      .post![
+                                                                  groupInfoProvider
+                                                                      .groupPost!
+                                                                      .results![
                                                                           index]
-                                                                      .group!,
+                                                                      .user!,
                                                                   overflow:
                                                                       TextOverflow
                                                                           .ellipsis,
@@ -596,39 +561,8 @@ class _UserProfileScreenState extends State<UserProfileScreen>
                   )
                 ],
               ),
-            )),
-      ),
+            ),
+          )),
     );
-  }
-
-  Future<dynamic> showLoginDiaglog(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return Material(
-            color: Colors.transparent,
-            child: CupertinoAlertDialog(
-                title: Text("Vui lòng đăng nhập"),
-                actions: [
-                  CupertinoDialogAction(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      isDefaultAction: true,
-                      child: Text("Hủy", style: defaultActionStyle)),
-                  CupertinoDialogAction(
-                      isDefaultAction: false,
-                      child: Text("Đăng nhập", style: nonDefaultActionStyle),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => LoginScreen()));
-                        // Provider.of<FollowBookProvider>(
-                        //         context)
-                        //     .followedBook = null;
-                      }),
-                ]),
-          );
-        });
   }
 }

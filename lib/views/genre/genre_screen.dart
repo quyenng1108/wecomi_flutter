@@ -107,14 +107,14 @@ class _GenreScreenState extends State<GenreScreen>
                                   context.read<GenreProvider>().showComicProgress();
                                   Navigator.maybePop(context);
                                 },
-                                color: Color(0xff7f7f7f)),
+                                color: Colors.white),
                           ),
                           Align(
                             alignment: Alignment.center,
                             child: Text("Thể loại truyện",
                                 style: giganticMediumBodyTextStyle.copyWith(
                                     fontSize: 24,
-                                    color: Color(0xff5E3A78),
+                                    color: Colors.white,
                                     fontWeight: FontWeight.w700)),
                           ),
                           Align(

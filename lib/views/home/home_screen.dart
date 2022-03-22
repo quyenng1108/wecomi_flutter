@@ -15,6 +15,7 @@ import 'package:wecomi_flutter/view_models/service_view_models/genre_provider.da
 import 'package:wecomi_flutter/views/account/account_screen.dart';
 import 'package:wecomi_flutter/views/book/book_screen.dart';
 import 'package:wecomi_flutter/views/genre/genre_screen.dart';
+import 'package:wecomi_flutter/views/group/group_list.dart';
 import 'package:wecomi_flutter/views/search/search_screen.dart';
 import 'package:wecomi_flutter/views/see_all_screen/see_all_screen.dart';
 
@@ -414,9 +415,17 @@ class _HomeScreenState extends State<HomeScreen>
                                           ),
                                           Column(
                                             children: [
-                                              Image.asset(
-                                                  "assets/icons/group.png",
-                                                  height: 60),
+                                              InkWell(
+                                                onTap: () {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              GroupListScreen()));
+                                                },
+                                                child: Image.asset(
+                                                    "assets/icons/group.png",
+                                                    height: 60),
+                                              ),
                                               Text("Nhóm")
                                             ],
                                           ),
@@ -660,7 +669,7 @@ class BannerItems extends StatelessWidget {
                   : "https://wallpaperaccess.com/full/8737.jpg",
               height: height * 0.2365,
               width: width * 0.8373,
-              fit: BoxFit.fill),
+              fit: BoxFit.cover),
         ),
       ),
       onTap: press,
@@ -743,7 +752,7 @@ class RecommendedItems extends StatelessWidget {
                           : "https://wallpaperaccess.com/full/8737.jpg",
                       height: height * 0.1182,
                       width: width * 0.448,
-                      fit: BoxFit.fill),
+                      fit: BoxFit.cover),
                 ),
               ),
             ),

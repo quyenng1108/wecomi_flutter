@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
+import 'package:wecomi_flutter/common/app_session.dart';
 import 'package:wecomi_flutter/constants/api.dart';
 import 'package:wecomi_flutter/constants/color_const.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
@@ -107,6 +108,7 @@ class _PostCommentScreenState extends State<PostCommentScreen> {
                           children: [
                             Text(
                               postData!.group!,
+                              style: mediumBodyTextStyle,
                               overflow: TextOverflow.ellipsis,
                             ),
                             SizedBox(
@@ -239,12 +241,21 @@ class _PostCommentScreenState extends State<PostCommentScreen> {
                                     child: InkWell(
                                       splashColor: majorPink,
                                       onTap: () {
-                                        context
-                                            .read<GroupPostProvider>()
-                                            .like(widget.index, isLiked);
-                                        context
-                                            .read<GroupPostProvider>()
-                                            .likePressed(widget.index);
+                                        print(postData!.id);
+                                        print(AppSession().token);
+                                        if (isLogged == false) {
+                                          focusNode.unfocus();
+                                          showLoginDiaglog(context).then(
+                                              (value) => focusNode.unfocus());
+                                        } else {
+                                          context
+                                              .read<GroupPostProvider>()
+                                              .like(widget.index, isLiked,
+                                                  postData!.id!);
+                                          context
+                                              .read<GroupPostProvider>()
+                                              .likePressed(widget.index);
+                                        }
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
@@ -527,14 +538,14 @@ class _PostCommentScreenState extends State<PostCommentScreen> {
                                                             children: [
                                                               GestureDetector(
                                                                 onTap: () {
-                                                                   if(!isGettingMoreReplies[
-                                                                      index])context
-                                                                      .read<
-                                                                          CommentProvider>()
-                                                                      .getMoreReplies(
-                                                                          commentData![index]
-                                                                              .id!,
-                                                                          index);
+                                                                  if (!isGettingMoreReplies[
+                                                                      index])
+                                                                    context
+                                                                        .read<
+                                                                            CommentProvider>()
+                                                                        .getMoreReplies(
+                                                                            commentData![index].id!,
+                                                                            index);
                                                                 },
                                                                 child:
                                                                     Container(
@@ -735,7 +746,10 @@ class _PostCommentScreenState extends State<PostCommentScreen> {
                           onTap: () {
                             if (isLogged == false) {
                               focusNode.unfocus();
-                              showLoginDiaglog(context).then((value) => focusNode.unfocus());
+                              showLoginDiaglog(context)
+                                  .then((value) => focusNode.unfocus());
+                            } else {
+                              focusNode.requestFocus();
                             }
                           },
                           onSubmitted: (value) {
@@ -743,8 +757,10 @@ class _PostCommentScreenState extends State<PostCommentScreen> {
                             context
                                 .read<GroupPostProvider>()
                                 .commentAdded(widget.index);
-                            context.read<CommentProvider>().comment(value).then(
-                                (value) => scrollController.animateTo(
+                            context
+                                .read<CommentProvider>()
+                                .comment(value, postData!.id!)
+                                .then((value) => scrollController.animateTo(
                                     scrollController.position.maxScrollExtent,
                                     duration: Duration(milliseconds: 400),
                                     curve: Curves.easeInOut));
@@ -758,7 +774,7 @@ class _PostCommentScreenState extends State<PostCommentScreen> {
                           padding: EdgeInsets.only(
                               left: 12, top: 8, bottom: 8, right: 12),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(8),
                               color: Color(0xffEEF0F1)
                               // border: Border.all(
                               //   width: .5
@@ -768,7 +784,26 @@ class _PostCommentScreenState extends State<PostCommentScreen> {
                     SizedBox(
                       width: 8,
                     ),
-                    Image.asset("assets/icons/send.png", height: 24),
+                    InkWell(
+                        onTap: () {
+                          if (isLogged && commentController.text != '') {
+                            var value = commentController.text;
+                            commentController.clear();
+                            context
+                                .read<GroupPostProvider>()
+                                .commentAdded(widget.index);
+                            context
+                                .read<CommentProvider>()
+                                .comment(value, postData!.id!)
+                                .then((value) => scrollController.animateTo(
+                                    scrollController.position.maxScrollExtent,
+                                    duration: Duration(milliseconds: 400),
+                                    curve: Curves.easeInOut));
+                            // print();
+                          }
+                        },
+                        child:
+                            Image.asset("assets/icons/send.png", height: 24)),
                   ],
                 ),
               ),
@@ -779,37 +814,32 @@ class _PostCommentScreenState extends State<PostCommentScreen> {
 
   Future<dynamic> showLoginDiaglog(BuildContext context) {
     return showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return Material(
-                                    color: Colors.transparent,
-                                    child: CupertinoAlertDialog(
-                                        title: Text("Vui lòng đăng nhập"),
-                                        actions: [
-                                          CupertinoDialogAction(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              isDefaultAction: true,
-                                              child: Text("Hủy",
-                                                  style: defaultActionStyle)),
-                                          CupertinoDialogAction(
-                                              isDefaultAction: false,
-                                              child: Text("Đăng nhập",
-                                                  style:
-                                                      nonDefaultActionStyle),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            LoginScreen()));
-                                                // Provider.of<FollowBookProvider>(
-                                                //         context)
-                                                //     .followedBook = null;
-                                              }),
-                                        ]),
-                                  );
-                                });
+        context: context,
+        builder: (context) {
+          return Material(
+            color: Colors.transparent,
+            child: CupertinoAlertDialog(
+                title: Text("Vui lòng đăng nhập"),
+                actions: [
+                  CupertinoDialogAction(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      isDefaultAction: true,
+                      child: Text("Hủy", style: defaultActionStyle)),
+                  CupertinoDialogAction(
+                      isDefaultAction: false,
+                      child: Text("Đăng nhập", style: nonDefaultActionStyle),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => LoginScreen()));
+                        // Provider.of<FollowBookProvider>(
+                        //         context)
+                        //     .followedBook = null;
+                      }),
+                ]),
+          );
+        });
   }
 }

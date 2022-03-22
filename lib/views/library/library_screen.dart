@@ -72,18 +72,24 @@ class _LibraryScreenState extends State<LibraryScreen>
                     children: [
                       Align(
                           alignment: Alignment.centerRight,
-                          child: Container(
-                            padding: EdgeInsets.all(6),
-                            height: 36,
-                            width: 52,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                bottomLeft: Radius.circular(20),
-                              ),
-                              color: Colors.white.withOpacity(.25)
-                            ),
-                            child: Image.asset("assets/icons/edit_white.png", height: 24,)
+                          child: InkWell(
+                            onTap: () {
+                              Utils.deleteDb();
+                            },
+                            child: Container(
+                                padding: EdgeInsets.all(6),
+                                height: 36,
+                                width: 52,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(20),
+                                      bottomLeft: Radius.circular(20),
+                                    ),
+                                    color: Colors.white.withOpacity(.25)),
+                                child: Image.asset(
+                                  "assets/icons/edit_white.png",
+                                  height: 24,
+                                )),
                           )),
                       Align(
                         alignment: Alignment.center,

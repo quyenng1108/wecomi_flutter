@@ -335,10 +335,10 @@ class _ChapterDetailScreenState extends State<ChapterDetailScreen> {
                                             // ),
                                             );
                                       }),
-                                  Container(
-                                      height: 200,
-                                      child: Center(
-                                          child: Text("comment section")))
+                                  // Container(
+                                  //     height: 200,
+                                  //     child: Center(
+                                  //         child: Text("comment section")))
                                 ],
                               ),
                             );

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
 import 'package:wecomi_flutter/models/followed_book.dart';
 import 'package:wecomi_flutter/models/read_history.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/book_provider.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/change_information_provider.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/comment_provider.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/follow_book_provider.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/getchapter_byBookuuid_provider.dart';
@@ -16,6 +18,8 @@ import 'package:wecomi_flutter/view_models/service_view_models/chapter_provider.
 import 'package:wecomi_flutter/view_models/service_view_models/comic_provider.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/forgot_password_provider.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/genre_provider.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/group_info_provider.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/group_list_provider.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/group_post_provider.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/local_auth_provider.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/login_provider.dart';
@@ -44,9 +48,11 @@ import 'package:wecomi_flutter/views/splash_screen.dart';
 import 'package:wecomi_flutter/views/test.dart';
 import 'package:wecomi_flutter/views/user_profile/user_profile_screen.dart';
 
-void main() async{
+void main() async {
   VisibilityDetectorController.instance.updateInterval = Duration.zero;
   WidgetsFlutterBinding.ensureInitialized();
+//   SharedPreferences preferences = await SharedPreferences.getInstance();
+// await preferences.clear();
   await Hive.initFlutter();
   Hive.registerAdapter(ReadHistoryAdapter());
   Hive.registerAdapter(FollowedBookAdapter());
@@ -73,6 +79,9 @@ void main() async{
       ChangeNotifierProvider(create: (_) => UserProfileProvider()),
       ChangeNotifierProvider(create: (_) => ReadHistoryProvider()),
       ChangeNotifierProvider(create: (_) => LocalAuthProvider()),
+      ChangeNotifierProvider(create: (_) => GroupListProvider()),
+      ChangeNotifierProvider(create: (_) => GroupInfoProvider()),
+      ChangeNotifierProvider(create: (_) => ChangeInformationProvider()),
     ],
     child: MyApp(),
   ));

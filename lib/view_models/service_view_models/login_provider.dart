@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -9,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wecomi_flutter/common/app_session.dart';
 import 'package:wecomi_flutter/constants/api.dart';
 import 'package:wecomi_flutter/models/account_model.dart';
+import 'package:wecomi_flutter/models/user_profile.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/follow_book_provider.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/local_auth_provider.dart';
 
@@ -20,9 +22,11 @@ class LoginProvider with ChangeNotifier {
   AccountModel get invalidUsernameAccount => _invalidUsernameAccount;
   AccountModel get invalidPasswordAccount => _invalidPasswordAccount;
   String? accessToken;
+  UserProfile userProfile = UserProfile();
   int? userId;
   int? accountStatus;
   String? accountName;
+  String? avatar;
   bool isLogged = false;
 
   Future<void> loginWithEmail(
@@ -50,16 +54,26 @@ class LoginProvider with ChangeNotifier {
         // _loggedInAccount = AccountModel(
         //     jsonResponse["accessToken"], jsonResponse["accountId"], null, null);
         prefs.setString("token", jsonResponse["access_token"]);
-        prefs.setStringList("userData", [username]);
-        checkLoginState();
+
         // Provider.of<FollowBookProvider>(context, listen: false)
         //     .getFollowedBookList(jsonResponse["access_token"]);
         if (username != AppSession().username) {
-          Provider.of<LocalAuthProvider>(context).onLogout(false);
+          Provider.of<LocalAuthProvider>(context, listen: false)
+              .onLogout(false);
         }
         AppSession().saveLoginData(username, password);
-        Navigator.pop(context);
-        Navigator.pop(context);
+        getUserProfile(jsonResponse["access_token"]).then((value) {
+          prefs.setStringList("userData", [
+            userProfile.fullName ?? '',
+            "${userProfile.avatar!}",
+            userProfile.id.toString()
+          ]);
+          checkLoginState();
+          Navigator.pop(context);
+          Navigator.pop(context);
+        });
+        // Navigator.pop(context);
+        // Navigator.pop(context);
       } else if (res.statusCode == 400) {
         _invalidUsernameAccount =
             AccountModel(null, null, "Tài khoản không tồn tại", null);
@@ -78,6 +92,27 @@ class LoginProvider with ChangeNotifier {
       print(exception.message);
     }
     notifyListeners();
+  }
+
+  Future<void> getUserProfile(String token) async {
+    String url = '${apiUrl}v1/user-profile/user_info/';
+    // showProgress();
+    Uri uri = Uri.parse(url);
+    Map<String, String> header = {
+      "Content-type": "application/json",
+      "Accept": "application/json",
+      "Authorization": token
+    };
+    dynamic res = await http.get(uri, headers: header);
+    if (res.statusCode == 200) {
+      String response = Utf8Decoder().convert(res.bodyBytes);
+      userProfile = userProfileFromJson(response);
+      print(userProfile);
+      notifyListeners();
+    } else {
+      throw Exception(e);
+    }
+    // dismissProgress();
   }
 
   GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -131,10 +166,26 @@ class LoginProvider with ChangeNotifier {
         isLogged = false;
       } else {
         isLogged = true;
+        accountName = AppSession().name;
+        avatar = "${apiUrlNoSlash}${AppSession().avatar}";
+        userId = AppSession().userId;
       }
     });
 
     notifyListeners();
+  }
+
+  setAvatar(String avatarUrl) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    avatar = "$apiUrlNoSlash$avatarUrl";
+    notifyListeners();
+    print(avatar);
+    prefs.setStringList("userData", [
+      AppSession().name ?? "",
+      "$avatarUrl",
+      AppSession().userId.toString()
+    ]);
   }
 
   logout() async {

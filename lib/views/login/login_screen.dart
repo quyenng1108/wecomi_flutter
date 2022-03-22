@@ -28,7 +28,12 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
+  }
 
+  @override
+  void didChangeDependencies() {
+    print("did");
+    super.didChangeDependencies();
   }
 
   @override
@@ -62,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 SignupTextField(
                   controller: _usernameTextController,
                   inputAction: TextInputAction.next,
-                  hintText: "Họ tên",
+                  hintText: "Tên tài khoản",
                   nextFocus: () => FocusScope.of(context).nextFocus(),
                   focusedBorder: loginProvider
                               .invalidUsernameAccount.invalidUsernameMessage !=
@@ -321,6 +326,7 @@ class SocialLogin extends StatelessWidget {
               primary: Colors.white,
               onPrimary: Color(0xffE76F86),
               shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Color(0xffE4E8EF), width: 1.2),
                   borderRadius: BorderRadius.circular(16))),
           child: Container(
             // padding: EdgeInsets.all(width * 0.048),

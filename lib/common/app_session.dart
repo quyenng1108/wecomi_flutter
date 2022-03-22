@@ -23,11 +23,11 @@ class AppSession {
     List<String>? userData = prefs.getStringList("userData");
     if (token != null && userData != null) {
       name = userData[0];
+      avatar = userData[1];
+      userId = int.parse(userData[2]);
       // userId = int.parse(userData[0]);
       // accountStatus = int.parse(userData[1]);
-      if (prefs.getInt("sex") != null) {
-        sex = prefs.getInt("sex")!;
-      }
+      print(userData);
     }
   }
 

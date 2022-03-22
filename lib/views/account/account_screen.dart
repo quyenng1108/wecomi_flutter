@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wecomi_flutter/common/app_session.dart';
@@ -9,12 +10,14 @@ import 'package:wecomi_flutter/components/login_related_button.dart';
 import 'package:wecomi_flutter/constants/color_const.dart';
 import 'package:wecomi_flutter/constants/font_const.dart';
 import 'package:wecomi_flutter/constants/theme.dart';
+import 'package:wecomi_flutter/view_models/service_view_models/change_information_provider.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/follow_book_provider.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/local_auth_provider.dart';
 import 'package:wecomi_flutter/view_models/service_view_models/login_provider.dart';
 import 'package:wecomi_flutter/view_models/ui_view_models/app_provider.dart';
 import 'package:wecomi_flutter/views/login/login_screen.dart';
 import 'package:after_layout/after_layout.dart';
+import 'package:wecomi_flutter/views/user_profile/user_profile_screen.dart';
 
 class AccountScreen extends StatefulWidget {
   @override
@@ -32,14 +35,22 @@ class _AccountScreenState extends State<AccountScreen>
   }
 
   @override
+  void didChangeDependencies() {
+    print("did");
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     bool isUsingLocalAuth =
         context.select((LocalAuthProvider p) => p.isUsingLocalAuth);
+
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     loginProvider = Provider.of<LoginProvider>(context);
     var standardSpacing = EdgeInsets.symmetric(horizontal: width * 0.0427);
     return Scaffold(
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           title: Text("Tài khoản", style: giganticMediumBodyTextStyle),
           backgroundColor: Colors.transparent,
@@ -48,7 +59,7 @@ class _AccountScreenState extends State<AccountScreen>
         body: SafeArea(
             child: Container(
           child: Column(
-            mainAxisSize: MainAxisSize.max,
+            // mainAxisSize: MainAxisSize.max,
             children: [
               // Stack(
               //   children: [
@@ -367,8 +378,15 @@ class NotLoggedInLayout extends StatelessWidget {
 }
 
 class LoggedInLayout extends StatelessWidget {
+  final ImagePicker _picker = ImagePicker();
+  String? imagePath;
   @override
   Widget build(BuildContext context) {
+    bool isEditing =
+        context.select((ChangeInformationProvider p) => p.isEditing);
+        bool isLoading =
+        context.select((ChangeInformationProvider p) => p.isLoading);
+        String avatar = context.select((LoginProvider p) => p.avatar!);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var standardSpacing = EdgeInsets.symmetric(horizontal: width * 0.0427);
@@ -379,50 +397,156 @@ class LoggedInLayout extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(90),
-            child: Image.asset("assets/icons/User-Sample.png",
-                height: width * 0.2346),
+          Stack(
+            children: [
+              InkWell(
+                onTap: () {
+                  int id = AppSession().userId!;
+                  if (!isEditing) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => UserProfileScreen(
+                              userId: id,
+                            )));
+                  } else {
+                    showCupertinoModalPopup(
+                        context: context,
+                        builder: (contextt) => CupertinoActionSheet(
+                              actions: [
+                                CupertinoActionSheetAction(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+
+                                      pickImageFromGallery(context);
+                                    },
+                                    child: Text("Chọn từ bộ sưu tập")),
+                                CupertinoActionSheetAction(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+
+                                      pickImageFromCamera(context);
+                                    },
+                                    child: Text("Chụp ảnh")),
+                              ],
+                              cancelButton: CupertinoActionSheetAction(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("Hủy",
+                                      style: TextStyle(color: buttonColor))),
+                            ));
+                  }
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(90),
+                  child: Image.network(context.watch<LoginProvider>().avatar!,
+                      height: 100,
+                      width: 100,
+                      fit: BoxFit.cover),
+                ),
+
+
+              ),
+              isEditing
+                  ? Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                          padding: EdgeInsets.all(4),
+                          height: 24,
+                          width: 24,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle, color: lightGrey),
+                          child:
+                              Image.asset("assets/icons/Edit.png", height: 18)))
+                  : SizedBox(),
+              isLoading ?
+                Positioned(
+                  right: 33,
+                  bottom: 33,
+                  child: CircularProgressIndicator(color: lightGrey,))
+              :SizedBox()
+            ],
+
           ),
           SizedBox(
             height: height * 0.0147,
           ),
-          Text(AppSession().name ?? "Ten",
+          Text(context.watch<LoginProvider>().accountName!,
               style: extraLargeDarkGreyMediumBodyTextStyle),
+          SizedBox(
+            height: height * 0.0147,
+          ),
+          ElevatedButton(
+              onPressed: () {
+                context.read<ChangeInformationProvider>().toggleEditing();
+              },
+              style: ElevatedButton.styleFrom(
+                  shadowColor: Colors.transparent,
+                  elevation: 0,
+                  primary: buttonColor,
+                  onPrimary: Color(0xffB85985),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(48))),
+              child: Text( isEditing ? "Xong" : "Chỉnh sửa", style: smallRegularWhiteBodyTextStyle)),
           SizedBox(
             height: height * 0.0147,
           ),
           // SizedBox(
           //   height: height * 0.0295,
           // ),
-          ConstrainedBox(
-            constraints: BoxConstraints.tightFor(
-                height: height * 0.0382, width: width * 0.33),
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                  side: BorderSide(color: buttonColor),
-                  shadowColor: Colors.transparent,
-                  elevation: 0,
-                  primary: Theme.of(context).backgroundColor,
-                  onPrimary: Theme.of(context).primaryColor,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8))),
-              child: Container(
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Image.asset(
-                        "assets/icons/Edit.png",
-                        height: width * 0.0426,
-                      ),
-                      Text("Chỉnh sửa", style: mediumPinkBodyTextStyle),
-                    ]),
-              ),
-            ),
-          ),
+          // ConstrainedBox(
+          //   constraints: BoxConstraints.tightFor(
+          //       height: height * 0.0382, width: width * 0.33),
+          //   child: ElevatedButton(
+          //     onPressed: () {},
+          //     style: ElevatedButton.styleFrom(
+          //         side: BorderSide(color: buttonColor),
+          //         shadowColor: Colors.transparent,
+          //         elevation: 0,
+          //         primary: Theme.of(context).backgroundColor,
+          //         onPrimary: Theme.of(context).primaryColor,
+          //         shape: RoundedRectangleBorder(
+          //             borderRadius: BorderRadius.circular(8))),
+          //     child: Container(
+          //       child: Row(
+          //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //           children: [
+          //             Image.asset(
+          //               "assets/icons/Edit.png",
+          //               height: width * 0.0426,
+          //             ),
+          //             Text("Chỉnh sửa", style: mediumPinkBodyTextStyle),
+          //           ]),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
+  }
+
+  void pickImageFromGallery(BuildContext context) async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      imagePath = image.path;
+
+      print(imagePath);
+      if (imagePath != null) {
+        Provider.of<ChangeInformationProvider>(context, listen: false)
+            .getAvatarUrl(imagePath!, context);
+      }
+    }
+  }
+
+  void pickImageFromCamera(BuildContext context) async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    if (image != null){
+      imagePath = image.path;
+      // print(imagePath);
+      if (imagePath != null) {
+        Provider.of<ChangeInformationProvider>(context, listen: false)
+            .getAvatarUrl(imagePath!, context);
+      }
+    } 
   }
 }

@@ -8,7 +8,7 @@ import 'package:wecomi_flutter/models/user_profile.dart';
 
 class UserProfileProvider extends ChangeNotifier {
   UserProfile? userProfile;
-
+  bool hasFollowed = false;
   bool isLoading = true;
 
   showProgress() {
@@ -41,5 +41,10 @@ class UserProfileProvider extends ChangeNotifier {
       throw Exception(e);
     }
     dismissProgress();
+  }
+
+  void follow() {
+    hasFollowed = !hasFollowed;
+    notifyListeners();
   }
 }

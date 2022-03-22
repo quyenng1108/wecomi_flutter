@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:wecomi_flutter/constants/api.dart';
+import 'package:wecomi_flutter/constants/font.dart';
 import 'package:wecomi_flutter/models/signup_validation_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:wecomi_flutter/utils/loading_dialog.dart';
 
 class SignupProvider with ChangeNotifier {
   SignupValidationModel _email = SignupValidationModel(null, null);
@@ -105,12 +107,17 @@ class SignupProvider with ChangeNotifier {
     };
     final uri = Uri.parse(url);
     if (isValid) {
+      LoadingDialog().buildShowDialog(context);
       final res = await http.post(uri,
           headers: {'Content-Type': 'application/json'},
           body: json.encode(body));
       print(res.body);
-      _test = SignupValidationModel("hehehe", "hehehe");
-      Navigator.of(context).pop();
+      Navigator.of(context)
+        ..pop()
+        ..pop();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Đăng ký thành công",
+              style: smallRegularWhiteBodyTextStyle)));
     } else {
       print("hok dc dau");
     }
