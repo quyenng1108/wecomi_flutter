@@ -7,9 +7,13 @@ Wecomi is a free and open source comic reader developed mainly for iOS
 **Feature**
 
 Online reading
+
 Read history and book follow
+
 Categories to organize your library
+
 Light and dark themes
+
 Interacting with others by using the integrated social media platform
 
 **Disclaimer**
