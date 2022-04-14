@@ -4,7 +4,7 @@ A Comic Reading app integrated with a mini social media platform.
 
 Wecomi is a free and open source comic reader developed mainly for iOS
 
-**Feature**
+**Features**
 
 Online reading
 
